@@ -8,7 +8,7 @@ namespace LinkLynx.Core.Utility.Registries
     /// <summary>
     /// Generic Helpers for the VTProIntegrationTestSimpleSharp application.
     /// </summary>
-    internal static class GHelpers
+    public static class PageHelpers
     {
         /// <summary>
         /// Sets a digital join on the device.
@@ -16,7 +16,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// <param name="device"> The device to set the digital join on.</param>
         /// <param name="digitalJoin"> The digital join to set.</param>
         /// <param name="value"> The value to set the digital join to.</param>
-        internal static void SetDigitalJoin(BasicTriList device, uint digitalJoin, bool value)
+        public static void SetDigitalJoin(BasicTriList device, uint digitalJoin, bool value)
         {
             if (device == null)
                 throw new NullReferenceException("[GHelpers] Error: SetDigitalJoin Device is null, cannot set join.");
@@ -32,7 +32,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// <param name="device"> The device to set the analogJoin join on.</param>
         /// <param name="analogJoin"> The analogJoin join to set.</param>
         /// <param name="value"> The value to set the analogJoin join to.</param>
-        internal static void SetAnalogJoin(BasicTriList device, uint analogJoin, ushort value)
+        public static void SetAnalogJoin(BasicTriList device, uint analogJoin, ushort value)
         {
             if (device == null)
                 throw new NullReferenceException("[GHelpers] SetAnalogJoin: Device is null, cannot set join.");
@@ -48,7 +48,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// <param name="device"> The device to set the serial join on.</param>
         /// <param name="serialJoin"> The serial join to set.</param>
         /// <param name="value"> The value to set the serial join to.</param>
-        internal static void SetSerialJoin(BasicTriList device, uint serialJoin, string value)
+        public static void SetSerialJoin(BasicTriList device, uint serialJoin, string value)
         {
             if (device == null)
                 throw new NullReferenceException("[GHelpers] SetSerialJoin: Device is null, cannot set join.");
@@ -63,7 +63,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// </summary>
         /// <param name="args">The signal received</param>
         /// <returns>Bool, If the signal was a rising edge</returns>
-        internal static bool IsRisingEdge(SigEventArgs args)
+        public static bool IsRisingEdge(SigEventArgs args)
         {
             if (args.Sig.Type != eSigType.Bool)
                 throw new Exception("[GHelpers] Cant check if non-digital signal is a Rising Edge");
