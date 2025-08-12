@@ -35,36 +35,7 @@ These are the requirements for using this library.
 
 ## Usage Example
 
-<pre> ```csharp
-
-// This is a single logic page example.
-
-[Page(MainPageInfo.PageID)]
-internal class MainPageLogic : PageLogicBase
-{
-    public MainPageLogic(BasicTriList device) : base(device) { }
-
-    // Initializes the logic for the page.
-    public override void Initialize()
-    {
-        PageHelpers.SetSerialJoin(assignedPanel, (uint)MainPageInfo.SerialJoins.FormattedTextBoxValue, "Hello World!"); // Set the output serial to the input
-    }
-
-    // Action to perform when the time button is pressed.
-    [Join(MainPageInfo.DigitalJoins.TimeButtonPress)]
-    public void OnTimeButtonPress(SigEventArgs args)
-    {
-        if (GHelpers.IsRisingEdge(args))
-        {
-            CrestronConsole.PrintLine("Time Button Pressed");
-
-            PageHelpers.SetDigitalJoin(assignedPanel, (uint)MainPageInfo.DigitalJoins.TimeButtonEnable, false);
-            PageHelpers.SetDigitalJoin(assignedPanel, (uint)MainPageInfo.DigitalJoins.DateAndTimeWidgetVisibility, true);
-        }
-    }
-}
-
-``` </pre>
+<pre> ```csharp // This is a single logic page example. [Page(MainPageInfo.PageID)] internal class MainPageLogic : PageLogicBase { public MainPageLogic(BasicTriList device) : base(device) { } // Initializes the logic for the page. public override void Initialize() { PageHelpers.SetSerialJoin(assignedPanel, (uint)MainPageInfo.SerialJoins.FormattedTextBoxValue, "Hello World!"); } // Action to perform when the time button is pressed. [Join(MainPageInfo.DigitalJoins.TimeButtonPress)] public void OnTimeButtonPress(SigEventArgs args) { if (GHelpers.IsRisingEdge(args)) { CrestronConsole.PrintLine("Time Button Pressed"); PageHelpers.SetDigitalJoin(assignedPanel, (uint)MainPageInfo.DigitalJoins.TimeButtonEnable, false); PageHelpers.SetDigitalJoin(assignedPanel, (uint)MainPageInfo.DigitalJoins.DateAndTimeWidgetVisibility, true); } } } ``` </pre>
 
 ## Features
 - **One-call startup**
