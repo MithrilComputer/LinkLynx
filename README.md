@@ -26,16 +26,45 @@ These are the requirements for using this library.
 - IDE: Visual Studio 2019 or later
 - Target Platform: 4-Series processors (SIMPL# Pro projects)
 
+## Usage Example
 
+```csharp
+
+// This is a single logic page example.
+
+[Page(MainPageInfo.PageID)]
+internal class MainPageLogic : PageLogicBase
+{
+    public MainPageLogic(BasicTriList device) : base(device) { }
+
+    // Initializes the logic for the page.
+    public override void Initialize()
+    {
+        PageHelpers.SetSerialJoin(assignedPanel, (uint)MainPageInfo.SerialJoins.FormattedTextBoxValue, "Hello World!"); // Set the output serial to the input
+    }
+
+    // Action to perform when the time button is pressed.
+    [Join(MainPageInfo.DigitalJoins.TimeButtonPress)]
+    public void OnTimeButtonPress(SigEventArgs args)
+    {
+        if (GHelpers.IsRisingEdge(args))
+        {
+            CrestronConsole.PrintLine("Time Button Pressed");
+
+            PageHelpers.SetDigitalJoin(assignedPanel, (uint)MainPageInfo.DigitalJoins.TimeButtonEnable, false);
+            PageHelpers.SetDigitalJoin(assignedPanel, (uint)MainPageInfo.DigitalJoins.DateAndTimeWidgetVisibility, true);
+        }
+    }
+}
+
+</pre>
+
+```
 ## Installation
 1. Add Required Crestron NuGet packages.
 2. Download the latest `LinkLynx.dll` from [Releases](#download).
 3. In your SIMPL# Pro project, **Add Reference** → **Browse** to the DLL.
 
-
-## Usage Example
-
-<pre> ```csharp // This is a single logic page example. [Page(MainPageInfo.PageID)] internal class MainPageLogic : PageLogicBase { public MainPageLogic(BasicTriList device) : base(device) { } // Initializes the logic for the page. public override void Initialize() { PageHelpers.SetSerialJoin(assignedPanel, (uint)MainPageInfo.SerialJoins.FormattedTextBoxValue, "Hello World!"); } // Action to perform when the time button is pressed. [Join(MainPageInfo.DigitalJoins.TimeButtonPress)] public void OnTimeButtonPress(SigEventArgs args) { if (GHelpers.IsRisingEdge(args)) { CrestronConsole.PrintLine("Time Button Pressed"); PageHelpers.SetDigitalJoin(assignedPanel, (uint)MainPageInfo.DigitalJoins.TimeButtonEnable, false); PageHelpers.SetDigitalJoin(assignedPanel, (uint)MainPageInfo.DigitalJoins.DateAndTimeWidgetVisibility, true); } } } ``` </pre>
 
 ## Features
 - **One-call startup**
