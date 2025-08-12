@@ -1,9 +1,10 @@
-﻿using System;
-using System.Reflection;
-using LinkLynx.Core.Logic;
+﻿using LinkLynx.Core.Logic.Pages;
 using LinkLynx.Core.Utility.Dispatchers;
 using LinkLynx.Core.Utility.Registries;
 using LinkLynx.Core.Utility.Signals;
+using System;
+using System.Linq;
+using System.Reflection;
 
 namespace LinkLynx.Core.Engine
 {
@@ -62,10 +63,18 @@ namespace LinkLynx.Core.Engine
         /// <param name="pageId">The id of the given type.</param>
         private static void AutoWireJoins(Type pageType, ushort pageId)
         {
-            typeof(AutoJoinRegistrar)
-                .GetMethod("RegisterJoins")
-                .MakeGenericMethod(pageType)
-                .Invoke(null, new object[] { pageId });
+            MethodInfo method = typeof(AutoJoinRegistrar)
+                .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
+                .FirstOrDefault(m =>
+                    m.Name == "RegisterJoins" &&
+                    m.IsGenericMethodDefinition &&
+                    m.GetParameters().Length == 1 &&
+                    m.GetParameters()[0].ParameterType == typeof(ushort));
+
+            if (method == null)
+                throw new MissingMethodException("AutoJoinRegistrar.RegisterJoins<T>(ushort) not found.");
+
+            method.MakeGenericMethod(pageType).Invoke(null, new object[] { pageId });
         }
     }
 }

@@ -2,7 +2,8 @@
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using LinkLynx.Core.Collections;
-using LinkLynx.Core.Logic;
+using LinkLynx.Core.Collections.Pools;
+using LinkLynx.Core.Logic.Pages;
 using LinkLynx.Core.Utility.Registries;
 using System;
 
@@ -20,6 +21,9 @@ namespace LinkLynx.Core.Utility.Dispatchers
         /// <param name="args">The signal to be processed.</param>
         internal static void Route(BasicTriList device, SigEventArgs args)
         {
+
+            CrestronConsole.PrintLine($"[JoinInstanceRouter] Attempting signal route...");
+
             PanelLogicGroup group = LogicGroupPool.GetPanelLogicGroup(device);
 
             if (group == null)
@@ -50,6 +54,8 @@ namespace LinkLynx.Core.Utility.Dispatchers
                     CrestronConsole.PrintLine($"[JoinInstanceRouter] Warning: No action registered for join {join} ({type})");
                     return;
                 }
+
+                CrestronConsole.PrintLine($"[JoinInstanceRouter] Running Function");
 
                 action.Invoke(page, args);
             }

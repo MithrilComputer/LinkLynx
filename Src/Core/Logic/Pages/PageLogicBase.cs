@@ -1,6 +1,6 @@
 ﻿using Crestron.SimplSharpPro.DeviceSupport;
 
-namespace LinkLynx.Core.Logic
+namespace LinkLynx.Core.Logic.Pages
 {
     /// <summary>
     /// This is the base class for all panel specific logic, Represents a page's worth of logic.

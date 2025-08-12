@@ -1,6 +1,6 @@
 ﻿using Crestron.SimplSharp;
 using Crestron.SimplSharpPro;
-using LinkLynx.Core.Logic;
+using LinkLynx.Core.Logic.Pages;
 using LinkLynx.Core.Utility.Registries;
 using LinkLynx.Core.Utility.Signals;
 using System;

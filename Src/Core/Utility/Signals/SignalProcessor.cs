@@ -2,6 +2,7 @@
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using LinkLynx.Core.Collections;
+using LinkLynx.Core.Collections.Pools;
 using LinkLynx.Core.Utility.Dispatchers;
 
 namespace LinkLynx.Core.Utility.Signals
@@ -38,6 +39,8 @@ namespace LinkLynx.Core.Utility.Signals
                 CrestronConsole.PrintLine("[SignalProcessor] Error: Device or signal is null.");
                 return;
             }
+
+            CrestronConsole.PrintLine("[SignalProcessor] Signal Clear, routing...");
 
             JoinInstanceRouter.Route(device, args);
         }

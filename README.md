@@ -35,7 +35,8 @@ using Crestron.SimplSharpPro.DeviceSupport;
 
 using LinkLynx.Core.Utility.Helpers;
 using LinkLynx.Core.Utility.Signals;
-using LinkLynx.Core.Logic;
+using LinkLynx.Core.Logic.Pages;
+using System;
 
 // This is a single logic page example.
 
@@ -44,25 +45,75 @@ internal class MainPageLogic : PageLogicBase
 {
     public MainPageLogic(BasicTriList device) : base(device) { }
 
+    bool isTimeDisplayed;
+
+    ushort gaugeValue;
+
+    string someText;
+
+    Random random;
+
     // Initializes the logic for the page.
     public override void Initialize()
     {
-        SignalHelper.SetSerialJoin(assignedPanel, MainPageInfo.SerialJoins.FormattedTextBoxValue, "Hello World!");
+        if(random == null)
+        {
+            random = new Random();
+        }
+
+        someText = "Want A Random Number?";
+        isTimeDisplayed = false;
+        gaugeValue = 0;
+
+        SignalHelper.SetDigitalJoin(assignedPanel, (uint)MainPageInfo.DigitalJoins.WeatherWidgetVisibility, false);
+
+        SignalHelper.SetSerialJoin(assignedPanel, (uint)MainPageInfo.SerialJoins.TextBoxInput, someText);
     }
 
     // Action to perform when the time button is pressed.
-    [Join(MainPageInfo.DigitalJoins.TimeButtonPress)]
+    [Join(MainPageInfo.DigitalJoins.WeatherButtonPress)]
     public void OnTimeButtonPress(SigEventArgs args)
     {
         if (SignalHelper.IsRisingEdge(args))
         {
             CrestronConsole.PrintLine("Time Button Pressed");
 
-            SignalHelper.SetDigitalJoin(assignedPanel, MainPageInfo.DigitalJoins.TimeButtonEnable, false);
-            SignalHelper.SetDigitalJoin(assignedPanel, MainPageInfo.DigitalJoins.DateAndTimeWidgetVisibility, true);
+            if (isTimeDisplayed)
+            {
+                SignalHelper.SetDigitalJoin(assignedPanel, (uint)MainPageInfo.DigitalJoins.WeatherWidgetVisibility, false);
+                isTimeDisplayed = false;
+            }
+            else
+            {
+                SignalHelper.SetDigitalJoin(assignedPanel, (uint)MainPageInfo.DigitalJoins.WeatherWidgetVisibility, true);
+                isTimeDisplayed = true;
+            }
+
+            if (gaugeValue >= 4)
+            {
+                gaugeValue = 0;
+            } 
+            else
+            {
+                gaugeValue++;
+            }
+
+            SignalHelper.SetAnalogJoin(assignedPanel, (uint)MainPageInfo.AnalogJoins.GaugeInput, gaugeValue);
+
+            if (someText == "Want A Random Number?")
+            {
+                someText = random.Next(10000).ToString();
+            }
+            else
+            {
+                someText = "Want A Random Number?";
+            }
+
+            SignalHelper.SetSerialJoin(assignedPanel, (uint)MainPageInfo.SerialJoins.TextBoxInput, someText);
         }
     }
 }
+
 
 ```
 ## Installation
@@ -101,8 +152,8 @@ internal class MainPageLogic : PageLogicBase
   - Debug helpers show used/available IPIDs.
 
 - **Developer helpers**
-  - `GHelpers.SetDigital/Analog/SerialJoin(...)` for quick panel writes.
-  - `IsRisingEdge(args)` utility for simple button edge detection.
+  - `SignalHelper.SetDigital/Analog/SerialJoin(...)` for quick panel writes.
+  - `SignalHelper.IsRisingEdge(args)` utility for simple button edge detection.
   - Consistent console logging for ops/debug.
 
 - **Clean shutdown**

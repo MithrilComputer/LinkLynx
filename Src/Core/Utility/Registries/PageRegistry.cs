@@ -1,6 +1,6 @@
 ﻿using Crestron.SimplSharp;
 using Crestron.SimplSharpPro.DeviceSupport;
-using LinkLynx.Core.Logic;
+using LinkLynx.Core.Logic.Pages;
 using System;
 using System.Collections.Generic;
 

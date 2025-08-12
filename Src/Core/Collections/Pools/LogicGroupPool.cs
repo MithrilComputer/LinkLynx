@@ -3,7 +3,7 @@ using Crestron.SimplSharpPro.DeviceSupport;
 using System;
 using System.Collections.Generic;
 
-namespace LinkLynx.Core.Collections
+namespace LinkLynx.Core.Collections.Pools
 {
 
     /// <summary>

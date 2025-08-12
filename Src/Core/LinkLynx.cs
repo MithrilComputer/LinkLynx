@@ -2,6 +2,7 @@
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using LinkLynx.Core.Collections;
+using LinkLynx.Core.Collections.Pools;
 using LinkLynx.Core.Engine;
 using LinkLynx.Core.Utility.Dispatchers;
 using LinkLynx.Core.Utility.Registries;
@@ -130,6 +131,7 @@ namespace LinkLynx.Core
         public void RegisterPanel(BasicTriList panel)
         {
             LogicGroupPool.RegisterPanel(panel);
+            panel.Register();
         }
 
         /// <summary>
@@ -168,8 +170,8 @@ namespace LinkLynx.Core
         public void Cleanup()
         {
             // 1. Pools
-            CrestronConsole.PrintLine("[LinkLynx] Cleaning IPID Pool...");
-            IPIDPool.Clear();
+            CrestronConsole.PrintLine("[LinkLynx] Cleaning Panel Pool...");
+            PanelPool.Clear();
             CrestronConsole.PrintLine("[LinkLynx] Cleaning Logic Group Pool...");
             LogicGroupPool.Clear();
 
