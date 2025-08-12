@@ -44,18 +44,13 @@ internal class MainPageLogic : PageLogicBase
 {
     public MainPageLogic(BasicTriList device) : base(device) { }
 
-    /// <summary>
-    /// Initializes the logic for the page.
-    ///</summary>
+    // Initializes the logic for the page.
     public override void Initialize()
     {
         PageHelpers.SetSerialJoin(assignedPanel, (uint)MainPageInfo.SerialJoins.FormattedTextBoxValue, "Hello World!"); // Set the output serial to the input
     }
 
-    /// <summary>
-    /// Action to perform when the time button is pressed.
-    /// </summary>
-    /// <param name="args">The signal event</param>
+    // Action to perform when the time button is pressed.
     [Join(MainPageInfo.DigitalJoins.TimeButtonPress)]
     public void OnTimeButtonPress(SigEventArgs args)
     {
