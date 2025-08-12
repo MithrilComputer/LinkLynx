@@ -2,7 +2,7 @@
 using Crestron.SimplSharpPro;
 using LinkLynx.Core.Logic;
 using LinkLynx.Core.Utility.Dispatchers.Signals;
-using LinkLynx.Core.Utility.Registries;
+using LinkLynx.Core.Utility.Helpers;
 using System;
 
 namespace LinkLynx.Core.Utility.Dispatchers
@@ -22,7 +22,7 @@ namespace LinkLynx.Core.Utility.Dispatchers
         /// It is used to determine the signal type.</remarks>
         internal static bool AddToDispatcher(Enum join, Action<PageLogicBase, SigEventArgs> action)
         {
-            eSigType signalType = JoinHelper.GetSignalTypeFromEnum(join);
+            eSigType signalType = EnumHelper.GetSignalTypeFromEnum(join);
             uint joinId = Convert.ToUInt32(join);
 
             switch (signalType)

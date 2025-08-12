@@ -1,18 +1,19 @@
 ﻿using Crestron.SimplSharpPro;
 using System;
 
-namespace LinkLynx.Core.Utility.Registries
+namespace LinkLynx.Core.Utility.Helpers
 {
     /// <summary>
     /// Helps with some specific cases involved with JoinMapping
     /// </summary>
-    internal static class JoinHelper
+    public static class EnumHelper
     {
         /// <summary>
-        /// Gets a signal type from an enum for better clarity.
+        /// Gets a signal type from an enum for better clarity. Enum must contain any of the words 'digital', 'analog', or 'serial'.
+        /// The function is not case sensitive, so 'DiGiTal' will work just as well as as 'Digital'.
         /// </summary>
         /// <param name="joinEnum">The enum that represents the logic join.</param>
-        internal static eSigType GetSignalTypeFromEnum(Enum joinEnum)
+        public static eSigType GetSignalTypeFromEnum(Enum joinEnum)
         {
             string typeName = joinEnum.GetType().Name.ToLower();
 

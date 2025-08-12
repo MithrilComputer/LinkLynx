@@ -2,6 +2,7 @@
 using Crestron.SimplSharpPro;
 using System;
 using System.Collections.Generic;
+using LinkLynx.Core.Utility.Helpers;
 
 namespace LinkLynx.Core.Utility.Registries
 {
@@ -57,7 +58,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// <exception cref="InvalidOperationException">Gets thrown whenever a duplicate key is attempted to be used.</exception>
         internal static void RegisterPageKeyFromJoin(Enum join, ushort pageId)
         {
-            eSigType type = JoinHelper.GetSignalTypeFromEnum(join);
+            eSigType type = EnumHelper.GetSignalTypeFromEnum(join);
             uint joinNumber = Convert.ToUInt32(join);
 
             CrestronConsole.PrintLine($"[GlobalJoinPageRegistry] Log: Registered '{type}' join '{joinNumber}' to page '{pageId}'");

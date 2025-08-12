@@ -29,6 +29,13 @@ These are the requirements for using this library.
 ## Usage Example
 
 ```csharp
+using Crestron.SimplSharp;
+using Crestron.SimplSharpPro;
+using Crestron.SimplSharpPro.DeviceSupport;
+
+using LinkLynx.Core.Utility.Helpers;
+using LinkLynx.Core.Utility.Signals;
+using LinkLynx.Core.Logic;
 
 // This is a single logic page example.
 
@@ -40,19 +47,19 @@ internal class MainPageLogic : PageLogicBase
     // Initializes the logic for the page.
     public override void Initialize()
     {
-        PageHelpers.SetSerialJoin(assignedPanel, (uint)MainPageInfo.SerialJoins.FormattedTextBoxValue, "Hello World!"); // Set the output serial to the input
+        SignalHelper.SetSerialJoin(assignedPanel, MainPageInfo.SerialJoins.FormattedTextBoxValue, "Hello World!");
     }
 
     // Action to perform when the time button is pressed.
     [Join(MainPageInfo.DigitalJoins.TimeButtonPress)]
     public void OnTimeButtonPress(SigEventArgs args)
     {
-        if (GHelpers.IsRisingEdge(args))
+        if (SignalHelper.IsRisingEdge(args))
         {
             CrestronConsole.PrintLine("Time Button Pressed");
 
-            PageHelpers.SetDigitalJoin(assignedPanel, (uint)MainPageInfo.DigitalJoins.TimeButtonEnable, false);
-            PageHelpers.SetDigitalJoin(assignedPanel, (uint)MainPageInfo.DigitalJoins.DateAndTimeWidgetVisibility, true);
+            SignalHelper.SetDigitalJoin(assignedPanel, MainPageInfo.DigitalJoins.TimeButtonEnable, false);
+            SignalHelper.SetDigitalJoin(assignedPanel, MainPageInfo.DigitalJoins.DateAndTimeWidgetVisibility, true);
         }
     }
 }
