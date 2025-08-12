@@ -1,0 +1,29 @@
+# Build results
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.pdb
+
+.vs/
+
+*.bkp
+
+# Backup & log files
+*.log
+*.tlog
+*.cache
+*.dbmdl
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+*.nuget.props
+*.nuget.targets
+
+# Publish output
+publish/
+out/

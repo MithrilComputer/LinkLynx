@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>LinkLynx</AssemblyName>
+    <RootNamespace>LinkLynx.Core</RootNamespace>
+    <OutputType>Library</OutputType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Keep only the packages you need. Exclude build/runtime so no CPZ targets get imported. -->
+    <PackageReference Include="Crestron.SimplSharp.SDK.Library" Version="2.21.133" ExcludeAssets="build;runtime;native;contentFiles;analyzers" />
+    <PackageReference Include="Crestron.SimplSharp.SDK.ProgramLibrary" Version="2.21.133" ExcludeAssets="build;runtime;native;contentFiles;analyzers" />
+    <!-- Do NOT include Crestron.SimplSharp.SDK.Program in a library project -->
+  </ItemGroup>
+
+  <!-- Stop Crestron DLLs from copying into bin -->
+  <ItemGroup>
+    <Reference Update="Crestron.SimplSharpPro">
+      <Private>False</Private>
+    </Reference>
+    <Reference Update="Crestron.SimplSharpPro.DeviceSupport">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Docs\" />
+  </ItemGroup>
+</Project>
