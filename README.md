@@ -57,8 +57,6 @@ internal class MainPageLogic : PageLogicBase
     }
 }
 
-</pre>
-
 ```
 ## Installation
 1. Add Required Crestron NuGet packages.
