@@ -3,9 +3,9 @@ LinkLynx is a lightweight development framework meant to drastically speed up an
 
 ## Table of Contents
 - [Download](#download)
-- [Requirements](#dequirements)
+- [Requirements](#requirements)
 - [Installation](#installation)
-- [Usage Example](#usage example)
+- [Usage Example](#usage-example)
 - [Usage](docs/Usage.md)
 - [API Reference](docs/API.md)
 - [Features](#features)
@@ -35,7 +35,7 @@ These are the requirements for using this library.
 
 ## Usage Example
 
-<pre> ```
+<pre> ```csharp
 
 // This is a single logic page example.
 
