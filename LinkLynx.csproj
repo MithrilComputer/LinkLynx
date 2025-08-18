@@ -16,7 +16,7 @@
     <!-- Keep only the packages you need. Exclude build/runtime so no CPZ targets get imported. -->
     <PackageReference Include="Crestron.SimplSharp.SDK.Library" Version="2.21.133" ExcludeAssets="build;runtime;native;contentFiles;analyzers" />
     <PackageReference Include="Crestron.SimplSharp.SDK.ProgramLibrary" Version="2.21.133" ExcludeAssets="build;runtime;native;contentFiles;analyzers" />
-    <PackageReference Include="NUnit" Version="4.4.0" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
     <!-- Do NOT include Crestron.SimplSharp.SDK.Program in a library project -->
   </ItemGroup>
 

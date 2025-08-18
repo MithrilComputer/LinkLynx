@@ -2,9 +2,7 @@
 using LinkLynx.Core.Logic.Pages;            // only for the type in the Func signature
 using LinkLynx.Core.Utility.Registries;
 using NUnit.Framework;
-using NUnit.Framework.Legacy;
 using System;
-using System.Collections.Generic;
 
 namespace LinkLynx.Tests
 {
