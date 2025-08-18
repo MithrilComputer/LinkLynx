@@ -3,6 +3,9 @@ using Crestron.SimplSharpPro.DeviceSupport;
 using LinkLynx.Core.Logic.Pages;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("LinkLynx.Tests")]
 
 namespace LinkLynx.Core.Utility.Registries
 {
