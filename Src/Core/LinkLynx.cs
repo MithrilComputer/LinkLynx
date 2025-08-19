@@ -1,12 +1,11 @@
-﻿using Crestron.SimplSharp;
-using Crestron.SimplSharpPro;
+﻿using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
-using LinkLynx.Core.Collections;
-using LinkLynx.Core.Collections.Pools;
 using LinkLynx.Core.Engine;
+using LinkLynx.Core.Utility.Debugging.Logging;
 using LinkLynx.Core.Utility.Dispatchers;
-using LinkLynx.Core.Utility.Registries;
 using LinkLynx.Core.Utility.Signals;
+using System;
+using System.Reflection;
 
 namespace LinkLynx.Core
 {
@@ -116,6 +115,7 @@ namespace LinkLynx.Core
         public void Initialize()
         {
             PageScanner.Run(); // your reflection scanner that registers pages + joins
+            SendSplash();
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace LinkLynx.Core
         /// </exception>
         public void RegisterPanel(BasicTriList panel)
         {
-            LogicGroupPool.RegisterPanel(panel);
+            LinkLynxServices.logicGroupPool.RegisterPanel(panel);
             panel.Register();
         }
 
@@ -147,7 +147,7 @@ namespace LinkLynx.Core
         /// </exception>
         public void InitializePanel(BasicTriList panel)
         {
-            LogicGroupPool.InitializePanelLogic(panel);
+            LinkLynxServices.logicGroupPool.InitializePanelLogic(panel);
         }
 
         /// <summary>
@@ -170,23 +170,54 @@ namespace LinkLynx.Core
         public void Cleanup()
         {
             // 1. Pools
-            CrestronConsole.PrintLine("[LinkLynx] Cleaning Panel Pool...");
-            PanelPool.Clear();
-            CrestronConsole.PrintLine("[LinkLynx] Cleaning Logic Group Pool...");
-            LogicGroupPool.Clear();
+            ConsoleLogger.Log("[LinkLynx] Cleaning Panel Pool...");
+            LinkLynxServices.panelPool.Clear();
+            ConsoleLogger.Log("[LinkLynx] Cleaning Logic Group Pool...");
+            LinkLynxServices.logicGroupPool.Clear();
 
             // 2. Registries
-            CrestronConsole.PrintLine("[LinkLynx] Cleaning The Page Registry...");
-            PageRegistry.Clear();
-            CrestronConsole.PrintLine("[LinkLynx] Cleaning The Reverse Page Registry...");
-            ReversePageRegistry.Clear();
+            ConsoleLogger.Log("[LinkLynx] Cleaning The Page Registry...");
+            LinkLynxServices.pageRegistry.Clear();
+            ConsoleLogger.Log("[LinkLynx] Cleaning The Reverse Page Registry...");
+            LinkLynxServices.reversePageRegistry.Clear();
 
             // 3. Dispatchers
-            CrestronConsole.PrintLine("[LinkLynx] Cleaning The Dispatcher...");
+            ConsoleLogger.Log("[LinkLynx] Cleaning The Dispatcher...");
             DispatcherHelper.Clear();
 
             // 4. Log the cleanup
-            CrestronConsole.PrintLine("[LinkLynx] Framework clean Successful! Good Night");
+            ConsoleLogger.Log("[LinkLynx] Framework clean Successful! Good Night...");
+        }
+
+        /// <summary>
+        /// Running this method prints a Splash Screen To the console.
+        /// </summary>
+        public void SendSplash()
+        {
+            var version = (Assembly.GetExecutingAssembly().GetName().Version ?? new Version(0, 0)).ToString();
+
+            const string banner = @"
+               █████████        ███     
+              ███░░░░░███  ███ ░███  ███
+             ░███    ░███ ░░░█████████░ 
+             ░███████████   ░░░█████░   
+             ░███░░░░░███    █████████  
+             ░███    ░███  ███░░███░░███
+             █████   █████░░░  ░███ ░░░ 
+            ░░░░░   ░░░░░      ░░░      
+            ";
+
+            ConsoleLogger.Log("");
+
+            foreach (var line in banner.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None))
+                ConsoleLogger.Log(line);
+
+            // MithrilComputers Logo
+            ConsoleLogger.Log("");
+            ConsoleLogger.Log($"LinkLynx by MithrilComputers — v{version}");
+            ConsoleLogger.Log("");
+            ConsoleLogger.Log("-------- Happy Hacking! ------");
+            ConsoleLogger.Log("");
         }
     }
 }

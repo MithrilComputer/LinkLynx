@@ -1,10 +1,10 @@
-﻿using Crestron.SimplSharp;
-using Crestron.SimplSharpPro;
+﻿using Crestron.SimplSharpPro;
 using LinkLynx.Core.Logic.Pages;
 using LinkLynx.Core.Utility.Registries;
-using LinkLynx.Core.Utility.Signals;
+using LinkLynx.Core.Utility.Debugging.Logging;
 using System;
 using System.Reflection;
+using LinkLynx.Core.Src.Core.Utility.Signals.Attributes;
 
 namespace LinkLynx.Core.Utility.Dispatchers
 {
@@ -33,13 +33,13 @@ namespace LinkLynx.Core.Utility.Dispatchers
                 {
                     if (joinAttr.Join is Enum joinEnum)
                     {
-                        ReversePageRegistry.RegisterPageKeyFromJoin(joinEnum, pageId);
+                        LinkLynxServices.reversePageRegistry.RegisterPageKeyFromJoin(joinEnum, pageId);
 
                         DispatcherHelper.AddToDispatcher(joinEnum, BuildLambda<T>(method));
                     }
                     else
                     {
-                        CrestronConsole.PrintLine($"[AutoJoinRegistrar] Warning: Join attribute on method '{method.Name}' does not contain a valid Enum.");
+                        ConsoleLogger.Log($"[AutoJoinRegistrar] Warning: Join attribute on method '{method.Name}' does not contain a valid Enum.");
                     }
                 }
             }
@@ -55,7 +55,7 @@ namespace LinkLynx.Core.Utility.Dispatchers
             {
                 if (page == null)
                 {
-                    CrestronConsole.PrintLine($"[AutoJoinRegistrar] Error: Page instance was null.");
+                    ConsoleLogger.Log($"[AutoJoinRegistrar] Error: Page instance was null.");
                     return;
                 }
 
@@ -65,12 +65,12 @@ namespace LinkLynx.Core.Utility.Dispatchers
                 }
                 catch (TargetInvocationException ex)
                 {
-                    CrestronConsole.PrintLine($"[AutoJoinRegistrar] Error in method '{method.Name}': {ex.InnerException?.Message ?? "Unknown inner exception"}");
-                    CrestronConsole.PrintLine(ex.InnerException?.StackTrace ?? "No stack trace");
+                    ConsoleLogger.Log($"[AutoJoinRegistrar] Error in method '{method.Name}': {ex.InnerException?.Message ?? "Unknown inner exception"}");
+                    ConsoleLogger.Log(ex.InnerException?.StackTrace ?? "No stack trace");
                 }
                 catch (Exception ex)
                 {
-                    CrestronConsole.PrintLine($"[AutoJoinRegistrar] Error: {ex.Message}");
+                    ConsoleLogger.Log($"[AutoJoinRegistrar] Error: {ex.Message}");
                 }
             };
         }

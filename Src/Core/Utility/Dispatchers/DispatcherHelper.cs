@@ -1,7 +1,6 @@
-﻿using Crestron.SimplSharp;
-using Crestron.SimplSharpPro;
+﻿using Crestron.SimplSharpPro;
 using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Core.Utility.Dispatchers.Signals;
+using LinkLynx.Core.Utility.Debugging.Logging;
 using LinkLynx.Core.Utility.Helpers;
 using System;
 
@@ -28,11 +27,11 @@ namespace LinkLynx.Core.Utility.Dispatchers
             switch (signalType)
             {
                 case eSigType.Bool:
-                    return DigitalDispatcher.AddToDispatcher(joinId, action);
+                    return LinkLynxServices.digitalDispatcher.AddToDispatcher(joinId, action);
                 case eSigType.UShort:
-                    return AnalogDispatcher.AddToDispatcher(joinId, action);
+                    return LinkLynxServices.analogDispatcher.AddToDispatcher(joinId, action);
                 case eSigType.String:
-                    return SerialDispatcher.AddToDispatcher(joinId, action);
+                    return LinkLynxServices.serialDispatcher.AddToDispatcher(joinId, action);
                 default:
                     throw new Exception("[DispatcherHelper] Incorrect Enum Value Passed when attempting to add a new logic join.");
             }
@@ -49,13 +48,13 @@ namespace LinkLynx.Core.Utility.Dispatchers
             switch (signalType)
             {
                 case eSigType.Bool:
-                    return DigitalDispatcher.CheckIfDispatcherContainsKey(joinId);
+                    return LinkLynxServices.digitalDispatcher.CheckIfDispatcherContainsKey(joinId);
                 case eSigType.UShort:
-                    return AnalogDispatcher.CheckIfDispatcherContainsKey(joinId);
+                    return LinkLynxServices.analogDispatcher.CheckIfDispatcherContainsKey(joinId);
                 case eSigType.String:
-                    return SerialDispatcher.CheckIfDispatcherContainsKey(joinId);
+                    return LinkLynxServices.serialDispatcher.CheckIfDispatcherContainsKey(joinId);
                 default:
-                    CrestronConsole.PrintLine($"[DispatcherHelper] Unsupported signal type: {signalType}, with a Join of {joinId}");
+                    ConsoleLogger.Log($"[DispatcherHelper] Unsupported signal type: {signalType}, with a Join of {joinId}");
                     return false;
             }
         }
@@ -71,11 +70,11 @@ namespace LinkLynx.Core.Utility.Dispatchers
             switch (signalType)
             {
                 case eSigType.Bool:
-                    return DigitalDispatcher.GetActionFromKey(joinId);
+                    return LinkLynxServices.digitalDispatcher.GetActionFromKey(joinId);
                 case eSigType.UShort:
-                    return AnalogDispatcher.GetActionFromKey(joinId);
+                    return LinkLynxServices.analogDispatcher.GetActionFromKey(joinId);
                 case eSigType.String:
-                    return SerialDispatcher.GetActionFromKey(joinId);
+                    return LinkLynxServices.serialDispatcher.GetActionFromKey(joinId);
                 default:
                     throw new FormatException("[DispatcherHelper] Input Enum Has Incorrect Formatting");
             }
@@ -86,9 +85,9 @@ namespace LinkLynx.Core.Utility.Dispatchers
         /// </summary>
         internal static void Clear()
         {
-            DigitalDispatcher.Clear();
-            AnalogDispatcher.Clear();
-            SerialDispatcher.Clear();
+            LinkLynxServices.digitalDispatcher.Clear();
+            LinkLynxServices.analogDispatcher.Clear();
+            LinkLynxServices.serialDispatcher.Clear();
         }
     }
 }

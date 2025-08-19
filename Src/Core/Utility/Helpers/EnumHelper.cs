@@ -15,13 +15,13 @@ namespace LinkLynx.Core.Utility.Helpers
         /// <param name="joinEnum">The enum that represents the logic join.</param>
         public static eSigType GetSignalTypeFromEnum(Enum joinEnum)
         {
-            string typeName = joinEnum.GetType().Name.ToLower();
+            if (joinEnum == null)
+                throw new ArgumentNullException($"[EnumHelper] Error: Cant get signal from a null Enum: {nameof(joinEnum)}");
 
-            if (typeName.Contains("digital")) return eSigType.Bool;
-            if (typeName.Contains("analog")) return eSigType.UShort;
-            if (typeName.Contains("serial")) return eSigType.String;
+            Type enumType = joinEnum.GetType();
+            eSigType signalType = LinkLynxServices.enumSignalTypeRegistry.Get(enumType);
 
-            throw new ArgumentException($"Unknown signal type from enum name: {typeName}");
+            return signalType;
         }
     }
 }

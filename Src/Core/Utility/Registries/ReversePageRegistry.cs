@@ -1,19 +1,35 @@
-﻿using Crestron.SimplSharp;
-using Crestron.SimplSharpPro;
+﻿using Crestron.SimplSharpPro;
+using LinkLynx.Core.Utility.Debugging.Logging;
+using LinkLynx.Core.Utility.Dispatchers.Signals;
+using LinkLynx.Core.Utility.Helpers;
 using System;
 using System.Collections.Generic;
-using LinkLynx.Core.Utility.Helpers;
 
 namespace LinkLynx.Core.Utility.Registries
 {
     /// <summary>
     /// A special class that used to link logic joins to pages, good for reverse join searching.
     /// </summary>
-    internal static class ReversePageRegistry
+    internal sealed class ReversePageRegistry
     {
-        private static readonly Dictionary<uint, ushort>  DigitalJoinPageMap = new Dictionary<uint, ushort>();
-        private static readonly Dictionary<uint, ushort> AnalogJoinPageMap = new Dictionary<uint, ushort>();
-        private static readonly Dictionary<uint, ushort> SerialJoinPageMap = new Dictionary<uint, ushort>();
+        /// <summary>
+        /// The singleton instance of the class.
+        /// </summary>
+        private static readonly ReversePageRegistry instance = new ReversePageRegistry();
+
+        /// <summary>
+        /// The singleton instance of the class.
+        /// </summary>
+        internal static ReversePageRegistry Instance => instance;
+
+        /// <summary>
+        /// Class constructor.
+        /// </summary>
+        internal ReversePageRegistry() { }
+
+        private readonly Dictionary<uint, ushort>  DigitalJoinPageMap = new Dictionary<uint, ushort>();
+        private readonly Dictionary<uint, ushort> AnalogJoinPageMap = new Dictionary<uint, ushort>();
+        private readonly Dictionary<uint, ushort> SerialJoinPageMap = new Dictionary<uint, ushort>();
 
         /// <summary>
         /// Gets a page ID given an input join ID and Join Type.
@@ -21,7 +37,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// <param name="join">The join ID to search for the page.</param>
         /// <param name="type">The type of join associated with the key.</param>
         /// <exception cref="Exception">This is thrown if a key could not be found.</exception>
-        internal static ushort GetPageFromSignalAndType(uint join, eSigType type)
+        internal ushort GetPageFromSignalAndType(uint join, eSigType type)
         {
             switch (type)
             {
@@ -56,12 +72,12 @@ namespace LinkLynx.Core.Utility.Registries
         /// <param name="join">The join associated to use as a key.</param>
         /// <param name="pageId">The page to associate to the given key</param>
         /// <exception cref="InvalidOperationException">Gets thrown whenever a duplicate key is attempted to be used.</exception>
-        internal static void RegisterPageKeyFromJoin(Enum join, ushort pageId)
+        internal void RegisterPageKeyFromJoin(Enum join, ushort pageId)
         {
             eSigType type = EnumHelper.GetSignalTypeFromEnum(join);
             uint joinNumber = Convert.ToUInt32(join);
 
-            CrestronConsole.PrintLine($"[GlobalJoinPageRegistry] Log: Registered '{type}' join '{joinNumber}' to page '{pageId}'");
+            ConsoleLogger.Log($"[GlobalJoinPageRegistry] Log: Registered '{type}' join '{joinNumber}' to page '{pageId}'");
 
             switch (type)
             {
@@ -106,7 +122,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// <summary>
         /// Clears all the entries in the registry. Use only at system shutdown.
         /// </summary>
-        internal static void Clear()
+        internal void Clear()
         {
             DigitalJoinPageMap.Clear();
             AnalogJoinPageMap.Clear();

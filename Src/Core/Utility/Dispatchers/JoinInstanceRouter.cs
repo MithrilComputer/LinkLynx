@@ -1,9 +1,9 @@
-﻿using Crestron.SimplSharp;
-using Crestron.SimplSharpPro;
+﻿using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using LinkLynx.Core.Collections;
 using LinkLynx.Core.Collections.Pools;
 using LinkLynx.Core.Logic.Pages;
+using LinkLynx.Core.Utility.Debugging.Logging;
 using LinkLynx.Core.Utility.Registries;
 using System;
 
@@ -21,48 +21,32 @@ namespace LinkLynx.Core.Utility.Dispatchers
         /// <param name="args">The signal to be processed.</param>
         internal static void Route(BasicTriList device, SigEventArgs args)
         {
+            ConsoleLogger.Log($"[JoinInstanceRouter] Attempting signal route...");
 
-            CrestronConsole.PrintLine($"[JoinInstanceRouter] Attempting signal route...");
+            PanelLogicGroup group = LinkLynxServices.logicGroupPool.GetPanelLogicGroup(device);
 
-            PanelLogicGroup group = LogicGroupPool.GetPanelLogicGroup(device);
+            uint join = args.Sig.Number;
+            eSigType type = args.Sig.Type;
 
-            if (group == null)
+            ushort pageId = LinkLynxServices.reversePageRegistry.GetPageFromSignalAndType(join, type);
+
+            PageLogicBase page = group.GetPageLogicFromID(pageId);
+
+            if (page == null)
             {
-                CrestronConsole.PrintLine($"[JoinInstanceRouter] Error: No logic group found for device '{device.ID}'");
+                ConsoleLogger.Log($"[JoinInstanceRouter] Error: Page {pageId} not found in panel group for device '{device.ID}'");
                 return;
             }
 
-            try
+            Action<PageLogicBase, SigEventArgs> action = DispatcherHelper.GetDispatcherActionFromKey(type, join);
+
+            if (action == null)
             {
-                uint join = args.Sig.Number;
-                eSigType type = args.Sig.Type;
-
-                ushort pageId = ReversePageRegistry.GetPageFromSignalAndType(join, type);
-
-                PageLogicBase page = group.GetPageLogicFromID(pageId);
-
-                if (page == null)
-                {
-                    CrestronConsole.PrintLine($"[JoinInstanceRouter] Error: Page {pageId} not found in panel group for device '{device.ID}'");
-                    return;
-                }
-
-                Action<PageLogicBase, SigEventArgs> action = DispatcherHelper.GetDispatcherActionFromKey(type, join);
-
-                if (action == null)
-                {
-                    CrestronConsole.PrintLine($"[JoinInstanceRouter] Warning: No action registered for join {join} ({type})");
-                    return;
-                }
-
-                CrestronConsole.PrintLine($"[JoinInstanceRouter] Running Function");
-
-                action.Invoke(page, args);
+                ConsoleLogger.Log($"[JoinInstanceRouter] Warning: No action registered for join {join} ({type})");
+                return;
             }
-            catch (Exception ex)
-            {
-                CrestronConsole.PrintLine($"[JoinInstanceRouter] Error: {ex.Message}");
-            }
+
+            action.Invoke(page, args);
         }
     }
 }

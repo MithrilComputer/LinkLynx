@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace LinkLynx.Core.Utility.Signals
+namespace LinkLynx.Core.Src.Core.Utility.Signals.Attributes
 {
     /// <summary>
     /// This is the attribute class for giving page logic classes an internal ID.
@@ -20,6 +16,9 @@ namespace LinkLynx.Core.Utility.Signals
         /// <summary>
         /// This is the attribute class for giving page logic classes an internal ID.
         /// </summary>
-        public PageAttribute(ushort id) => Id = id;
+        public PageAttribute(ushort id) 
+        {
+            Id = id;
+        } 
     }
 }

@@ -17,7 +17,8 @@ namespace LinkLynx.Core.Factories
         {
             Dictionary<ushort, PageLogicBase> createdPages = new Dictionary<ushort, PageLogicBase>();
 
-            IReadOnlyDictionary<ushort, Func<BasicTriList, PageLogicBase>> registeredPages = PageRegistry.GetAllRegistries();
+            IReadOnlyDictionary<ushort, Func<BasicTriList, PageLogicBase>> registeredPages 
+                = LinkLynxServices.pageRegistry.GetAllRegistries();
 
             foreach (KeyValuePair<ushort, Func<BasicTriList, PageLogicBase>> pair in registeredPages)
             {

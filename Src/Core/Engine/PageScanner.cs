@@ -1,7 +1,8 @@
-﻿using LinkLynx.Core.Logic.Pages;
+﻿using Crestron.SimplSharpPro;
+using LinkLynx.Core.Logic.Pages;
+using LinkLynx.Core.Src.Core.Utility.Signals.Attributes;
 using LinkLynx.Core.Utility.Dispatchers;
 using LinkLynx.Core.Utility.Registries;
-using LinkLynx.Core.Utility.Signals;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -18,39 +19,48 @@ namespace LinkLynx.Core.Engine
         /// </summary>
         internal static void Run()
         {
-            Type baseType = typeof(PageLogicBase);
+
+            // This might need to change at some point, 
+            // Only affects startup time, but could get heavy later if I don't optimize it with a few hundred pages in mind.
+            // Not to mention I don't like how it looks for some reason.
+
+            Type baseType = typeof(PageLogicBase); // Cache
 
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 Type[] types;
 
-                try 
-                { 
-                    types = assembly.GetTypes(); 
-                } 
-                catch 
-                { 
-                    continue; 
+                try
+                {
+                    types = assembly.GetTypes();
+                }
+                catch
+                {
+                    continue;
                 }
 
                 foreach (Type type in types)
                 {
-                    if (type.IsAbstract || !baseType.IsAssignableFrom(type)) 
-                        continue;
+                    if (type.IsEnum)
+                    {
+                        TryRegisterEnumSigType(type);
+                    }
 
-                    PageAttribute pageAttribute = type.GetCustomAttribute<PageAttribute>();
+                    if (type.IsClass)
+                    {
+                        PageAttribute pageAttribute = (PageAttribute)type.GetCustomAttribute(typeof(PageAttribute), inherit: false);
 
-                    if (pageAttribute == null) 
-                        continue;
+                        if (pageAttribute == null)
+                            continue;
 
-                    ushort pageId = pageAttribute.Id;
+                        ushort pageId = pageAttribute.Id;
 
-                    // Put the page factory in the registry
-                    PageRegistry.RegisterPage(pageId, panel =>
-                        (PageLogicBase)Activator.CreateInstance(type, new object[] { panel }));
+                        // Put the page factory in the registry
+                        LinkLynxServices.pageRegistry.RegisterPage(pageId, panel => (PageLogicBase)Activator.CreateInstance(type, new object[] { panel }));
 
-                    // Auto-wire joins to the registrar
-                    AutoWireJoins(type, pageId);
+                        // Auto-wire joins to the registrar
+                        AutoWireJoins(type, pageId);
+                    }
                 }
             }
         }
@@ -75,6 +85,23 @@ namespace LinkLynx.Core.Engine
                 throw new MissingMethodException("AutoJoinRegistrar.RegisterJoins<T>(ushort) not found.");
 
             method.MakeGenericMethod(pageType).Invoke(null, new object[] { pageId });
+        }
+
+        /// <summary>
+        /// Attempts to register a enum marked with SigType to the EnumSignalTypeRegistry.
+        /// </summary>
+        /// <param name="type">This should be a type of enum, but wrapped by the type class.</param>
+        private static void TryRegisterEnumSigType(Type type)
+        {
+            object[] attributes = type.GetCustomAttributes(typeof(SigTypeAttribute), inherit: false);
+
+            if (attributes.Length == 0) return;
+            if (attributes.Length > 1)
+                throw new InvalidOperationException($"[PageScanner] Error: Multiple [SigType] on enum {type.FullName}.");
+
+            eSigType sig = ((SigTypeAttribute)attributes[0]).JoinType;
+
+            LinkLynxServices.enumSignalTypeRegistry.Register(type, sig);
         }
     }
 }

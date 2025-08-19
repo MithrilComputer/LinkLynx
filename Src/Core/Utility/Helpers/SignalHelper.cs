@@ -2,6 +2,7 @@
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using System;
+using LinkLynx.Core.Utility.Debugging.Logging;
 
 namespace LinkLynx.Core.Utility.Helpers
 {
@@ -21,7 +22,7 @@ namespace LinkLynx.Core.Utility.Helpers
             if (panel == null)
                 throw new NullReferenceException("[GHelpers] Error: SetDigitalJoin Device is null, cannot set join.");
 
-            CrestronConsole.PrintLine($"[GHelpers] Log: Setting Digital Join '{digitalJoin}' on device '{panel.ID}' as '{value}'");
+            ConsoleLogger.Log($"[GHelpers] Log: Setting Digital Join '{digitalJoin}' on device '{panel.ID}' as '{value}'");
 
             panel.BooleanInput[digitalJoin].BoolValue = value;
         }
@@ -37,7 +38,7 @@ namespace LinkLynx.Core.Utility.Helpers
             if (panel == null)
                 throw new NullReferenceException("[GHelpers] SetAnalogJoin: Device is null, cannot set join.");
 
-            CrestronConsole.PrintLine($"[GHelpers] Log: Setting Analog Join '{analogJoin}' on device '{panel.ID}' as '{value}'");
+            ConsoleLogger.Log($"[GHelpers] Log: Setting Analog Join '{analogJoin}' on device '{panel.ID}' as '{value}'");
 
             panel.UShortInput[analogJoin].UShortValue = value;
         }
@@ -53,7 +54,7 @@ namespace LinkLynx.Core.Utility.Helpers
             if (panel == null)
                 throw new NullReferenceException("[GHelpers] SetSerialJoin: Device is null, cannot set join.");
 
-            CrestronConsole.PrintLine($"[GHelpers] Log: Setting Serial Join '{serialJoin}' on device '{panel.ID}' as '{value}'");
+            ConsoleLogger.Log($"[GHelpers] Log: Setting Serial Join '{serialJoin}' on device '{panel.ID}' as '{value}'");
 
             panel.StringInput[serialJoin].StringValue = value;
         }

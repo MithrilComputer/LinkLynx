@@ -1,5 +1,6 @@
 ﻿using Crestron.SimplSharp;
 using Crestron.SimplSharpPro.DeviceSupport;
+using LinkLynx.Core.Utility.Debugging.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,29 @@ namespace LinkLynx.Core.Collections.Pools
     /// <summary>
     /// The pool of all the connected panels.
     /// </summary>
-    public static class PanelPool
+    public sealed class PanelPool
     {
+        /// <summary>
+        /// The singleton instance of the class.
+        /// </summary>
+        private static readonly PanelPool instance = new PanelPool();
+
+        /// <summary>
+        /// The singleton instance of the class.
+        /// </summary>
+        public static PanelPool Instance => instance;
+
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        public PanelPool()
+        {            // Fill queue with valid IPIDs
+            for (uint i = dynamicIPIDValuesMinimum; i <= dynamicIPIDValuesMaximum; i++)
+            {
+                availableDynamicIPIDs.Enqueue(i);
+            }
+        }
+
         /// <summary>
         /// The reserved minimum range for the IPIDs that are only used by direct calls to add or remove.
         /// </summary>
@@ -29,7 +51,7 @@ namespace LinkLynx.Core.Collections.Pools
         /// <summary>
         /// The IPID that is used to assign a new dynamic IPID from external requests, cannot be used by any device as a identifier. Any web panel with this IPID will be automatically assigned a new dynamic IPID from the pool.
         /// </summary>
-        public static uint IPIDAutoAssignValue => ipidAutoAssignID;
+        public uint IPIDAutoAssignValue => ipidAutoAssignID;
 
         /// <summary>
         /// The minimum value for dynamic IPIDs that can be assigned to devices.
@@ -44,29 +66,17 @@ namespace LinkLynx.Core.Collections.Pools
         /// <summary>
         /// The pool of available IPIDs for devices.
         /// </summary>
-        private static Queue<uint> availableDynamicIPIDs = new Queue<uint>();
+        private readonly Queue<uint> availableDynamicIPIDs = new Queue<uint>();
 
         /// <summary>
         /// The set of used IPIDs to prevent duplicates.
         /// </summary>
-        private static HashSet<uint> usedIPIDS = new HashSet<uint>();
+        private readonly HashSet<uint> usedIPIDS = new HashSet<uint>();
 
         /// <summary>
         /// a registry of all panels that are currently using an IPID.
         /// </summary>
-        private static Dictionary<uint, BasicTriList> panelDictionary = new Dictionary<uint, BasicTriList>();
-
-        /// <summary>
-        /// The constructor for the IPIDPool class.
-        /// </summary>
-        static PanelPool()
-        {
-            // Fill queue with valid IPIDs
-            for (uint i = dynamicIPIDValuesMinimum; i <= dynamicIPIDValuesMaximum; i++)
-            {
-                availableDynamicIPIDs.Enqueue(i);
-            }
-        }
+        private readonly Dictionary<uint, BasicTriList> panelDictionary = new Dictionary<uint, BasicTriList>();
 
         /// <summary>
         /// Assigns the next available IPID to a device.
@@ -74,11 +84,11 @@ namespace LinkLynx.Core.Collections.Pools
         /// <remarks>The IPID will be between the values of 85 and 240</remarks>
         /// <param name="device">The device to assign a new IPID to</param>
         /// <returns>The IPID that was assigned to the device</returns>
-        internal static uint AssignDynamicDeviceIPID(BasicTriList device)
+        internal uint AssignDynamicDeviceIPID(BasicTriList device)
         {
             if(device == null)
             {
-                CrestronConsole.PrintLine("[PanelPool] Warning: Device is null, cannot assign IPID.");
+                ConsoleLogger.Log("[PanelPool] Warning: Device is null, cannot assign IPID.");
                 return 0;
             }
 
@@ -92,7 +102,7 @@ namespace LinkLynx.Core.Collections.Pools
             panelDictionary.Add(ipid, device);
             usedIPIDS.Add(ipid);
 
-            CrestronConsole.PrintLine($"[PanelPool] Log: Assigned device '{device.Name}' to IPID 0x{ipid:X2}");
+            ConsoleLogger.Log($"[PanelPool] Log: Assigned device '{device.Name}' to IPID 0x{ipid:X2}");
 
             return ipid;
         }
@@ -104,21 +114,21 @@ namespace LinkLynx.Core.Collections.Pools
         /// <param name="ipid"></param>
         /// <param name="device"></param>
         /// <returns></returns>
-        internal static bool ReserveIPIDToDevice(uint ipid, BasicTriList device)
+        internal bool ReserveIPIDToDevice(uint ipid, BasicTriList device)
         {
             if (usedIPIDS.Contains(ipid))
             {
-                CrestronConsole.PrintLine($"[PanelPool] Warning: IPID '0x{ipid:X2}' already exists in global IPIDs.");
+                ConsoleLogger.Log($"[PanelPool] Warning: IPID '0x{ipid:X2}' already exists in global IPIDs.");
                 return false; // IPID already in use
             }
 
             if (ipid < reservedIPIDMin || ipid > reservedIPIDMax)
             {
-                CrestronConsole.PrintLine($"[PanelPool] Warning: IPID '0x{ipid:X2}' is outside reserved range ({reservedIPIDMin}–{reservedIPIDMax}).");
+                ConsoleLogger.Log($"[PanelPool] Warning: IPID '0x{ipid:X2}' is outside reserved range ({reservedIPIDMin}–{reservedIPIDMax}).");
                 return false;
             }
 
-            CrestronConsole.PrintLine("[PanelPool] Log: Adding device to IPID pool");
+            ConsoleLogger.Log("[PanelPool] Log: Adding device to IPID pool");
             
             panelDictionary.Add(ipid, device);
 
@@ -131,21 +141,21 @@ namespace LinkLynx.Core.Collections.Pools
         /// </summary>
         /// <param name="ipid">The ipid of the device you would like to remove from the pool.</param>
         /// <returns>If the operation was successful</returns>
-        internal static bool RemoveIPID(uint ipid)
+        internal bool RemoveIPID(uint ipid)
         {
             if (!usedIPIDS.Contains(ipid))
             {
-                CrestronConsole.PrintLine($"[PanelPool] Warning: IPID '0x{ipid:X2}' not found in global IPIDs.");
+                ConsoleLogger.Log($"[PanelPool] Warning: IPID '0x{ipid:X2}' not found in global IPIDs.");
                 return false;
             }
 
             if (ipid < dynamicIPIDValuesMinimum || ipid > dynamicIPIDValuesMaximum)
             {
-                CrestronConsole.PrintLine($"[PanelPool] Warning: Cannot release reserved IPID: 0x{ipid:X2} back to the dynamic pool.");
+                ConsoleLogger.Log($"[PanelPool] Warning: Cannot release reserved IPID: 0x{ipid:X2} back to the dynamic pool.");
                 return false;
             }
 
-            CrestronConsole.PrintLine("[PanelPool] Log: Removing device from IPID pool");
+            ConsoleLogger.Log("[PanelPool] Log: Removing device from IPID pool");
 
             panelDictionary.Remove(ipid);
 
@@ -159,7 +169,7 @@ namespace LinkLynx.Core.Collections.Pools
         /// </summary>
         /// <param name="ipid">The device IPID to check if exists in the pool.</param>
         /// <returns>If the device was found in the pool</returns>
-        internal static bool CheckIfIPIDTaken(uint ipid)
+        internal bool CheckIfIPIDTaken(uint ipid)
         {
             return usedIPIDS.Contains(ipid);
         }
@@ -169,29 +179,29 @@ namespace LinkLynx.Core.Collections.Pools
         /// </summary>
         /// <param name="ipid">The ipid of the device you want to get from the pool.</param>
         /// <returns>The device with the associated IPID</returns>
-        public static BasicTriList GetDeviceFromIPID(uint ipid)
+        public BasicTriList GetDeviceFromIPID(uint ipid)
         {
             if (panelDictionary.TryGetValue(ipid, out var device))
                 return device;
 
-            CrestronConsole.PrintLine($"[PanelPool] Warning: IPID '0x{ipid:X2}' not found in the pool.");
+            ConsoleLogger.Log($"[PanelPool] Warning: IPID '0x{ipid:X2}' not found in the pool.");
             return null; // IPID not found
         }
 
         /// <summary>
         /// A debug method to print the current status of the IPID pool.
         /// </summary>
-        internal static void DebugStatus()
+        internal void DebugStatus()
         {
-            CrestronConsole.PrintLine($"[PanelPool] Debug: Used IPIDs: {usedIPIDS.Count}, Available: {availableDynamicIPIDs.Count}");
+            ConsoleLogger.Log($"[PanelPool] Debug: Used IPIDs: {usedIPIDS.Count}, Available: {availableDynamicIPIDs.Count}");
             if (usedIPIDS.Count > 0)
-                CrestronConsole.PrintLine("[PanelPool] Debug:  Active IPIDs: " + string.Join(", ", usedIPIDS.Select(x => $"0x{x:X2}")));
+                ConsoleLogger.Log("[PanelPool] Debug:  Active IPIDs: " + string.Join(", ", usedIPIDS.Select(x => $"0x{x:X2}")));
         }
 
         /// <summary>
         /// Clears the IPID pool, should only be called on system shutdown
         /// </summary>
-        internal static void Clear()
+        internal void Clear()
         {
             availableDynamicIPIDs.Clear();
             usedIPIDS.Clear();

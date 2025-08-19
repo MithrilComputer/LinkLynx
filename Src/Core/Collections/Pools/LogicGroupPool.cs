@@ -1,5 +1,6 @@
 ﻿using Crestron.SimplSharp;
 using Crestron.SimplSharpPro.DeviceSupport;
+using LinkLynx.Core.Utility.Debugging.Logging;
 using System;
 using System.Collections.Generic;
 
@@ -9,27 +10,53 @@ namespace LinkLynx.Core.Collections.Pools
     /// <summary>
     /// The logic pool class that manages the logic groups for each panel device.
     /// </summary>
-    internal static class LogicGroupPool
+    internal sealed class LogicGroupPool
     {
-        private static readonly Dictionary<uint, PanelLogicGroup> deviceLogicMap = 
+        /// <summary>
+        /// The singleton instance of the class.
+        /// </summary>
+        private static readonly LogicGroupPool instance = new LogicGroupPool();
+
+        /// <summary>
+        /// The singleton instance of the class.
+        /// </summary>
+        public static LogicGroupPool Instance => instance;
+
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        internal LogicGroupPool() { } 
+
+        private readonly Dictionary<uint, PanelLogicGroup> deviceLogicPool = 
             new Dictionary<uint, PanelLogicGroup>();
 
         /// <summary>
         /// Registers a panel device and initializes its logic group.
         /// </summary>
         /// <param name="device">The device to initialize</param>
-        internal static void RegisterPanel(BasicTriList device)
+        internal void RegisterPanel(BasicTriList device)
         {
-            CrestronConsole.PrintLine($"Registering panel with ID: {device.ID}");
+            ConsoleLogger.Log($"[LogicGroupPool] Registering panel with ID: {device.ID}");
 
-            if (!deviceLogicMap.ContainsKey(device.ID))
+            if (!deviceLogicPool.ContainsKey(device.ID))
             {
                 PanelLogicGroup panelLogic = new PanelLogicGroup(device);
-                deviceLogicMap[device.ID] = panelLogic;
+                deviceLogicPool[device.ID] = panelLogic;
 
                 panelLogic.InitializePageLogic(); // Optional: call init logic per panel
             } else
-                throw new ArgumentException($"Panel with ID {device.ID} is already registered.");
+                throw new ArgumentException($"[LogicGroupPool] Error: Panel with ID {device.ID} is already registered.");
+        }
+
+        internal void UnRegisterPanel(BasicTriList device)
+        {
+            ConsoleLogger.Log($"[LogicGroupPool] UnRegistering panel with ID: {device.ID}");
+
+            if(deviceLogicPool.ContainsKey(device.ID))
+            {
+                deviceLogicPool[device.ID] = null;
+            } else
+                throw new ArgumentException($"[LogicGroupPool] Error: Panel with ID: failed to Unregister due to no registry being present.");
         }
 
         /// <summary>
@@ -38,9 +65,9 @@ namespace LinkLynx.Core.Collections.Pools
         /// <param name="device"></param>
         /// <returns></returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        internal static PanelLogicGroup GetPanelLogicGroup(BasicTriList device)
+        internal PanelLogicGroup GetPanelLogicGroup(BasicTriList device)
         {
-            if (deviceLogicMap.TryGetValue(device.ID, out var panelLogic))
+            if (deviceLogicPool.TryGetValue(device.ID, out var panelLogic))
             {
                 return panelLogic;
             }
@@ -55,9 +82,9 @@ namespace LinkLynx.Core.Collections.Pools
         /// </summary>
         /// <param name="device"></param>
         /// <exception cref="KeyNotFoundException"></exception>
-        internal static void InitializePanelLogic(BasicTriList device)
+        internal void InitializePanelLogic(BasicTriList device)
         {
-            if (deviceLogicMap.TryGetValue(device.ID, out var panelLogic))
+            if (deviceLogicPool.TryGetValue(device.ID, out var panelLogic))
             {
                 panelLogic.InitializePageLogic();
             }
@@ -70,9 +97,9 @@ namespace LinkLynx.Core.Collections.Pools
         /// <summary>
         /// Clears the stored logic groups, should only be called on system shutdown
         /// </summary>
-        internal static void Clear()
+        internal void Clear()
         {
-            deviceLogicMap.Clear();
+            deviceLogicPool.Clear();
         }
     }
 }

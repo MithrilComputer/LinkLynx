@@ -1,8 +1,7 @@
-﻿using Crestron.SimplSharp;
+﻿using LinkLynx.Core.Utility.Debugging.Logging;
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using LinkLynx.Core.Collections;
-using LinkLynx.Core.Collections.Pools;
 using LinkLynx.Core.Utility.Dispatchers;
 
 namespace LinkLynx.Core.Utility.Signals
@@ -22,25 +21,25 @@ namespace LinkLynx.Core.Utility.Signals
             // Check if the device and signal is null to avoid null reference exceptions.
             if (device == null || args == null)
             {
-                CrestronConsole.PrintLine("[Signal Processor] Device or signal is null, cannot process signal change.");
+                ConsoleLogger.Log("[Signal Processor] Device or signal is null, cannot process signal change.");
                 return;
             }
 
-            PanelLogicGroup logicGroup = LogicGroupPool.GetPanelLogicGroup(device);
+            PanelLogicGroup logicGroup = LinkLynxServices.logicGroupPool.GetPanelLogicGroup(device);
 
             if(logicGroup == null)
             {
-                CrestronConsole.PrintLine($"[Signal Processor] No logic group found for device: {device.Name}");
+                ConsoleLogger.Log($"[Signal Processor] No logic group found for device: {device.Name}");
                 return;
             }
 
             if (device == null || args == null)
             {
-                CrestronConsole.PrintLine("[SignalProcessor] Error: Device or signal is null.");
+                ConsoleLogger.Log("[SignalProcessor] Error: Device or signal is null.");
                 return;
             }
 
-            CrestronConsole.PrintLine("[SignalProcessor] Signal Clear, routing...");
+            ConsoleLogger.Log("[SignalProcessor] Signal Clear, routing...");
 
             JoinInstanceRouter.Route(device, args);
         }
