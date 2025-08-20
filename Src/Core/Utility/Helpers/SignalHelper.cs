@@ -1,5 +1,4 @@
-﻿using Crestron.SimplSharp;
-using Crestron.SimplSharpPro;
+﻿using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using System;
 using LinkLynx.Core.Utility.Debugging.Logging;
@@ -12,51 +11,63 @@ namespace LinkLynx.Core.Utility.Helpers
     public static class SignalHelper
     {
         /// <summary>
-        /// Sets a digital join on the panel.
+        /// Sets a logic join on a given panel.
         /// </summary>
-        /// <param name="panel"> The panel to set the digital join on.</param>
-        /// <param name="digitalJoin"> The digital join to set.</param>
-        /// <param name="value"> The value to set the digital join to.</param>
-        public static void SetDigitalJoin(BasicTriList panel, uint digitalJoin, bool value)
+        /// <param name="panel"> The panel to set the logic join on.</param>
+        /// <param name="join"> The join to set.</param>
+        /// <param name="value"> The value to set the join to.</param>
+        public static void SetLogicJoin<T>(BasicTriList panel, Enum join, T value)
         {
             if (panel == null)
-                throw new NullReferenceException("[GHelpers] Error: SetDigitalJoin Device is null, cannot set join.");
+                throw new ArgumentNullException($"[SignalHelper] SetSerialJoin: Device is null, cannot set join.");
 
-            ConsoleLogger.Log($"[GHelpers] Log: Setting Digital Join '{digitalJoin}' on device '{panel.ID}' as '{value}'");
+            eSigType signalType = LinkLynxServices.enumSignalTypeRegistry.Get(join.GetType());
+            
+            ushort joinNumber = Convert.ToUInt16(join);
 
-            panel.BooleanInput[digitalJoin].BoolValue = value;
-        }
+            ConsoleLogger.Log($"[SignalHelper] Log: Setting Join '{Convert.ToUInt16(join)}' on device '{panel.ID}' as '{value}'");
 
-        /// <summary>
-        /// Sets a analog join on the panel.
-        /// </summary>
-        /// <param name="panel"> The panel to set the analog join on.</param>
-        /// <param name="analogJoin"> The analogJoin join to set.</param>
-        /// <param name="value"> The value to set the analog join to.</param>
-        public static void SetAnalogJoin(BasicTriList panel, uint analogJoin, ushort value)
-        {
-            if (panel == null)
-                throw new NullReferenceException("[GHelpers] SetAnalogJoin: Device is null, cannot set join.");
+            switch (signalType)
+            {
+                case eSigType.Bool:
 
-            ConsoleLogger.Log($"[GHelpers] Log: Setting Analog Join '{analogJoin}' on device '{panel.ID}' as '{value}'");
+                    if (typeof(T) == typeof(bool))
+                    {
+                        bool trueValue = (bool)(object)value;
 
-            panel.UShortInput[analogJoin].UShortValue = value;
-        }
+                        panel.BooleanInput[joinNumber].BoolValue = trueValue;
+                    }
+                    else
+                        throw new ArgumentException($"[SignalHelper] Error: Type mismatch when attempting to set join for a given Enum: {join}, and Value: {value}");
+                    break;
 
-        /// <summary>
-        /// Sets a serial join on the panel.
-        /// </summary>
-        /// <param name="panel"> The panel to set the serial join on.</param>
-        /// <param name="serialJoin"> The serial join to set.</param>
-        /// <param name="value"> The value to set the serial join to.</param>
-        public static void SetSerialJoin(BasicTriList panel, uint serialJoin, string value)
-        {
-            if (panel == null)
-                throw new NullReferenceException("[GHelpers] SetSerialJoin: Device is null, cannot set join.");
+                case eSigType.String:
 
-            ConsoleLogger.Log($"[GHelpers] Log: Setting Serial Join '{serialJoin}' on device '{panel.ID}' as '{value}'");
+                    if (typeof(T) == typeof(string))
+                    {
+                        string trueValue = (string)(object)value;
 
-            panel.StringInput[serialJoin].StringValue = value;
+                        panel.StringInput[joinNumber].StringValue = trueValue;
+                    }
+                    else
+                        throw new ArgumentException($"[SignalHelper] Error: Type mismatch when attempting to set join for a given Enum: {join}, and Value: {value}");
+                    break;
+
+                case eSigType.UShort:
+
+                    if (typeof(T) == typeof(ushort))
+                    {
+                        ushort trueValue = (ushort)(object)value;
+
+                        panel.UShortInput[joinNumber].UShortValue = trueValue;
+                    }
+                    else
+                        throw new ArgumentException($"[SignalHelper] Error: Type mismatch when attempting to set join for a given Enum: {join}, and Value: {value}");
+                    break;
+
+                case eSigType.NA:
+                        throw new ArgumentException($"[SignalHelper] Error: Cannot process a NA type!");
+            }
         }
 
         /// <summary>
@@ -67,7 +78,7 @@ namespace LinkLynx.Core.Utility.Helpers
         public static bool IsRisingEdge(SigEventArgs args)
         {
             if (args.Sig.Type != eSigType.Bool)
-                throw new Exception("[GHelpers] Cant check if non-digital signal is a Rising Edge");
+                throw new Exception("[SignalHelper] Cant check if non-digital signal is a Rising Edge");
 
             return args.Sig.BoolValue;
         }
@@ -80,7 +91,7 @@ namespace LinkLynx.Core.Utility.Helpers
         public static bool IsFallingEdge(SigEventArgs args)
         {
             if (args.Sig.Type != eSigType.Bool)
-                throw new Exception("[GHelpers] Cant check if non-digital signal is a Rising Edge");
+                throw new Exception("[SignalHelper] Cant check if non-digital signal is a Falling Edge");
 
             return !args.Sig.BoolValue;
         }
