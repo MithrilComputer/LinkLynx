@@ -71,7 +71,7 @@ namespace LinkLynx.Core
         /// </summary>
         /// <param name="panel">The device that is responsible for the signal.</param>
         /// <param name="args">The signal instance that was created for the change.</param>
-        void HandelSimpleSignal(BasicTriList panel, SigEventArgs args);
+        void HandleSimpleSignal(BasicTriList panel, SigEventArgs args);
 
         /// <summary>
         /// Releases all resources and clears registries.
@@ -114,8 +114,8 @@ namespace LinkLynx.Core
         /// </remarks>
         public void Initialize()
         {
-            PageScanner.Run(); // your reflection scanner that registers pages + joins
             SendSplash();
+            PageScanner.Run(); // your reflection scanner that registers pages + joins
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace LinkLynx.Core
         /// </summary>
         /// <param name="panel"></param>
         /// <param name="args"></param>
-        public void HandelSimpleSignal(BasicTriList panel, SigEventArgs args)
+        public void HandleSimpleSignal(BasicTriList panel, SigEventArgs args)
         {
             SignalProcessor.ProcessSignalChange(panel, args);
         }
@@ -197,27 +197,27 @@ namespace LinkLynx.Core
             var version = (Assembly.GetExecutingAssembly().GetName().Version ?? new Version(0, 0)).ToString();
 
             const string banner = @"
-               █████████        ███     
-              ███░░░░░███  ███ ░███  ███
-             ░███    ░███ ░░░█████████░ 
-             ░███████████   ░░░█████░   
-             ░███░░░░░███    █████████  
-             ░███    ░███  ███░░███░░███
-             █████   █████░░░  ░███ ░░░ 
-            ░░░░░   ░░░░░      ░░░      
+             █████       █████      
+            ░░███       ░░███       
+             ░███        ░███       
+             ░███        ░███       
+             ░███        ░███       
+             ░███      █ ░███      █
+             ███████████ ███████████
+             ░░░░░░░░░░░ ░░░░░░░░░░░ 
             ";
 
-            ConsoleLogger.Log("");
+            ConsoleLogger.Log(" ");
 
             foreach (var line in banner.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None))
                 ConsoleLogger.Log(line);
 
             // MithrilComputers Logo
-            ConsoleLogger.Log("");
+            ConsoleLogger.Log(" ");
             ConsoleLogger.Log($"LinkLynx by MithrilComputers — v{version}");
-            ConsoleLogger.Log("");
+            ConsoleLogger.Log(" ");
             ConsoleLogger.Log("-------- Happy Hacking! ------");
-            ConsoleLogger.Log("");
+            ConsoleLogger.Log(" ");
         }
     }
 }

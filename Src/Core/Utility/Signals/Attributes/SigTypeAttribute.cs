@@ -1,7 +1,7 @@
 ﻿using Crestron.SimplSharpPro;
 using System;
 
-namespace LinkLynx.Core.Src.Core.Utility.Signals.Attributes
+namespace LinkLynx.Core.Utility.Signals.Attributes
 {
     /// <summary>
     /// This attribute class associates enum's with a signal type (Digital, Analog, Serial)

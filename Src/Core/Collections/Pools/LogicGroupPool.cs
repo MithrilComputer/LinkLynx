@@ -48,9 +48,9 @@ namespace LinkLynx.Core.Collections.Pools
                 throw new ArgumentException($"[LogicGroupPool] Error: Panel with ID {device.ID} is already registered.");
         }
 
-        internal void UnRegisterPanel(BasicTriList device)
+        internal void UnregisterPanel(BasicTriList device)
         {
-            ConsoleLogger.Log($"[LogicGroupPool] UnRegistering panel with ID: {device.ID}");
+            ConsoleLogger.Log($"[LogicGroupPool] UnregisterPanel panel with ID: {device.ID}");
 
             if(deviceLogicPool.ContainsKey(device.ID))
             {

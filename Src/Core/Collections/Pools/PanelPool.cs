@@ -84,7 +84,7 @@ namespace LinkLynx.Core.Collections.Pools
         /// <remarks>The IPID will be between the values of 85 and 240</remarks>
         /// <param name="device">The device to assign a new IPID to</param>
         /// <returns>The IPID that was assigned to the device</returns>
-        internal uint AssignDynamicDeviceIPID(BasicTriList device)
+        internal uint AssignDynamicDeviceToIpId(BasicTriList device)
         {
             if(device == null)
             {

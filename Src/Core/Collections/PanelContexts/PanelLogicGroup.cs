@@ -38,10 +38,10 @@ namespace LinkLynx.Core.Collections
         /// <summary>
         /// Gets a local Page Logic bases on the given page ID.
         /// </summary>
-        /// <param name="pageID">The page id to ask for</param>
-        internal PageLogicBase GetPageLogicFromID(ushort pageID)
+        /// <param name="pageId">The page id to ask for</param>
+        internal PageLogicBase GetPageLogicFromId(ushort pageId)
         {
-            pageLogicPool.TryGetValue(pageID, out var logic);
+            pageLogicPool.TryGetValue(pageId, out var logic);
             return logic;
         }
 

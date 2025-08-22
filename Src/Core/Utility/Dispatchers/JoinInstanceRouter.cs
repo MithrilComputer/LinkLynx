@@ -1,10 +1,8 @@
 ﻿using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using LinkLynx.Core.Collections;
-using LinkLynx.Core.Collections.Pools;
 using LinkLynx.Core.Logic.Pages;
 using LinkLynx.Core.Utility.Debugging.Logging;
-using LinkLynx.Core.Utility.Registries;
 using System;
 
 namespace LinkLynx.Core.Utility.Dispatchers
@@ -30,7 +28,7 @@ namespace LinkLynx.Core.Utility.Dispatchers
 
             ushort pageId = LinkLynxServices.reversePageRegistry.GetPageFromSignalAndType(join, type);
 
-            PageLogicBase page = group.GetPageLogicFromID(pageId);
+            PageLogicBase page = group.GetPageLogicFromId(pageId);
 
             if (page == null)
             {
