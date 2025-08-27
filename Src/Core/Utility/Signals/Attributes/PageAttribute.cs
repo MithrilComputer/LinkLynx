@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LinkLynx.Signals.Attributes
+namespace LinkLynx.Core.Utility.Signals.Attributes
 {
     /// <summary>
     /// This is the attribute class for giving page logic classes an internal ID.

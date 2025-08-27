@@ -114,6 +114,7 @@ namespace LinkLynx.Core
         /// </remarks>
         public void Initialize()
         {
+            ConsoleLogger.Log("[LinkLynx] Initializing Framework...");
             SendSplash();
             PageScanner.Run(); // your reflection scanner that registers pages + joins
         }
@@ -131,7 +132,6 @@ namespace LinkLynx.Core
         public void RegisterPanel(BasicTriList panel)
         {
             LinkLynxServices.logicGroupPool.RegisterPanel(panel);
-            panel.Register();
         }
 
         /// <summary>
@@ -194,29 +194,10 @@ namespace LinkLynx.Core
         /// </summary>
         public void SendSplash()
         {
-            var version = (Assembly.GetExecutingAssembly().GetName().Version ?? new Version(0, 0)).ToString();
-
-            const string banner = @"
-             █████       █████      
-            ░░███       ░░███       
-             ░███        ░███       
-             ░███        ░███       
-             ░███        ░███       
-             ░███      █ ░███      █
-             ███████████ ███████████
-             ░░░░░░░░░░░ ░░░░░░░░░░░ 
-            ";
-
             ConsoleLogger.Log(" ");
-
-            foreach (var line in banner.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None))
-                ConsoleLogger.Log(line);
-
-            // MithrilComputers Logo
+            ConsoleLogger.Log($"LinkLynx by MithrilComputers v0.3.0");
             ConsoleLogger.Log(" ");
-            ConsoleLogger.Log($"LinkLynx by MithrilComputers — v{version}");
-            ConsoleLogger.Log(" ");
-            ConsoleLogger.Log("-------- Happy Hacking! ------");
+            ConsoleLogger.Log("----------- Happy Hacking! -----------");
             ConsoleLogger.Log(" ");
         }
     }

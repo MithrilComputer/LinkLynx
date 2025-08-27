@@ -19,32 +19,42 @@ namespace LinkLynx.Core.Utility.Dispatchers
         /// <param name="args">The signal to be processed.</param>
         internal static void Route(BasicTriList device, SigEventArgs args)
         {
-            ConsoleLogger.Log($"[JoinInstanceRouter] Attempting signal route...");
-
-            PanelLogicGroup group = LinkLynxServices.logicGroupPool.GetPanelLogicGroup(device);
-
-            uint join = args.Sig.Number;
-            eSigType type = args.Sig.Type;
-
-            ushort pageId = LinkLynxServices.reversePageRegistry.GetPageFromSignalAndType(join, type);
-
-            PageLogicBase page = group.GetPageLogicFromId(pageId);
-
-            if (page == null)
+            try
             {
-                ConsoleLogger.Log($"[JoinInstanceRouter] Error: Page {pageId} not found in panel group for device '{device.ID}'");
-                return;
+                uint join = args.Sig.Number;
+                eSigType type = args.Sig.Type;
+
+                ConsoleLogger.Log($"[JoinInstanceRouter] Device {device.ID}, Sig {type} #{join}, Bool={args.Sig.BoolValue}");
+
+                PanelLogicGroup group = LinkLynxServices.logicGroupPool.GetPanelLogicGroup(device);
+
+                ushort pageId = LinkLynxServices.reversePageRegistry.GetPageFromSignalAndType(join, type);
+
+                ConsoleLogger.Log($"[JoinInstanceRouter] Resolved PageId={pageId}");
+
+                PageLogicBase page = group.GetPageLogicFromId(pageId);
+
+                if (page == null)
+                {
+                    ConsoleLogger.Log($"[JoinInstanceRouter] Error: Page {pageId} not found in panel group for device '{device.ID}'");
+                    return;
+                }
+
+                Action<PageLogicBase, SigEventArgs> action = DispatcherHelper.GetDispatcherActionFromKey(type, join);
+
+                if (action == null)
+                {
+                    ConsoleLogger.Log($"[JoinInstanceRouter] Warning: No action registered for join {join} ({type})");
+                    return;
+                }
+
+                action.Invoke(page, args);
             }
-
-            Action<PageLogicBase, SigEventArgs> action = DispatcherHelper.GetDispatcherActionFromKey(type, join);
-
-            if (action == null)
+            catch (Exception ex)
             {
-                ConsoleLogger.Log($"[JoinInstanceRouter] Warning: No action registered for join {join} ({type})");
-                return;
+                ConsoleLogger.Log($"[JoinInstanceRouter] Route error: {ex.GetType().Name}: {ex.Message}");
+                throw;
             }
-
-            action.Invoke(page, args);
         }
     }
 }

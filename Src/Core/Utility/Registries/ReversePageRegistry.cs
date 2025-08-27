@@ -1,6 +1,5 @@
 ﻿using Crestron.SimplSharpPro;
 using LinkLynx.Core.Utility.Debugging.Logging;
-using LinkLynx.Core.Utility.Dispatchers.Signals;
 using LinkLynx.Core.Utility.Helpers;
 using System;
 using System.Collections.Generic;
@@ -27,7 +26,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// </summary>
         internal ReversePageRegistry() { }
 
-        private readonly Dictionary<uint, ushort>  DigitalJoinPageMap = new Dictionary<uint, ushort>();
+        private readonly Dictionary<uint, ushort> DigitalJoinPageMap = new Dictionary<uint, ushort>();
         private readonly Dictionary<uint, ushort> AnalogJoinPageMap = new Dictionary<uint, ushort>();
         private readonly Dictionary<uint, ushort> SerialJoinPageMap = new Dictionary<uint, ushort>();
 
@@ -63,7 +62,7 @@ namespace LinkLynx.Core.Utility.Registries
                     break;
             }
 
-            throw new Exception($"[GlobalJoinPageRegistry] Error: Could not find the page associated with the signal key of '{join}' with a type of '{type}'");
+            throw new Exception($"[ReversePageRegistry] Error: Could not find the page associated with the signal key of '{join}' with a type of '{type}'");
         }
 
         /// <summary>
@@ -77,7 +76,7 @@ namespace LinkLynx.Core.Utility.Registries
             eSigType type = EnumHelper.GetSignalTypeFromEnum(join);
             uint joinNumber = Convert.ToUInt32(join);
 
-            ConsoleLogger.Log($"[GlobalJoinPageRegistry] Log: Registered '{type}' join '{joinNumber}' to page '{pageId}'");
+            ConsoleLogger.Log($"[ReversePageRegistry] Log: Registered '{type}' join '{joinNumber}' to page '{pageId}'");
 
             switch (type)
             {
@@ -88,7 +87,7 @@ namespace LinkLynx.Core.Utility.Registries
                     } 
                     else
                     {
-                        throw new InvalidOperationException($"[GlobalJoinPageRegistry] Error: Duplicate digital key '{joinNumber}' was attempted to be registered to page '{pageId}'");
+                        throw new InvalidOperationException($"[ReversePageRegistry] Error: Duplicate digital key '{joinNumber}' was attempted to be registered to page '{pageId}'");
                     }
                         break;
 
@@ -99,7 +98,7 @@ namespace LinkLynx.Core.Utility.Registries
                     }
                     else
                     {
-                        throw new InvalidOperationException($"[GlobalJoinPageRegistry] Error: Duplicate analog key '{joinNumber}' was attempted to be registered to page '{pageId}'");
+                        throw new InvalidOperationException($"[ReversePageRegistry] Error: Duplicate analog key '{joinNumber}' was attempted to be registered to page '{pageId}'");
                     }
                     break;
 
@@ -110,12 +109,12 @@ namespace LinkLynx.Core.Utility.Registries
                     }
                     else
                     {
-                        throw new InvalidOperationException($"[GlobalJoinPageRegistry] Error: Duplicate serial key '{joinNumber}' was attempted to be registered to page '{pageId}'");
+                        throw new InvalidOperationException($"[ReversePageRegistry] Error: Duplicate serial key '{joinNumber}' was attempted to be registered to page '{pageId}'");
                     }
                     break;
 
                 default:
-                    throw new InvalidOperationException($"[GlobalJoinPageRegistry] Error: Unsupported eSigType of '{type}'");
+                    throw new InvalidOperationException($"[ReversePageRegistry] Error: Unsupported eSigType of '{type}'");
             }
         }
 

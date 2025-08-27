@@ -24,6 +24,8 @@ namespace LinkLynx.Core.Utility.Dispatchers
             eSigType signalType = EnumHelper.GetSignalTypeFromEnum(join);
             uint joinId = Convert.ToUInt32(join);
 
+            ConsoleLogger.Log($"[DispatcherHelper] Adding Join {joinId} of type {signalType} to dispatcher.");
+
             switch (signalType)
             {
                 case eSigType.Bool:

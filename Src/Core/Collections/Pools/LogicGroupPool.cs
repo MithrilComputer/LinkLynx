@@ -36,14 +36,48 @@ namespace LinkLynx.Core.Collections.Pools
         /// <param name="device">The device to initialize</param>
         internal void RegisterPanel(BasicTriList device)
         {
+            if(device == null)
+                throw new ArgumentNullException(nameof(device));
+
+            uint id = device.ID;
+            if (id == 0)
+                throw new ArgumentException("[LogicGroupPool] Device.ID is 0 (invalid/uninitialized).", nameof(device));
+
+
             ConsoleLogger.Log($"[LogicGroupPool] Registering panel with ID: {device.ID}");
 
             if (!deviceLogicPool.ContainsKey(device.ID))
             {
-                PanelLogicGroup panelLogic = new PanelLogicGroup(device);
-                deviceLogicPool[device.ID] = panelLogic;
+
+                ConsoleLogger.Log($"[LogicGroupPool] Creatasdas dA D");
+
+                PanelLogicGroup panelLogic;
+
+                try
+                {
+                    panelLogic = new PanelLogicGroup(device);
+                }
+                catch (Exception ex)
+                {
+                    ConsoleLogger.Log($"[LogicGroupPool] PanelLogicGroup ctor failed for ID {id}: {ex.GetType().Name}: {ex.Message}");
+                    throw; // rethrow so you see the real stack
+                }
+
+                try
+                {
+                    deviceLogicPool.Add(id, panelLogic);
+                }
+                catch (Exception ex)
+                {
+                    ConsoleLogger.Log($"[LogicGroupPool] Failed adding panel ID {id} to pool: {ex.GetType().Name}: {ex.Message}");
+                    throw;
+                }
+
+                ConsoleLogger.Log($"[LogicGroupPool] Initalizing Panel");
 
                 panelLogic.InitializePageLogic(); // Optional: call init logic per panel
+
+                ConsoleLogger.Log($"[LogicGroupPool] Panel with ID: {device.ID} registered successfully!");
             } else
                 throw new ArgumentException($"[LogicGroupPool] Error: Panel with ID {device.ID} is already registered.");
         }

@@ -1,11 +1,11 @@
 ﻿using Crestron.SimplSharpPro;
 using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Core.Src.Core.Utility.Signals.Attributes;
+using LinkLynx.Core.Utility.Signals.Attributes;
 using LinkLynx.Core.Utility.Dispatchers;
-using LinkLynx.Core.Utility.Registries;
 using System;
 using System.Linq;
 using System.Reflection;
+using LinkLynx.Core.Utility.Debugging.Logging;
 
 namespace LinkLynx.Core.Engine
 {
@@ -19,7 +19,7 @@ namespace LinkLynx.Core.Engine
         /// </summary>
         internal static void Run()
         {
-
+            ConsoleLogger.Log("[PageScanner] Scanning for pages...");
             // This might need to change at some point, 
             // Only affects startup time, but could get heavy later if I don't optimize it with a few hundred pages in mind.
             // Not to mention I don't like how it looks for some reason.
@@ -29,6 +29,13 @@ namespace LinkLynx.Core.Engine
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 Type[] types;
+
+                string name = assembly.GetName().Name;
+
+                if (CheckIfBlackListed(name))
+                {
+                    continue;
+                }
 
                 try
                 {
@@ -45,13 +52,21 @@ namespace LinkLynx.Core.Engine
                     {
                         TryRegisterEnumSigType(type);
                     }
+                }
 
+                foreach (Type type in types)
+                {
                     if (type.IsClass)
                     {
                         PageAttribute pageAttribute = (PageAttribute)type.GetCustomAttribute(typeof(PageAttribute), inherit: false);
 
                         if (pageAttribute == null)
+                        {
+                            ConsoleLogger.Log($"[PageScanner] Scanned Class has no attributes, skipping {name}");
                             continue;
+                        }
+
+                        ConsoleLogger.Log($"[PageScanner] Scanned Page has attributes, processing {name}");
 
                         ushort pageId = pageAttribute.Id;
 
@@ -73,6 +88,8 @@ namespace LinkLynx.Core.Engine
         /// <param name="pageId">The id of the given type.</param>
         private static void AutoWireJoins(Type pageType, ushort pageId)
         {
+            ConsoleLogger.Log("[PageScanner] Attempting to wire page signal joins...");
+
             MethodInfo method = typeof(AutoJoinRegistrar)
                 .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
                 .FirstOrDefault(m =>
@@ -84,7 +101,11 @@ namespace LinkLynx.Core.Engine
             if (method == null)
                 throw new MissingMethodException("AutoJoinRegistrar.RegisterJoins<T>(ushort) not found.");
 
+            ConsoleLogger.Log("[PageScanner] Registering Joins...");
+
             method.MakeGenericMethod(pageType).Invoke(null, new object[] { pageId });
+
+            ConsoleLogger.Log("[PageScanner] Register Method Called!");
         }
 
         /// <summary>
@@ -93,6 +114,8 @@ namespace LinkLynx.Core.Engine
         /// <param name="type">This should be a type of enum, but wrapped by the type class.</param>
         private static void TryRegisterEnumSigType(Type type)
         {
+            ConsoleLogger.Log("[PageScanner] Found Signal Enum! Registering...");
+
             object[] attributes = type.GetCustomAttributes(typeof(SigTypeAttribute), inherit: false);
 
             if (attributes.Length == 0) return;
@@ -102,6 +125,32 @@ namespace LinkLynx.Core.Engine
             eSigType sig = ((SigTypeAttribute)attributes[0]).JoinType;
 
             LinkLynxServices.enumSignalTypeRegistry.Register(type, sig);
+        }
+
+        private static bool CheckIfBlackListed(string name)
+        {
+            if (name.StartsWith("System", StringComparison.OrdinalIgnoreCase) ||
+            name.StartsWith("Microsoft", StringComparison.OrdinalIgnoreCase) ||
+            name.StartsWith("mscorlib", StringComparison.OrdinalIgnoreCase) ||
+            name.StartsWith("netstandard", StringComparison.OrdinalIgnoreCase) ||
+            name.StartsWith("Crestron", StringComparison.OrdinalIgnoreCase) ||
+            name.StartsWith("LinkLynx", StringComparison.OrdinalIgnoreCase)||
+            name.StartsWith("ConsoleServiceCE", StringComparison.OrdinalIgnoreCase)||
+            name.StartsWith("SimplSharpHelperInterface", StringComparison.OrdinalIgnoreCase) ||
+            name.StartsWith("ManagedUtilitiesCE", StringComparison.OrdinalIgnoreCase) ||
+            name.StartsWith("ManagedUtilities", StringComparison.OrdinalIgnoreCase) ||
+            name.StartsWith("ConsoleServiceBase", StringComparison.OrdinalIgnoreCase) ||
+            name.StartsWith("CedbDataStoreInterface", StringComparison.OrdinalIgnoreCase) ||
+            name.StartsWith("SmartThreadPoolCE", StringComparison.OrdinalIgnoreCase) ||
+            name.StartsWith("SimplSharpCustomAttributesInterface", StringComparison.OrdinalIgnoreCase) ||
+            name.StartsWith("SimplSharpPro", StringComparison.OrdinalIgnoreCase) )
+            {
+
+                return true;
+
+            }
+
+            return false;
         }
     }
 }

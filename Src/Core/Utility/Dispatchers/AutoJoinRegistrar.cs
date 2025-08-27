@@ -4,7 +4,7 @@ using LinkLynx.Core.Utility.Registries;
 using LinkLynx.Core.Utility.Debugging.Logging;
 using System;
 using System.Reflection;
-using LinkLynx.Core.Src.Core.Utility.Signals.Attributes;
+using LinkLynx.Core.Utility.Signals.Attributes;
 
 namespace LinkLynx.Core.Utility.Dispatchers
 {
@@ -22,26 +22,41 @@ namespace LinkLynx.Core.Utility.Dispatchers
         {
             Type logicType = typeof(T);
 
-            foreach (MethodInfo method in logicType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            ConsoleLogger.Log($"[AutoJoinRegistrar] Auto-Registering Page Class with ID:{pageId}");
+
+            try
             {
-                JoinAttribute[] joinAttributes = method.GetCustomAttributes(typeof(JoinAttribute), false) as JoinAttribute[];
 
-                if (joinAttributes == null || joinAttributes.Length == 0)
-                    continue;
-
-                foreach (JoinAttribute joinAttr in joinAttributes)
+                foreach (MethodInfo method in logicType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
                 {
-                    if (joinAttr.Join is Enum joinEnum)
-                    {
-                        LinkLynxServices.reversePageRegistry.RegisterPageKeyFromJoin(joinEnum, pageId);
+                    JoinAttribute[] joinAttributes = method.GetCustomAttributes(typeof(JoinAttribute), false) as JoinAttribute[];
 
-                        DispatcherHelper.AddToDispatcher(joinEnum, BuildLambda<T>(method));
-                    }
-                    else
+                    if (joinAttributes == null || joinAttributes.Length == 0)
+                        continue;
+
+                    ConsoleLogger.Log($"[AutoJoinRegistrar] Found {joinAttributes.Length} Join Attributes on method '{method.Name}'");
+
+                    foreach (JoinAttribute joinAttr in joinAttributes)
                     {
-                        ConsoleLogger.Log($"[AutoJoinRegistrar] Warning: Join attribute on method '{method.Name}' does not contain a valid Enum.");
+                        if (joinAttr.Join is Enum joinEnum)
+                        {
+                            ConsoleLogger.Log($"[AutoJoinRegistrar] Registering Join '{joinEnum}' on method '{method.Name}'");
+
+                            LinkLynxServices.reversePageRegistry.RegisterPageKeyFromJoin(joinEnum, pageId);
+
+                            DispatcherHelper.AddToDispatcher(joinEnum, BuildLambda<T>(method));
+                        }
+                        else
+                        {
+                            ConsoleLogger.Log($"[AutoJoinRegistrar] Warning: Join attribute on method '{method.Name}' does not contain a valid Enum.");
+                        }
                     }
                 }
+            }
+            catch
+            (Exception ex)
+            {
+                ConsoleLogger.Log($"[AutoJoinRegistrar] Error while registering joins for page ID {pageId}: {ex.Message}");
             }
         }
 
