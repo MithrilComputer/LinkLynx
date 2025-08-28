@@ -14,6 +14,8 @@ namespace LinkLynx.Core.Engine
     /// </summary>
     internal static class PageScanner
     {
+        private static readonly string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
         /// <summary>
         /// Runs the scanner, finds all the pages by attribute, then registers them, and their logic joins.
         /// </summary>
@@ -28,14 +30,14 @@ namespace LinkLynx.Core.Engine
 
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                Type[] types;
-
-                string name = assembly.GetName().Name;
-
-                if (CheckIfBlackListed(name))
+                if (!CheckIfWhitelisted(assembly))
                 {
                     continue;
                 }
+
+                Type[] types;
+
+                string name = assembly.GetName().Name;
 
                 try
                 {
@@ -73,7 +75,7 @@ namespace LinkLynx.Core.Engine
                         // Put the page factory in the registry
                         LinkLynxServices.pageRegistry.RegisterPage(pageId, panel => (PageLogicBase)Activator.CreateInstance(type, new object[] { panel }));
 
-                        // Auto-wire joins to the registrar
+                        // Auto wire the joins to the registrar
                         AutoWireJoins(type, pageId);
                     }
                 }
@@ -88,7 +90,7 @@ namespace LinkLynx.Core.Engine
         /// <param name="pageId">The id of the given type.</param>
         private static void AutoWireJoins(Type pageType, ushort pageId)
         {
-            ConsoleLogger.Log("[PageScanner] Attempting to wire page signal joins...");
+            ConsoleLogger.Log($"[PageScanner] Attempting to wire page class {pageType.FullName}'s signal joins...");
 
             MethodInfo method = typeof(AutoJoinRegistrar)
                 .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
@@ -104,8 +106,6 @@ namespace LinkLynx.Core.Engine
             ConsoleLogger.Log("[PageScanner] Registering Joins...");
 
             method.MakeGenericMethod(pageType).Invoke(null, new object[] { pageId });
-
-            ConsoleLogger.Log("[PageScanner] Register Method Called!");
         }
 
         /// <summary>
@@ -114,43 +114,51 @@ namespace LinkLynx.Core.Engine
         /// <param name="type">This should be a type of enum, but wrapped by the type class.</param>
         private static void TryRegisterEnumSigType(Type type)
         {
-            ConsoleLogger.Log("[PageScanner] Found Signal Enum! Registering...");
+            ConsoleLogger.Log($"[PageScanner] Found Enum '{type.FullName}' Attempting to register...");
 
             object[] attributes = type.GetCustomAttributes(typeof(SigTypeAttribute), inherit: false);
 
-            if (attributes.Length == 0) return;
+            if (attributes.Length == 0) 
+            {
+                ConsoleLogger.Log($"[PageScanner] Enum '{type.FullName}' Has no attributes, skipping.");
+                return;
+            }
+
             if (attributes.Length > 1)
-                throw new InvalidOperationException($"[PageScanner] Error: Multiple [SigType] on enum {type.FullName}.");
+            {
+                ConsoleLogger.Log($"[PageScanner] Enum '{type.FullName}' Has too many attributes, skipping.");
+                return;
+            }
 
             eSigType sig = ((SigTypeAttribute)attributes[0]).JoinType;
 
             LinkLynxServices.enumSignalTypeRegistry.Register(type, sig);
         }
 
-        private static bool CheckIfBlackListed(string name)
+        /// <summary>
+        /// Checks if the assembly is whitelisted to be scanned.
+        /// </summary>
+        private static bool CheckIfWhitelisted(Assembly assembly)
         {
-            if (name.StartsWith("System", StringComparison.OrdinalIgnoreCase) ||
-            name.StartsWith("Microsoft", StringComparison.OrdinalIgnoreCase) ||
-            name.StartsWith("mscorlib", StringComparison.OrdinalIgnoreCase) ||
-            name.StartsWith("netstandard", StringComparison.OrdinalIgnoreCase) ||
-            name.StartsWith("Crestron", StringComparison.OrdinalIgnoreCase) ||
-            name.StartsWith("LinkLynx", StringComparison.OrdinalIgnoreCase)||
-            name.StartsWith("ConsoleServiceCE", StringComparison.OrdinalIgnoreCase)||
-            name.StartsWith("SimplSharpHelperInterface", StringComparison.OrdinalIgnoreCase) ||
-            name.StartsWith("ManagedUtilitiesCE", StringComparison.OrdinalIgnoreCase) ||
-            name.StartsWith("ManagedUtilities", StringComparison.OrdinalIgnoreCase) ||
-            name.StartsWith("ConsoleServiceBase", StringComparison.OrdinalIgnoreCase) ||
-            name.StartsWith("CedbDataStoreInterface", StringComparison.OrdinalIgnoreCase) ||
-            name.StartsWith("SmartThreadPoolCE", StringComparison.OrdinalIgnoreCase) ||
-            name.StartsWith("SimplSharpCustomAttributesInterface", StringComparison.OrdinalIgnoreCase) ||
-            name.StartsWith("SimplSharpPro", StringComparison.OrdinalIgnoreCase) )
+            try
             {
+                if (assembly.IsDynamic)
+                    return false;
 
-                return true;
+                string assemblyPath = assembly.Location;
 
+                if (!String.IsNullOrEmpty(assemblyPath) && assemblyPath.StartsWith(baseDirectory, StringComparison.OrdinalIgnoreCase))
+                {
+                    ConsoleLogger.Log($"[PageScanner] Assembly '{assembly.FullName}' is in the base directory, processing.");
+                    return true;
+                }
+
+                return false;
+
+            } catch
+            {
+                return false;
             }
-
-            return false;
         }
     }
 }

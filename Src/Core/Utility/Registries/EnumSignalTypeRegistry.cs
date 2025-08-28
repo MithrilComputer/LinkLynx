@@ -1,4 +1,5 @@
 ﻿using Crestron.SimplSharpPro;
+using LinkLynx.Core.Utility.Debugging.Logging;
 using System;
 using System.Collections.Generic;
 
@@ -73,6 +74,7 @@ namespace LinkLynx.Core.Utility.Registries
             if (!registry.ContainsKey(enumType))
             {
                 registry.Add(enumType, type);
+                ConsoleLogger.Log($"[EnumSignalTypeRegistry] Log: Registered Enum '{enumType.FullName}' as type '{type}'");
                 return;
             }
 

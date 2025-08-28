@@ -22,11 +22,8 @@ namespace LinkLynx.Core.Utility.Dispatchers
         {
             Type logicType = typeof(T);
 
-            ConsoleLogger.Log($"[AutoJoinRegistrar] Auto-Registering Page Class with ID:{pageId}");
-
             try
             {
-
                 foreach (MethodInfo method in logicType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
                 {
                     JoinAttribute[] joinAttributes = method.GetCustomAttributes(typeof(JoinAttribute), false) as JoinAttribute[];
