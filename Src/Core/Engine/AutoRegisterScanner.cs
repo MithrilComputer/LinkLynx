@@ -6,13 +6,14 @@ using System;
 using System.Linq;
 using System.Reflection;
 using LinkLynx.Core.Utility.Debugging.Logging;
+using System.Collections.Generic;
 
 namespace LinkLynx.Core.Engine
 {
     /// <summary>
     /// A scanner Class made to look for all the pages in a program and register them, and their logic joins.
     /// </summary>
-    internal static class PageScanner
+    internal static class AutoRegisterScanner
     {
         private static readonly string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -21,10 +22,7 @@ namespace LinkLynx.Core.Engine
         /// </summary>
         internal static void Run()
         {
-            ConsoleLogger.Log("[PageScanner] Scanning for pages...");
-            // This might need to change at some point, 
-            // Only affects startup time, but could get heavy later if I don't optimize it with a few hundred pages in mind.
-            // Not to mention I don't like how it looks for some reason.
+            ConsoleLogger.Log("[PageScanner] Page Scanner started! Scanning...");
 
             Type baseType = typeof(PageLogicBase); // Cache
 
@@ -64,11 +62,11 @@ namespace LinkLynx.Core.Engine
 
                         if (pageAttribute == null)
                         {
-                            ConsoleLogger.Log($"[PageScanner] Scanned Class has no attributes, skipping {name}");
+                            ConsoleLogger.Log($"[PageScanner] Scanned Class has no attributes, skipping {type.FullName}");
                             continue;
                         }
 
-                        ConsoleLogger.Log($"[PageScanner] Scanned Page has attributes, processing {name}");
+                        ConsoleLogger.Log($"[PageScanner] Scanned Page has attributes, processing {type.FullName}");
 
                         ushort pageId = pageAttribute.Id;
 
@@ -155,7 +153,8 @@ namespace LinkLynx.Core.Engine
 
                 return false;
 
-            } catch
+            } 
+            catch
             {
                 return false;
             }

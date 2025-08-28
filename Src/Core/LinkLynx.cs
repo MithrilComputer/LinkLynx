@@ -54,17 +54,10 @@ namespace LinkLynx.Core
         void RegisterPanel(BasicTriList panel);
 
         /// <summary>
-        /// Runs each page's <c>Initialize()</c> method for the specified panel,
-        /// setting default UI state and feedback.
+        /// Resets the specified panel to its visually default state.
         /// </summary>
-        /// <param name="panel">The panel whose pages should be initialized.</param>
-        /// <remarks>
-        /// Call after <see cref="RegisterPanel(BasicTriList)"/> and once the panel is online.
-        /// </remarks>
-        /// <exception cref="System.Collections.Generic.KeyNotFoundException">
-        /// Thrown if the panel has not been registered.
-        /// </exception>
-        void InitializePanel(BasicTriList panel);
+        /// <param name="panel">The <see cref="BasicTriList"/> instance representing the panel to reset. Cannot be <see langword="null"/>.</param>
+        void SetPanelToDefaultState(BasicTriList panel);
 
         /// <summary>
         /// Handles any simple signal given, Maps the signal to a device's logic.
@@ -91,7 +84,7 @@ namespace LinkLynx.Core
     /// <remarks>
     /// Call <see cref="Initialize"/> once at program startup, then register each panel
     /// via <see cref="RegisterPanel"/> before using it. Finally, call
-    /// <see cref="InitializePanel"/> to set each panel to its default UI state.
+    /// <see cref="SetPanelToDefaultState"/> to set a panel to its default UI state whenever needed.
     /// This type is intended to be used as a single instance per program.
     /// </remarks>
     /// <example>
@@ -99,7 +92,7 @@ namespace LinkLynx.Core
     /// var fw = new LinkLynx();
     /// fw.Initialize();
     /// fw.RegisterPanel(xPanelOne);
-    /// fw.InitializePanel(xPanelOne);
+    /// fw.SetPanelToDefaultState(xPanelOne);
     /// </code>
     /// </example>
     public sealed class LinkLynx : ILinkLynx
@@ -116,7 +109,7 @@ namespace LinkLynx.Core
         {
             ConsoleLogger.Log("[LinkLynx] Initializing Framework...");
             SendSplash();
-            PageScanner.Run(); // your reflection scanner that registers pages + joins
+            AutoRegisterScanner.Run(); // your reflection scanner that registers pages + joins
         }
 
         /// <summary>
@@ -132,29 +125,21 @@ namespace LinkLynx.Core
         public void RegisterPanel(BasicTriList panel)
         {
             LinkLynxServices.logicGroupPool.RegisterPanel(panel);
-        }
-
-        /// <summary>
-        /// Runs each page's <c>Initialize()</c> method for the specified panel,
-        /// setting default UI state and feedback.
-        /// </summary>
-        /// <param name="panel">The panel whose pages should be initialized.</param>
-        /// <remarks>
-        /// Call after <see cref="RegisterPanel(BasicTriList)"/> and once the panel is online.
-        /// </remarks>
-        /// <exception cref="System.Collections.Generic.KeyNotFoundException">
-        /// Thrown if the panel has not been registered.
-        /// </exception>
-        public void InitializePanel(BasicTriList panel)
-        {
             LinkLynxServices.logicGroupPool.InitializePanelLogic(panel);
         }
 
         /// <summary>
-        /// 
+        /// Resets the specified panel to its visually default state.
         /// </summary>
-        /// <param name="panel"></param>
-        /// <param name="args"></param>
+        /// <param name="panel">The <see cref="BasicTriList"/> instance representing the panel to reset. Cannot be <see langword="null"/>.</param>
+        public void SetPanelToDefaultState(BasicTriList panel)
+        {
+            LinkLynxServices.logicGroupPool.SetPanelDefaults(panel);
+        }
+
+        /// <summary>
+        /// Handles any simple signal given, Maps the signal to a device's logic.
+        /// </summary>
         public void HandleSimpleSignal(BasicTriList panel, SigEventArgs args)
         {
             SignalProcessor.ProcessSignalChange(panel, args);

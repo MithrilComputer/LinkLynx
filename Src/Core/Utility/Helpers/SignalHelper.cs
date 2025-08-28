@@ -25,7 +25,7 @@ namespace LinkLynx.Core.Utility.Helpers
             
             ushort joinNumber = Convert.ToUInt16(join);
 
-            ConsoleLogger.Log($"[SignalHelper] Log: Setting Join '{Convert.ToUInt16(join)}' on device '{panel.ID}' as '{value}'");
+            ConsoleLogger.Log($"[SignalHelper] Setting Join '{Convert.ToUInt16(join)}' on device '{panel.ID}' as '{value}'");
 
             switch (signalType)
             {

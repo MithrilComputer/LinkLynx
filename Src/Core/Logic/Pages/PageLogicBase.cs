@@ -28,5 +28,10 @@ namespace LinkLynx.Core.Logic.Pages
         /// This sets all the page logic values to default.
         /// </summary>
         public virtual void Initialize() { }
+
+        /// <summary>
+        /// This sets all the page logic values to default.
+        /// </summary>
+        public abstract void SetDefaults();
     }
 }

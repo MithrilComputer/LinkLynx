@@ -118,9 +118,27 @@ namespace LinkLynx.Core.Collections.Pools
         /// <exception cref="KeyNotFoundException"></exception>
         internal void InitializePanelLogic(BasicTriList device)
         {
-            if (deviceLogicPool.TryGetValue(device.ID, out var panelLogic))
+            if (deviceLogicPool.TryGetValue(device.ID, out PanelLogicGroup panelLogic))
             {
                 panelLogic.InitializePageLogic();
+            }
+            else
+            {
+                throw new KeyNotFoundException($"No logic group found for device {device.ID}");
+            }
+        }
+
+
+        /// <summary>
+        /// Initializes the logic for a specific panel device.
+        /// </summary>
+        /// <param name="device"></param>
+        /// <exception cref="KeyNotFoundException"></exception>
+        internal void SetPanelDefaults(BasicTriList device)
+        {
+            if (deviceLogicPool.TryGetValue(device.ID, out PanelLogicGroup panelLogic))
+            {
+                panelLogic.SetPageDefaults();
             }
             else
             {

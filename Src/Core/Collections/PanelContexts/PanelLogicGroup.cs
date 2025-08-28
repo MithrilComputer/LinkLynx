@@ -25,13 +25,24 @@ namespace LinkLynx.Core.Collections
         }
 
         /// <summary>
-        /// Initializes all the logic on the panel. Can use to bring it to the default start state.
+        /// Initializes all the logic on the panel once at runtime.
         /// </summary>
         internal void InitializePageLogic()
         {
             foreach (KeyValuePair<ushort, PageLogicBase> pair in pageLogicPool)
             {
                 pair.Value.Initialize();
+            }
+        }
+
+        /// <summary>
+        /// Sets all the page's logic and  to the default start state.
+        /// </summary>
+        internal void SetPageDefaults()
+        {
+            foreach (KeyValuePair<ushort, PageLogicBase> pair in pageLogicPool)
+            {
+                pair.Value.SetDefaults();
             }
         }
 
