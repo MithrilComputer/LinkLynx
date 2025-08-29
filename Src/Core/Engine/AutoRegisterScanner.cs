@@ -22,7 +22,7 @@ namespace LinkLynx.Core.Engine
         /// </summary>
         internal static void Run()
         {
-            ConsoleLogger.Log("[PageScanner] Page Scanner started! Scanning...");
+            ConsoleLogger.Log("[AutoRegisterScanner] Page Scanner started! Scanning...");
 
             Type baseType = typeof(PageLogicBase); // Cache
 
@@ -62,11 +62,11 @@ namespace LinkLynx.Core.Engine
 
                         if (pageAttribute == null)
                         {
-                            ConsoleLogger.Log($"[PageScanner] Scanned Class has no attributes, skipping {type.FullName}");
+                            ConsoleLogger.Log($"[AutoRegisterScanner] Scanned Class has no attributes, skipping {type.FullName}");
                             continue;
                         }
 
-                        ConsoleLogger.Log($"[PageScanner] Scanned Page has attributes, processing {type.FullName}");
+                        ConsoleLogger.Log($"[AutoRegisterScanner] Scanned Page has attributes, processing {type.FullName}");
 
                         ushort pageId = pageAttribute.Id;
 
@@ -88,7 +88,7 @@ namespace LinkLynx.Core.Engine
         /// <param name="pageId">The id of the given type.</param>
         private static void AutoWireJoins(Type pageType, ushort pageId)
         {
-            ConsoleLogger.Log($"[PageScanner] Attempting to wire page class {pageType.FullName}'s signal joins...");
+            ConsoleLogger.Log($"[AutoRegisterScanner] Attempting to wire page class {pageType.FullName}'s signal joins...");
 
             MethodInfo method = typeof(AutoJoinRegistrar)
                 .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
@@ -101,7 +101,7 @@ namespace LinkLynx.Core.Engine
             if (method == null)
                 throw new MissingMethodException("AutoJoinRegistrar.RegisterJoins<T>(ushort) not found.");
 
-            ConsoleLogger.Log("[PageScanner] Registering Joins...");
+            ConsoleLogger.Log("[AutoRegisterScanner] Registering Joins...");
 
             method.MakeGenericMethod(pageType).Invoke(null, new object[] { pageId });
         }
@@ -112,19 +112,19 @@ namespace LinkLynx.Core.Engine
         /// <param name="type">This should be a type of enum, but wrapped by the type class.</param>
         private static void TryRegisterEnumSigType(Type type)
         {
-            ConsoleLogger.Log($"[PageScanner] Found Enum '{type.FullName}' Attempting to register...");
+            ConsoleLogger.Log($"[AutoRegisterScanner] Found Enum '{type.FullName}' Attempting to register...");
 
             object[] attributes = type.GetCustomAttributes(typeof(SigTypeAttribute), inherit: false);
 
             if (attributes.Length == 0) 
             {
-                ConsoleLogger.Log($"[PageScanner] Enum '{type.FullName}' Has no attributes, skipping.");
+                ConsoleLogger.Log($"[AutoRegisterScanner] Enum '{type.FullName}' Has no attributes, skipping.");
                 return;
             }
 
             if (attributes.Length > 1)
             {
-                ConsoleLogger.Log($"[PageScanner] Enum '{type.FullName}' Has too many attributes, skipping.");
+                ConsoleLogger.Log($"[AutoRegisterScanner] Enum '{type.FullName}' Has too many attributes, skipping.");
                 return;
             }
 
@@ -140,23 +140,13 @@ namespace LinkLynx.Core.Engine
         {
             try
             {
-                if (assembly.IsDynamic)
-                    return false;
-
-                string assemblyPath = assembly.Location;
-
-                if (!String.IsNullOrEmpty(assemblyPath) && assemblyPath.StartsWith(baseDirectory, StringComparison.OrdinalIgnoreCase))
-                {
-                    ConsoleLogger.Log($"[PageScanner] Assembly '{assembly.FullName}' is in the base directory, processing.");
-                    return true;
-                }
-
-                return false;
-
-            } 
+                return assembly.GetReferencedAssemblies().Any(r =>
+                        r.Name.StartsWith("LinkLynx.", StringComparison.Ordinal) ||
+                        r.Name.Equals("LinkLynx", StringComparison.Ordinal));
+            }
             catch
             {
-                return false;
+                return false; // defensive for weird loaders
             }
         }
     }

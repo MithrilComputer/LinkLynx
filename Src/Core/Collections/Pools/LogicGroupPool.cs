@@ -73,10 +73,6 @@ namespace LinkLynx.Core.Collections.Pools
                     throw;
                 }
 
-                ConsoleLogger.Log($"[LogicGroupPool] Initalizing Panel");
-
-                panelLogic.InitializePageLogic(); // Optional: call init logic per panel
-
                 ConsoleLogger.Log($"[LogicGroupPool] Panel with ID: {device.ID} registered successfully!");
             } else
                 throw new ArgumentException($"[LogicGroupPool] Error: Panel with ID {device.ID} is already registered.");
