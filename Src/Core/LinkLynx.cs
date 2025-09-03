@@ -17,7 +17,7 @@ namespace LinkLynx.Core
     /// <remarks>
     /// Call <see cref="Initialize"/> once at program startup, then register each panel
     /// via <see cref="RegisterPanel"/> before using it. Finally, call
-    /// <see cref="InitializePanel"/> to set each panel to its default UI state.
+    /// <see cref="SetPanelToDefaultState"/> to set a panel to its default UI state whenever needed.
     /// This type is intended to be used as a single instance per program.
     /// </remarks>
     /// <example>
