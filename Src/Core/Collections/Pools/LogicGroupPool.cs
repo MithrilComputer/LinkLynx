@@ -40,22 +40,19 @@ namespace LinkLynx.Core.Collections.Pools
                 throw new ArgumentNullException(nameof(device));
 
             uint id = device.ID;
+
             if (id == 0)
                 throw new ArgumentException("[LogicGroupPool] Device.ID is 0 (invalid/uninitialized).", nameof(device));
 
-
-            ConsoleLogger.Log($"[LogicGroupPool] Registering panel with ID: {device.ID}");
-
             if (!deviceLogicPool.ContainsKey(device.ID))
             {
-
-                ConsoleLogger.Log($"[LogicGroupPool] Creatasdas dA D");
+                ConsoleLogger.Log($"[LogicGroupPool] Registering panel with ID: {device.ID}");
 
                 PanelLogicGroup panelLogic;
 
                 try
                 {
-                    panelLogic = new PanelLogicGroup(device);
+                    panelLogic = new PanelLogicGroup(device); // Todo make a factory
                 }
                 catch (Exception ex)
                 {

@@ -14,8 +14,6 @@ namespace LinkLynx.Core.Engine
     /// </summary>
     internal static class AutoRegisterScanner
     {
-        private static readonly string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-
         /// <summary>
         /// Runs the scanner, finds all the pages by attribute, then registers them, and their logic joins.
         /// </summary>

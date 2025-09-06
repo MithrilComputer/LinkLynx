@@ -18,7 +18,7 @@ Get the latest DLL from the [Releases page](https://github.com/MithrilComputer/L
 
 
 ## Requirements
-These are the requirements for using this library.
+These are the requirements for using this Framework.
 - .NET Framework: 4.7.2
 - Crestron NuGet Packages:
 	- Crestron.SimplSharp.SDK.Library.2.21.133 or later

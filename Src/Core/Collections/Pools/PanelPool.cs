@@ -108,13 +108,13 @@ namespace LinkLynx.Core.Collections.Pools
         }
 
         /// <summary>
-        /// Adds a new IPID to the pool if it is not already in use.
+        /// Adds a new panel's IPID to the pool if it is not already in use.
         /// </summary>
-        /// <remarks>Keep the IPID used to between the reserved 3 - 83 devices</remarks>
+        /// <remarks>Keep the IPID used to between the reserved 3 - 83 panels</remarks>
         /// <param name="ipid"></param>
-        /// <param name="device"></param>
+        /// <param name="panel"></param>
         /// <returns></returns>
-        internal bool ReserveIPIDToDevice(uint ipid, BasicTriList device)
+        internal bool ReserveIPIDToPanel(uint ipid, BasicTriList panel)
         {
             if (usedIPIDS.Contains(ipid))
             {
@@ -130,7 +130,7 @@ namespace LinkLynx.Core.Collections.Pools
 
             ConsoleLogger.Log("[PanelPool] Log: Adding device to IPID pool");
             
-            panelDictionary.Add(ipid, device);
+            panelDictionary.Add(ipid, panel);
 
             usedIPIDS.Add(ipid);
             return true;

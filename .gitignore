@@ -11,6 +11,8 @@ obj/
 
 *.bkp
 
+*.dtmp
+
 # Backup & log files
 *.log
 *.tlog

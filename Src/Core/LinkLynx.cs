@@ -157,17 +157,22 @@ namespace LinkLynx.Core
             // 1. Pools
             ConsoleLogger.Log("[LinkLynx] Cleaning Panel Pool...");
             LinkLynxServices.panelPool.Clear();
+
             ConsoleLogger.Log("[LinkLynx] Cleaning Logic Group Pool...");
             LinkLynxServices.logicGroupPool.Clear();
 
             // 2. Registries
             ConsoleLogger.Log("[LinkLynx] Cleaning The Page Registry...");
             LinkLynxServices.pageRegistry.Clear();
+
             ConsoleLogger.Log("[LinkLynx] Cleaning The Reverse Page Registry...");
             LinkLynxServices.reversePageRegistry.Clear();
 
+            ConsoleLogger.Log("[LinkLynx] Cleaning The Enum Registry...");
+            LinkLynxServices.enumSignalTypeRegistry.Clear();
+
             // 3. Dispatchers
-            ConsoleLogger.Log("[LinkLynx] Cleaning The Dispatcher...");
+            ConsoleLogger.Log("[LinkLynx] Cleaning The Action Dispatcher...");
             DispatcherHelper.Clear();
 
             // 4. Log the cleanup
