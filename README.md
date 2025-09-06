@@ -235,6 +235,8 @@ internal class RelayPage : PageLogicBase
 
 <br>
 
-No license. All rights reserved, for now.
+LinkLynx is licensed under the Apache License 2.0.  
+You are free to use, modify, and distribute this software, provided that you include the license text and copyright notice.  
+See the [LICENSE](LICENSE) file for details.
 
 <br>
