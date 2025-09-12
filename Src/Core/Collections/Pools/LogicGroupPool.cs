@@ -1,10 +1,10 @@
-﻿using Crestron.SimplSharp;
-using Crestron.SimplSharpPro.DeviceSupport;
+﻿using Crestron.SimplSharpPro.DeviceSupport;
+using LinkLynx.Core.Collections;
 using LinkLynx.Core.Utility.Debugging.Logging;
 using System;
 using System.Collections.Generic;
 
-namespace LinkLynx.Core.Collections.Pools
+namespace LinkLynx.Core.Src.Core.Collections.Pools
 {
 
     /// <summary>
