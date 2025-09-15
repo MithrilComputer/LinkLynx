@@ -1,4 +1,5 @@
 ﻿using Crestron.SimplSharpPro;
+using LinkLynx.Core.Interfaces;
 using LinkLynx.Core.Utility.Debugging.Logging;
 using System;
 using System.Collections.Generic;
@@ -8,19 +9,17 @@ namespace LinkLynx.Core.Utility.Registries
     /// <summary>
     /// A container class meant to hold a reference to what Enum type is associated with what eSigType it represents.
     /// </summary>
-    internal sealed class EnumSignalTypeRegistry
+    internal sealed class EnumSignalTypeRegistry : IEnumSignalTypeRegistry
     {
-        private static readonly EnumSignalTypeRegistry instance = new EnumSignalTypeRegistry();
-
         /// <summary>
-        /// The singleton instance of the class.
+        /// Creates a new instance of the EnumSignalTypeRegistry class as a IEnumSignalTypeRegistry.
         /// </summary>
-        public static EnumSignalTypeRegistry Instance => instance;
+        public IEnumSignalTypeRegistry Create() { return new EnumSignalTypeRegistry(); }
 
         /// <summary>
         /// Class constructor.
         /// </summary>
-        internal EnumSignalTypeRegistry() { }
+        private EnumSignalTypeRegistry() { }
 
         /// <summary>
         /// The registry that holds the key value pairs.
@@ -30,7 +29,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// <summary>
         /// How many items are in the registry.
         /// </summary>
-        internal int Count => registry.Count;
+        public int Count => registry.Count;
 
         /// <summary>
         /// Gets a specific signal type from an enum type.
@@ -39,7 +38,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="KeyNotFoundException"></exception>
-        internal eSigType Get(Type enumType)
+        public eSigType Get(Type enumType)
         {
             if(enumType == null)
                 throw new ArgumentNullException($"[EnumSignalTypeRegistry] Error: Cant get a entry in the registry with a null Key!");
@@ -63,7 +62,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="InvalidOperationException"></exception>
-        internal void Register(Type enumType, eSigType type)
+        public void Register(Type enumType, eSigType type)
         {
             if (enumType == null)
                 throw new ArgumentNullException($"[EnumSignalTypeRegistry] Error: Can't add a null Enum in registry!");
@@ -84,7 +83,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// <summary>
         /// Clears the registry of all its entries.
         /// </summary>
-        internal void Clear()
+        public void Clear()
         {
             registry.Clear();
         }
@@ -95,7 +94,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// <param name="enumType">The Enum type to check.</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        internal bool IsRegistered(Type enumType)
+        public bool IsRegistered(Type enumType)
         {
             if (enumType == null)
                 throw new ArgumentNullException($"[EnumSignalTypeRegistry] Error: Can't check a null Key!");

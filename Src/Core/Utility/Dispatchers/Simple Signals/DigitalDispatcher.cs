@@ -1,5 +1,6 @@
 ﻿using Crestron.SimplSharpPro;
 using LinkLynx.Core.Logic.Pages;
+using LinkLynx.Core.Src.Core.Interfaces;
 using LinkLynx.Core.Utility.Debugging.Logging;
 using System;
 using System.Collections.Generic;
@@ -9,22 +10,18 @@ namespace LinkLynx.Core.Utility.Dispatchers.Signals
     /// <summary>
     /// Dispatcher for digital signals in the application.
     /// </summary>
-    internal sealed class DigitalDispatcher
+    internal sealed class DigitalDispatcher : ILogicJoinDispatcher
     {
         /// <summary>
-        /// The singleton instance of the class.
+        /// Creates a new instance of the DigitalDispatcher and passes it as an ILogicJoinDispatcher
         /// </summary>
-        private static readonly DigitalDispatcher instance = new DigitalDispatcher();
-
-        /// <summary>
-        /// The singleton instance of the class.
-        /// </summary>
-        public static DigitalDispatcher Instance => instance;
+        /// <returns></returns>
+        public ILogicJoinDispatcher Create() { return new DigitalDispatcher(); }
 
         /// <summary>
         /// Class constructor.
         /// </summary>
-        internal DigitalDispatcher() { }
+        private DigitalDispatcher() { }
 
         /// <summary>
         /// How many items are in the dispatcher.
@@ -42,7 +39,7 @@ namespace LinkLynx.Core.Utility.Dispatchers.Signals
         /// <param name="joinId">The join ID Key</param>
         /// <param name="action">The action that is bound to the key</param>
         /// <returns>True if the join ID was added, false if it already exists.</returns>
-        internal bool AddToDispatcher(uint joinId, Action<PageLogicBase, SigEventArgs> action)
+        public bool TryAddToDispatcher(uint joinId, Action<PageLogicBase, SigEventArgs> action)
         {
             if (!dispatcher.ContainsKey(joinId))
             {
@@ -61,7 +58,7 @@ namespace LinkLynx.Core.Utility.Dispatchers.Signals
         /// Checks if the dispatcher contains a specific join ID.
         /// </summary>
         /// <param name="joinId">The key to be checked</param>
-        internal bool CheckIfDispatcherContainsKey(uint joinId)
+        public bool Contains(uint joinId)
         {
             if (dispatcher.ContainsKey(joinId))
             {
@@ -80,7 +77,7 @@ namespace LinkLynx.Core.Utility.Dispatchers.Signals
         /// </summary>
         /// <param name="joinId">The Id to get the action from</param>
         /// <returns>The action associated with the key</returns>
-        internal Action<PageLogicBase, SigEventArgs> GetActionFromKey(uint joinId)
+        public Action<PageLogicBase, SigEventArgs> Get(uint joinId)
         {
             if (dispatcher.TryGetValue(joinId, out var action))
             {
@@ -97,7 +94,7 @@ namespace LinkLynx.Core.Utility.Dispatchers.Signals
         /// <summary>
         /// Clears the dispatcher entries. Only use at system shutdown.
         /// </summary>
-        internal void Clear()
+        public void Clear()
         {
             dispatcher.Clear();
         }

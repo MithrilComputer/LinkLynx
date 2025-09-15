@@ -1,26 +1,21 @@
 ﻿using Crestron.SimplSharpPro.DeviceSupport;
 using LinkLynx.Core.Collections;
+using LinkLynx.Core.Src.Core.Interfaces;
 using LinkLynx.Core.Utility.Debugging.Logging;
 using System;
 using System.Collections.Generic;
 
 namespace LinkLynx.Core.Src.Core.Collections.Pools
 {
-
     /// <summary>
     /// The logic pool class that manages the logic groups for each panel device.
     /// </summary>
-    internal sealed class LogicGroupPool
-    {
+    internal sealed class LogicGroupPool : ILogicGroupPool
+    { 
         /// <summary>
-        /// The singleton instance of the class.
+        /// Creates and returns a new instance of a logic group pool.
         /// </summary>
-        private static readonly LogicGroupPool instance = new LogicGroupPool();
-
-        /// <summary>
-        /// The singleton instance of the class.
-        /// </summary>
-        public static LogicGroupPool Instance => instance;
+        public ILogicGroupPool Create() { return new LogicGroupPool(); }
 
         /// <summary>
         /// Class constructor
@@ -34,7 +29,7 @@ namespace LinkLynx.Core.Src.Core.Collections.Pools
         /// Registers a panel device and initializes its logic group.
         /// </summary>
         /// <param name="device">The device to initialize</param>
-        internal void RegisterPanel(BasicTriList device)
+        public void RegisterPanel(BasicTriList device)
         {
             if(device == null)
                 throw new ArgumentNullException(nameof(device));
@@ -75,7 +70,7 @@ namespace LinkLynx.Core.Src.Core.Collections.Pools
                 throw new ArgumentException($"[LogicGroupPool] Error: Panel with ID {device.ID} is already registered.");
         }
 
-        internal void UnregisterPanel(BasicTriList device)
+        public void UnregisterPanel(BasicTriList device)
         {
             ConsoleLogger.Log($"[LogicGroupPool] UnregisterPanel panel with ID: {device.ID}");
 
@@ -92,7 +87,7 @@ namespace LinkLynx.Core.Src.Core.Collections.Pools
         /// <param name="device"></param>
         /// <returns></returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        internal PanelLogicGroup GetPanelLogicGroup(BasicTriList device)
+        public PanelLogicGroup GetPanelLogicGroup(BasicTriList device)
         {
             if (deviceLogicPool.TryGetValue(device.ID, out var panelLogic))
             {
@@ -109,7 +104,7 @@ namespace LinkLynx.Core.Src.Core.Collections.Pools
         /// </summary>
         /// <param name="device"></param>
         /// <exception cref="KeyNotFoundException"></exception>
-        internal void InitializePanelLogic(BasicTriList device)
+        public void InitializePanelLogic(BasicTriList device)
         {
             if (deviceLogicPool.TryGetValue(device.ID, out PanelLogicGroup panelLogic))
             {
@@ -127,7 +122,7 @@ namespace LinkLynx.Core.Src.Core.Collections.Pools
         /// </summary>
         /// <param name="device"></param>
         /// <exception cref="KeyNotFoundException"></exception>
-        internal void SetPanelDefaults(BasicTriList device)
+        public void SetPanelDefaults(BasicTriList device)
         {
             if (deviceLogicPool.TryGetValue(device.ID, out PanelLogicGroup panelLogic))
             {
@@ -142,7 +137,7 @@ namespace LinkLynx.Core.Src.Core.Collections.Pools
         /// <summary>
         /// Clears the stored logic groups, should only be called on system shutdown
         /// </summary>
-        internal void Clear()
+        public void Clear()
         {
             deviceLogicPool.Clear();
         }

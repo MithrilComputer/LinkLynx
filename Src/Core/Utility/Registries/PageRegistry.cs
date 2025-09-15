@@ -1,33 +1,27 @@
 ﻿using Crestron.SimplSharpPro.DeviceSupport;
 using LinkLynx.Core.Logic.Pages;
+using LinkLynx.Core.Src.Core.Interfaces;
+using LinkLynx.Core.Utility.Debugging.Logging;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using LinkLynx.Core.Utility.Debugging.Logging;
-
-[assembly: InternalsVisibleTo("LinkLynx.Tests")]
 
 namespace LinkLynx.Core.Utility.Registries
 {
     /// <summary>
     /// A global page registry to keep track of all the known pages.
     /// </summary>
-    internal sealed class PageRegistry
+    internal sealed class PageRegistry : IPageRegistry
     {
         /// <summary>
-        /// The singleton instance of the class.
+        /// Creates and returns a new instance of the PageRegistry class as a IPageRegistry.
         /// </summary>
-        private static readonly PageRegistry instance = new PageRegistry();
-
-        /// <summary>
-        /// The singleton instance of the class.
-        /// </summary>
-        internal static PageRegistry Instance => instance;
+        public IPageRegistry Create() { return new PageRegistry(); }
 
         /// <summary>
         /// Class constructor.
         /// </summary>
-        internal PageRegistry() { }
+        private PageRegistry() { }
 
         /// <summary>
         /// The dictionary that stores all the page types that are added to the program.
@@ -40,7 +34,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// <param name="pageId">The page id.</param>
         /// <param name="pageLogic">The page logic reference.</param>
         /// <exception cref="ArgumentException"></exception>
-        internal void RegisterPage(ushort pageId, Func<BasicTriList, PageLogicBase> pageLogic)
+        public void RegisterPage(ushort pageId, Func<BasicTriList, PageLogicBase> pageLogic)
         {
             if (pageRegistry.ContainsKey(pageId))
             {
@@ -57,7 +51,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// </summary>
         /// <param name="pageId">The id of the page to get.</param>
         /// <returns>A Func that represents the page logic that is stored with the key.</returns>
-        internal Func<BasicTriList, PageLogicBase> GetPage(ushort pageId)
+        public Func<BasicTriList, PageLogicBase> GetPage(ushort pageId)
         {
             if (pageRegistry.TryGetValue(pageId, out Func<BasicTriList, PageLogicBase> page))
             {
@@ -74,7 +68,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// Gets the current set of registered pages.
         /// </summary>
         /// <returns>A dictionary of page IDs and their factory functions.</returns>
-        internal IReadOnlyDictionary<ushort, Func<BasicTriList, PageLogicBase>> GetAllRegistries()
+        public IReadOnlyDictionary<ushort, Func<BasicTriList, PageLogicBase>> GetAllRegistries()
         {
             return pageRegistry;
         }
@@ -82,7 +76,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// <summary>
         /// Clears the stored page entries, should only be called on system shutdown
         /// </summary>
-        internal void Clear()
+        public void Clear()
         {
             pageRegistry.Clear();
         }

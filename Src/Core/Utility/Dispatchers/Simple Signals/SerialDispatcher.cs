@@ -1,5 +1,6 @@
 ﻿using Crestron.SimplSharpPro;
 using LinkLynx.Core.Logic.Pages;
+using LinkLynx.Core.Src.Core.Interfaces;
 using LinkLynx.Core.Utility.Debugging.Logging;
 using System;
 using System.Collections.Generic;
@@ -9,22 +10,18 @@ namespace LinkLynx.Core.Utility.Dispatchers.Signals
     /// <summary>
     /// Dispatcher for serial signals in the application.
     /// </summary>
-    internal sealed class SerialDispatcher
+    internal sealed class SerialDispatcher : ILogicJoinDispatcher
     {
         /// <summary>
-        /// The singleton instance of the class.
+        /// Creates a new instance of the SerialDispatcher and passes it as an ILogicJoinDispatcher
         /// </summary>
-        private static readonly SerialDispatcher instance = new SerialDispatcher();
-
-        /// <summary>
-        /// The singleton instance of the class.
-        /// </summary>
-        public static SerialDispatcher Instance => instance;
+        /// <returns></returns>
+        public ILogicJoinDispatcher Create() { return new SerialDispatcher(); }
 
         /// <summary>
         /// Class constructor.
         /// </summary>
-        internal SerialDispatcher() { }
+        private SerialDispatcher() { }
 
         /// <summary>
         /// How many items are in the dispatcher.

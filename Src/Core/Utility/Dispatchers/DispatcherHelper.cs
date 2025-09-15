@@ -31,7 +31,7 @@ namespace LinkLynx.Core.Utility.Dispatchers
                 case eSigType.Bool:
                     return LinkLynxServices.digitalDispatcher.AddToDispatcher(joinId, action);
                 case eSigType.UShort:
-                    return LinkLynxServices.analogDispatcher.AddToDispatcher(joinId, action);
+                    return LinkLynxServices.analogDispatcher.TryAddToDispatcher(joinId, action);
                 case eSigType.String:
                     return LinkLynxServices.serialDispatcher.AddToDispatcher(joinId, action);
                 default:
