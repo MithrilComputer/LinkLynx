@@ -24,7 +24,7 @@ namespace LinkLynx.Core.Interfaces
         int Count { get; }
 
         /// <summary>
-        /// Registers an enum to the singal type.
+        /// Registers an enum to the signal type.
         /// </summary>
         void Register(Type enumType, eSigType type);
 

@@ -1,6 +1,6 @@
 ﻿using Crestron.SimplSharpPro;
 using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Core.Src.Core.Interfaces;
+using LinkLynx.Interfaces.Collections.Dispatchers;
 using LinkLynx.Core.Utility.Debugging.Logging;
 using System;
 using System.Collections.Generic;
@@ -8,20 +8,20 @@ using System.Collections.Generic;
 namespace LinkLynx.Core.Utility.Dispatchers.Signals
 {
     /// <summary>
-    /// Dispatcher for analog signals in the application.
+    /// Dispatcher for digital signals in the application.
     /// </summary>
-    internal sealed class AnalogDispatcher : ILogicJoinDispatcher
+    internal sealed class DigitalDispatcher : IDigitalJoinDispatcher
     {
         /// <summary>
-        /// Creates a new instance of the AnalogDispatcher and passes it as an ILogicJoinDispatcher
+        /// Creates a new instance of the DigitalDispatcher and passes it as an ILogicJoinDispatcher
         /// </summary>
         /// <returns></returns>
-        public ILogicJoinDispatcher Create() { return new AnalogDispatcher(); }
+        public IDigitalJoinDispatcher Create() { return new DigitalDispatcher(); }
 
         /// <summary>
         /// Class constructor.
         /// </summary>
-        private AnalogDispatcher() { }
+        private DigitalDispatcher() { }
 
         /// <summary>
         /// How many items are in the dispatcher.
@@ -44,12 +44,12 @@ namespace LinkLynx.Core.Utility.Dispatchers.Signals
             if (!dispatcher.ContainsKey(joinId))
             {
                 dispatcher.Add(joinId, action);
-                ConsoleLogger.Log($"[AnalogDispatcher] Join ID {joinId} bound to {action.Method.Name} in the dispatcher.");
+                ConsoleLogger.Log($"[DigitalDispatcher] Join ID {joinId} bound to {action.Method.Name} in the dispatcher.");
                 return true;
             }
             else
             {
-                ConsoleLogger.Log($"[AnalogDispatcher] Join ID {joinId} already exists in the dispatcher for {action.Method.Name}.");
+                ConsoleLogger.Log($"[DigitalDispatcher] Join ID {joinId} already exists in the dispatcher for {action.Method.Name}.");
                 return false;
             }
         }
@@ -62,12 +62,12 @@ namespace LinkLynx.Core.Utility.Dispatchers.Signals
         {
             if (dispatcher.ContainsKey(joinId))
             {
-                ConsoleLogger.Log($"[AnalogDispatcher] Join ID {joinId} exists in the dispatcher.");
+                ConsoleLogger.Log($"[DigitalDispatcher] Join ID {joinId} exists in the dispatcher.");
                 return true;
             }
             else
             {
-                ConsoleLogger.Log($"[AnalogDispatcher] Join ID {joinId} does not exist in the dispatcher.");
+                ConsoleLogger.Log($"[DigitalDispatcher] Join ID {joinId} does not exist in the dispatcher.");
                 return false;
             }
         }
@@ -81,12 +81,12 @@ namespace LinkLynx.Core.Utility.Dispatchers.Signals
         {
             if (dispatcher.TryGetValue(joinId, out var action))
             {
-                ConsoleLogger.Log($"[AnalogDispatcher] Found action {action.Method.Name} for join ID {joinId}.");
+                ConsoleLogger.Log($"[DigitalDispatcher] Found action {action.Method.Name} for join ID {joinId}.");
                 return action;
             }
             else
             {
-                ConsoleLogger.Log($"[AnalogDispatcher] No action found for join ID {joinId}.");
+                ConsoleLogger.Log($"[DigitalDispatcher] No action found for join ID {joinId}.");
                 return null;
             }
         }

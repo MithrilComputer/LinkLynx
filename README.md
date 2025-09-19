@@ -2,6 +2,8 @@
 
 LinkLynx is a lightweight development framework designed to drastically speed up and simplify development for most small to medium Crestron programs for 4-Series Processors Only. (Pre Release Early Alpha!!)
 
+Dont expect the expermental branch to work in any way. This is where I develop, go to main if you want a compilable vers.
+
 ## Table of Contents
 - [Download](#download)
 - [Requirements](#requirements)

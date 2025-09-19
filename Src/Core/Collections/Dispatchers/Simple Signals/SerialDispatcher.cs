@@ -1,6 +1,6 @@
 ﻿using Crestron.SimplSharpPro;
 using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Core.Src.Core.Interfaces;
+using LinkLynx.Interfaces.Collections.Dispatchers;
 using LinkLynx.Core.Utility.Debugging.Logging;
 using System;
 using System.Collections.Generic;
@@ -8,20 +8,20 @@ using System.Collections.Generic;
 namespace LinkLynx.Core.Utility.Dispatchers.Signals
 {
     /// <summary>
-    /// Dispatcher for digital signals in the application.
+    /// Dispatcher for serial signals in the application.
     /// </summary>
-    internal sealed class DigitalDispatcher : ILogicJoinDispatcher
+    internal sealed class SerialDispatcher : ISerialJoinDispatcher
     {
         /// <summary>
-        /// Creates a new instance of the DigitalDispatcher and passes it as an ILogicJoinDispatcher
+        /// Creates a new instance of the SerialDispatcher and passes it as an ILogicJoinDispatcher
         /// </summary>
         /// <returns></returns>
-        public ILogicJoinDispatcher Create() { return new DigitalDispatcher(); }
+        public ISerialJoinDispatcher Create() { return new SerialDispatcher(); }
 
         /// <summary>
         /// Class constructor.
         /// </summary>
-        private DigitalDispatcher() { }
+        private SerialDispatcher() { }
 
         /// <summary>
         /// How many items are in the dispatcher.
@@ -39,17 +39,17 @@ namespace LinkLynx.Core.Utility.Dispatchers.Signals
         /// <param name="joinId">The join ID Key</param>
         /// <param name="action">The action that is bound to the key</param>
         /// <returns>True if the join ID was added, false if it already exists.</returns>
-        public bool TryAddToDispatcher(uint joinId, Action<PageLogicBase, SigEventArgs> action)
+        internal bool AddToDispatcher(uint joinId, Action<PageLogicBase, SigEventArgs> action)
         {
             if (!dispatcher.ContainsKey(joinId))
             {
                 dispatcher.Add(joinId, action);
-                ConsoleLogger.Log($"[DigitalDispatcher] Join ID {joinId} bound to {action.Method.Name} in the dispatcher.");
+                ConsoleLogger.Log($"[SerialDispatcher] Join ID {joinId} bound to {action.Method.Name} in the dispatcher.");
                 return true;
             }
             else
             {
-                ConsoleLogger.Log($"[DigitalDispatcher] Join ID {joinId} already exists in the dispatcher for {action.Method.Name}.");
+                ConsoleLogger.Log($"[SerialDispatcher] Join ID {joinId} already exists in the dispatcher for {action.Method.Name}.");
                 return false;
             }
         }
@@ -58,16 +58,16 @@ namespace LinkLynx.Core.Utility.Dispatchers.Signals
         /// Checks if the dispatcher contains a specific join ID.
         /// </summary>
         /// <param name="joinId">The key to be checked</param>
-        public bool Contains(uint joinId)
+        internal bool CheckIfDispatcherContainsKey(uint joinId)
         {
             if (dispatcher.ContainsKey(joinId))
             {
-                ConsoleLogger.Log($"[DigitalDispatcher] Join ID {joinId} exists in the dispatcher.");
+                ConsoleLogger.Log($"[SerialDispatcher] Join ID {joinId} exists in the dispatcher.");
                 return true;
             }
             else
             {
-                ConsoleLogger.Log($"[DigitalDispatcher] Join ID {joinId} does not exist in the dispatcher.");
+                ConsoleLogger.Log($"[SerialDispatcher] Join ID {joinId} does not exist in the dispatcher.");
                 return false;
             }
         }
@@ -77,16 +77,16 @@ namespace LinkLynx.Core.Utility.Dispatchers.Signals
         /// </summary>
         /// <param name="joinId">The Id to get the action from</param>
         /// <returns>The action associated with the key</returns>
-        public Action<PageLogicBase, SigEventArgs> Get(uint joinId)
+        internal Action<PageLogicBase, SigEventArgs> GetActionFromKey(uint joinId)
         {
             if (dispatcher.TryGetValue(joinId, out var action))
             {
-                ConsoleLogger.Log($"[DigitalDispatcher] Found action {action.Method.Name} for join ID {joinId}.");
+                ConsoleLogger.Log($"[SerialDispatcher] Found action {action.Method.Name} for join ID {joinId}.");
                 return action;
             }
             else
             {
-                ConsoleLogger.Log($"[DigitalDispatcher] No action found for join ID {joinId}.");
+                ConsoleLogger.Log($"[SerialDispatcher] No action found for join ID {joinId}.");
                 return null;
             }
         }
@@ -94,7 +94,7 @@ namespace LinkLynx.Core.Utility.Dispatchers.Signals
         /// <summary>
         /// Clears the dispatcher entries. Only use at system shutdown.
         /// </summary>
-        public void Clear()
+        internal void Clear()
         {
             dispatcher.Clear();
         }
