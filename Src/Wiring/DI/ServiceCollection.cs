@@ -1,5 +1,4 @@
-﻿using LinkLynx.Core.Src.Wiring.DI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace LinkLynx.Wiring.DI
@@ -17,8 +16,7 @@ namespace LinkLynx.Wiring.DI
         /// Represents a collection of service descriptors used to configure services.
         /// </summary>
         /// <remarks>This collection is intended to store <see cref="ServiceDescriptor"/> instances, which
-        /// describe the services and their lifetimes for dependency injection. It is typically used internally to
-        /// manage service registrations.</remarks>
+        /// describe the services and their lifetimes for dependency injection.</remarks>
         private readonly List<ServiceDescriptor> descriptors = new List<ServiceDescriptor>();
 
         // Public API ---------------------------------------------------------------------------------------------------------------------

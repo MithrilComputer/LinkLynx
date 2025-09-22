@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LinkLynx.Core.Src.Wiring.DI
+namespace LinkLynx.Wiring.DI
 {
     public static class LinkLynxBootstrap
     {
