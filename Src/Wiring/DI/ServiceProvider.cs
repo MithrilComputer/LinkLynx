@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace LinkLynx.Wiring.DI
 {
@@ -46,32 +47,51 @@ namespace LinkLynx.Wiring.DI
             {
                 if (descriptor.SingletonInstance == null)
                 {
-                    //_!___!__!_!___!_!_!_!_!!!_______________________!!_!_!_!_
-                    // todo Create and cache singleton instance
-                    //descriptor.SingletonInstance = CreateServiceInstance(descriptor);
+                    descriptor.SingletonInstance = CreateInstanceFromDescriptor(descriptor);
                 }
                 return descriptor.SingletonInstance;
             }
             else // Transient
             {
-                // Todo Create a new instance each time
-                //return CreateServiceInstance(descriptor);
+                return CreateInstanceFromDescriptor(descriptor);
             }
         }
 
-        public object CreateInstance(ServiceDescriptor descriptor)
+        public object CreateInstanceFromDescriptor(ServiceDescriptor descriptor)
         {
-            if(descriptor == null)
+            if (descriptor == null)
                 throw new ArgumentNullException("[ServiceProvider] Warning: Cant take in null descriptor");
 
-            if(descriptor.Factory != null)
+            if (descriptor.Factory != null)
             {
                 object built = descriptor.Factory(this);
 
                 return built;
             }
 
+            Type implType = descriptor.ImplementationType != null ? descriptor.ImplementationType : descriptor.ServiceType;
 
+            if (implType == null)
+                throw new InvalidOperationException("Descriptor has no implementation or service type.");
+
+            ConstructorInfo[] constructors = implType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
+
+            if(constructors == null || constructors.Length == 0)
+                throw new InvalidOperationException($"No public constructors found for type '{implType}'.");
+
+
+        }
+
+        private object TrackDisposable(object instance)
+        {
+            IDisposable disposable = instance as IDisposable;
+
+            if(disposable != null)
+            {
+                toDispose.Add(disposable);
+            }
+
+            return instance;
         }
     }
 }
