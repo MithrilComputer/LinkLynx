@@ -110,7 +110,12 @@ namespace LinkLynx.Wiring.DI
         /// <returns>The current <see cref="ServiceCollection"/> instance, allowing for method chaining.</returns>
         public ServiceCollection AddTransient<TService>(Func<ServiceProvider, TService> factory)
         {
-            descriptors.Add(new ServiceDescriptor(typeof(TService), sp => factory(sp), ServiceLifetime.Transient));
+            object wrapper(ServiceProvider serviceProvider)
+            {
+                return factory(serviceProvider);
+            }
+
+            descriptors.Add(new ServiceDescriptor(typeof(TService), wrapper, ServiceLifetime.Transient));
             return this;
         }
 

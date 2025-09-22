@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LinkLynx.Core.Src.Wiring.DI
 {
-    public class ServiceProvider
+    public sealed class ServiceProvider
     {
     }
 }
