@@ -17,7 +17,7 @@ namespace LinkLynx.Wiring.DI
 
             foreach (ServiceDescriptor service in services)
             {
-                if(service == null)
+                if (service == null)
                     continue;
 
                 discriptorMap[service.ServiceType] = service;
@@ -38,7 +38,7 @@ namespace LinkLynx.Wiring.DI
 
             ServiceDescriptor descriptor;
 
-            if(!discriptorMap.TryGetValue(serviceType, out descriptor))
+            if (!discriptorMap.TryGetValue(serviceType, out descriptor))
             {
                 throw new InvalidOperationException($"[ServiceProvider] Error: No service for type '{serviceType}' has been registered.");
             }
@@ -60,7 +60,7 @@ namespace LinkLynx.Wiring.DI
         public object CreateInstanceFromDescriptor(ServiceDescriptor descriptor)
         {
             if (descriptor == null)
-                throw new ArgumentNullException("[ServiceProvider] Warning: Cant take in null descriptor");
+                throw new ArgumentNullException("[ServiceProvider] Error: Cant take in null descriptor");
 
             if (descriptor.Factory != null)
             {
@@ -72,26 +72,68 @@ namespace LinkLynx.Wiring.DI
             Type implType = descriptor.ImplementationType != null ? descriptor.ImplementationType : descriptor.ServiceType;
 
             if (implType == null)
-                throw new InvalidOperationException("Descriptor has no implementation or service type.");
+                throw new InvalidOperationException("[ServiceProvider] Error: Descriptor has no implementation or service type.");
 
             ConstructorInfo[] constructors = implType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
 
-            if(constructors == null || constructors.Length == 0)
-                throw new InvalidOperationException($"No public constructors found for type '{implType}'.");
+            if (constructors == null || constructors.Length == 0)
+                throw new InvalidOperationException($"[ServiceProvider] Error: No public constructors found for type '{implType}'.");
 
+            ConstructorInfo best = constructors[0];
 
+            for (int i = 1; i < constructors.Length; i++)
+            {
+                if (constructors[i].GetParameters().Length > best.GetParameters().Length)
+                {
+                    best = constructors[i];
+                }
+            }
+
+            ParameterInfo[] parameters = best.GetParameters();
+
+            object[] args = new object[parameters.Length];
+
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                Type depandacyType = parameters[i].ParameterType;
+                args[i] = GetRequired(depandacyType);
+            }
+
+            object instance = Activator.CreateInstance(implType, args);
+
+            return TrackDisposable(instance);
         }
 
         private object TrackDisposable(object instance)
         {
             IDisposable disposable = instance as IDisposable;
 
-            if(disposable != null)
+            if (disposable != null)
             {
                 toDispose.Add(disposable);
             }
 
             return instance;
+        }
+
+        public void Dispose()
+        {
+            if (disposed)
+                return;
+
+            disposed = true;
+
+            for (int i = toDispose.Count - 1; i >= 0; i--)
+            {
+                try
+                {
+                    toDispose[i].Dispose();
+                }
+                catch
+                { /*swallow exceptions*/ }
+            }
+
+            toDispose.Clear();
         }
     }
 }
