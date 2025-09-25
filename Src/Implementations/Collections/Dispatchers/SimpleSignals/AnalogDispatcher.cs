@@ -1,27 +1,28 @@
 ﻿using Crestron.SimplSharpPro;
 using LinkLynx.Core.Logic.Pages;
 using LinkLynx.Interfaces.Collections.Dispatchers;
-using LinkLynx.Core.Utility.Debugging.Logging;
 using System;
 using System.Collections.Generic;
+using LinkLynx.Interfaces.Debugging;
 
 namespace LinkLynx.Core.Utility.Dispatchers.Signals
 {
     /// <summary>
     /// Dispatcher for analog signals in the application.
     /// </summary>
-    internal sealed class AnalogDispatcher : IAnalogJoinDispatcher
+    internal sealed class AnalogDispatcher : IAnalogJoinDispatcher, IDisposable
     {
-        /// <summary>
-        /// Creates a new instance of the AnalogDispatcher and passes it as an ILogicJoinDispatcher
-        /// </summary>
-        /// <returns></returns>
-        public IAnalogJoinDispatcher Create() { return new AnalogDispatcher(); }
+        private ILogger consoleLogger;
 
         /// <summary>
         /// Class constructor.
         /// </summary>
-        private AnalogDispatcher() { }
+        public AnalogDispatcher(ILogger consoleLogger) 
+        { 
+        
+            this.consoleLogger = consoleLogger;
+
+        }
 
         /// <summary>
         /// How many items are in the dispatcher.
@@ -39,17 +40,17 @@ namespace LinkLynx.Core.Utility.Dispatchers.Signals
         /// <param name="joinId">The join ID Key</param>
         /// <param name="action">The action that is bound to the key</param>
         /// <returns>True if the join ID was added, false if it already exists.</returns>
-        public bool TryAddToDispatcher(uint joinId, Action<PageLogicBase, SigEventArgs> action)
+        public bool TryAdd(uint joinId, Action<PageLogicBase, SigEventArgs> action)
         {
             if (!dispatcher.ContainsKey(joinId))
             {
                 dispatcher.Add(joinId, action);
-                ConsoleLogger.Log($"[AnalogDispatcher] Join ID {joinId} bound to {action.Method.Name} in the dispatcher.");
+                consoleLogger.Log($"[AnalogDispatcher] Join ID {joinId} bound to {action.Method.Name} in the dispatcher.");
                 return true;
             }
             else
             {
-                ConsoleLogger.Log($"[AnalogDispatcher] Join ID {joinId} already exists in the dispatcher for {action.Method.Name}.");
+                consoleLogger.Log($"[AnalogDispatcher] Join ID {joinId} already exists in the dispatcher for {action.Method.Name}.");
                 return false;
             }
         }
@@ -62,12 +63,12 @@ namespace LinkLynx.Core.Utility.Dispatchers.Signals
         {
             if (dispatcher.ContainsKey(joinId))
             {
-                ConsoleLogger.Log($"[AnalogDispatcher] Join ID {joinId} exists in the dispatcher.");
+                consoleLogger.Log($"[AnalogDispatcher] Join ID {joinId} exists in the dispatcher.");
                 return true;
             }
             else
             {
-                ConsoleLogger.Log($"[AnalogDispatcher] Join ID {joinId} does not exist in the dispatcher.");
+                consoleLogger.Log($"[AnalogDispatcher] Join ID {joinId} does not exist in the dispatcher.");
                 return false;
             }
         }
@@ -81,12 +82,12 @@ namespace LinkLynx.Core.Utility.Dispatchers.Signals
         {
             if (dispatcher.TryGetValue(joinId, out var action))
             {
-                ConsoleLogger.Log($"[AnalogDispatcher] Found action {action.Method.Name} for join ID {joinId}.");
+                consoleLogger.Log($"[AnalogDispatcher] Found action {action.Method.Name} for join ID {joinId}.");
                 return action;
             }
             else
             {
-                ConsoleLogger.Log($"[AnalogDispatcher] No action found for join ID {joinId}.");
+                consoleLogger.Log($"[AnalogDispatcher] No action found for join ID {joinId}.");
                 return null;
             }
         }
@@ -94,7 +95,7 @@ namespace LinkLynx.Core.Utility.Dispatchers.Signals
         /// <summary>
         /// Clears the dispatcher entries. Only use at system shutdown.
         /// </summary>
-        public void Clear()
+        public void Dispose()
         {
             dispatcher.Clear();
         }

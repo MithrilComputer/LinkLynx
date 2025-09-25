@@ -1,32 +1,31 @@
 ﻿using Crestron.SimplSharpPro.DeviceSupport;
+using LinkLynx.Core.Interfaces;
 using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Core.Src.Core.Interfaces;
-using LinkLynx.Core.Utility.Debugging.Logging;
+using LinkLynx.Interfaces.Debugging;
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
-namespace LinkLynx.Core.Utility.Registries
+namespace LinkLynx.Implementations.Collections.Registries
 {
     /// <summary>
     /// A global page registry to keep track of all the known pages.
     /// </summary>
-    internal sealed class PageRegistry : IPageRegistry
+    internal sealed class PageRegistry : IPageRegistry, IDisposable
     {
-        /// <summary>
-        /// Creates and returns a new instance of the PageRegistry class as a IPageRegistry.
-        /// </summary>
-        public IPageRegistry Create() { return new PageRegistry(); }
+        private readonly ILogger consoleLogger;
 
         /// <summary>
         /// Class constructor.
         /// </summary>
-        private PageRegistry() { }
+        public PageRegistry(ILogger consoleLogger) 
+        {
+            this.consoleLogger = consoleLogger;
+        }
 
         /// <summary>
         /// The dictionary that stores all the page types that are added to the program.
         /// </summary>
-        internal readonly Dictionary<ushort, Func<BasicTriList, PageLogicBase>> pageRegistry = new Dictionary<ushort, Func<BasicTriList, PageLogicBase>>();
+        private readonly Dictionary<ushort, Func<BasicTriList, PageLogicBase>> pageRegistry = new Dictionary<ushort, Func<BasicTriList, PageLogicBase>>();
 
         /// <summary>
         /// Adds a new page to the global page registry.
@@ -59,7 +58,7 @@ namespace LinkLynx.Core.Utility.Registries
             }
             else
             {
-                ConsoleLogger.Log($"[PageRegistry] Warning: Page Registry does not contain a page for PageID: {pageId}");
+                consoleLogger.Log($"[PageRegistry] Warning: Page Registry does not contain a page for PageID: {pageId}");
                 return null;
             }
         }
@@ -76,7 +75,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// <summary>
         /// Clears the stored page entries, should only be called on system shutdown
         /// </summary>
-        public void Clear()
+        public void Dispose()
         {
             pageRegistry.Clear();
         }

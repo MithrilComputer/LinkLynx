@@ -4,12 +4,22 @@ using System.Reflection;
 
 namespace LinkLynx.Wiring.DI
 {
+    /// <summary>
+    /// This class is a simple service provider for resolving dependencies.
+    /// </summary>
     public sealed class ServiceProvider : IDisposable
     {
-        private readonly Dictionary<Type, ServiceDescriptor> discriptorMap = new Dictionary<Type, ServiceDescriptor>();
+        private readonly Dictionary<Type, ServiceDescriptor> descriptorMap = new Dictionary<Type, ServiceDescriptor>();
+        
         private readonly List<IDisposable> toDispose = new List<IDisposable>();
+
         private bool disposed = false;
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="ServiceProvider"/> class with the specified service descriptors.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public ServiceProvider(IEnumerable<ServiceDescriptor> services)
         {
             if (services == null)
@@ -20,10 +30,13 @@ namespace LinkLynx.Wiring.DI
                 if (service == null)
                     continue;
 
-                discriptorMap[service.ServiceType] = service;
+                descriptorMap[service.ServiceType] = service;
             }
         }
 
+        /// <summary>
+        /// Gets the required service of type T. Throws an exception if the service is not registered.
+        /// </summary>
         public T GetRequired<T>()
         {
             object service = GetRequired(typeof(T));
@@ -31,6 +44,9 @@ namespace LinkLynx.Wiring.DI
             return (T)service;
         }
 
+        /// <summary>
+        /// Gets the required service of the specified type. Throws an exception if the service is not registered.
+        /// </summary>
         public object GetRequired(Type serviceType)
         {
             if (serviceType == null)
@@ -38,7 +54,7 @@ namespace LinkLynx.Wiring.DI
 
             ServiceDescriptor descriptor;
 
-            if (!discriptorMap.TryGetValue(serviceType, out descriptor))
+            if (!descriptorMap.TryGetValue(serviceType, out descriptor))
             {
                 throw new InvalidOperationException($"[ServiceProvider] Error: No service for type '{serviceType}' has been registered.");
             }
@@ -57,6 +73,9 @@ namespace LinkLynx.Wiring.DI
             }
         }
 
+        /// <summary>
+        /// Creates an instance of the service described by the given descriptor.
+        /// </summary>
         public object CreateInstanceFromDescriptor(ServiceDescriptor descriptor)
         {
             if (descriptor == null)
@@ -69,15 +88,15 @@ namespace LinkLynx.Wiring.DI
                 return built;
             }
 
-            Type implType = descriptor.ImplementationType != null ? descriptor.ImplementationType : descriptor.ServiceType;
+            Type implementationType = descriptor.ImplementationType != null ? descriptor.ImplementationType : descriptor.ServiceType;
 
-            if (implType == null)
+            if (implementationType == null)
                 throw new InvalidOperationException("[ServiceProvider] Error: Descriptor has no implementation or service type.");
 
-            ConstructorInfo[] constructors = implType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
+            ConstructorInfo[] constructors = implementationType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
 
             if (constructors == null || constructors.Length == 0)
-                throw new InvalidOperationException($"[ServiceProvider] Error: No public constructors found for type '{implType}'.");
+                throw new InvalidOperationException($"[ServiceProvider] Error: No public constructors found for type '{implementationType}'.");
 
             ConstructorInfo best = constructors[0];
 
@@ -95,15 +114,18 @@ namespace LinkLynx.Wiring.DI
 
             for (int i = 0; i < parameters.Length; i++)
             {
-                Type depandacyType = parameters[i].ParameterType;
-                args[i] = GetRequired(depandacyType);
+                Type dependencyType = parameters[i].ParameterType;
+                args[i] = GetRequired(dependencyType);
             }
 
-            object instance = Activator.CreateInstance(implType, args);
+            object instance = Activator.CreateInstance(implementationType, args);
 
             return TrackDisposable(instance);
         }
 
+        /// <summary>
+        /// Tracks the disposable instance for later disposal.
+        /// </summary>
         private object TrackDisposable(object instance)
         {
             IDisposable disposable = instance as IDisposable;
@@ -116,6 +138,9 @@ namespace LinkLynx.Wiring.DI
             return instance;
         }
 
+        /// <summary>
+        /// Disposes the service provider and all tracked disposable instances.
+        /// </summary>
         public void Dispose()
         {
             if (disposed)

@@ -17,10 +17,5 @@ namespace LinkLynx.Core.Interfaces
         /// Registers a Logic Join to a page.
         /// </summary>
         bool TryRegister(Enum join, ushort pageId);
-
-        /// <summary>
-        /// Clears the registries
-        /// </summary>
-        void Clear();
     }
 }

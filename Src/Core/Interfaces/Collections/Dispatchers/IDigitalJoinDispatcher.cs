@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Crestron.SimplSharpPro;
+using LinkLynx.Core.Logic.Pages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +10,12 @@ namespace LinkLynx.Interfaces.Collections.Dispatchers
 {
     internal interface IDigitalJoinDispatcher
     {
+        int Count { get; }
+
+        bool TryAdd(uint joinId, Action<PageLogicBase, SigEventArgs> action);
+
+        bool Contains(uint joinId);
+
+        Action<PageLogicBase, SigEventArgs> Get(uint joinId);
     }
 }

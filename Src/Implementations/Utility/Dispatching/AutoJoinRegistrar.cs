@@ -1,24 +1,36 @@
 ﻿using Crestron.SimplSharpPro;
 using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Core.Utility.Registries;
-using LinkLynx.Core.Utility.Debugging.Logging;
 using System;
 using System.Reflection;
 using LinkLynx.Core.Utility.Signals.Attributes;
+using LinkLynx.Interfaces.Debugging;
+using LinkLynx.Interfaces.Utility.Dispatching;
+using LinkLynx.Core.Interfaces;
 
-namespace LinkLynx.Core.Utility.Dispatchers
+namespace LinkLynx.Core.Implementations.Utility.Dispatching
 {
     /// <summary>
     /// Responsible for automatically registering all joins at runtime. 
     /// Uses the [Join(Enum)] attribute to assign bindings to methods
     /// </summary>
-    internal static class AutoJoinRegistrar
+    internal class AutoJoinRegistrar
     {
+        private ILogger consoleLogger;
+        private IJoinDispatcher dispatcherHelper;
+        private IReversePageRegistry reversePageRegistry;
+
+        public AutoJoinRegistrar(ILogger consoleLogger, IJoinDispatcher dispatcherHelper, IReversePageRegistry reversePageRegistry)
+        {
+            this.consoleLogger = consoleLogger;
+            this.dispatcherHelper = dispatcherHelper;
+            this.reversePageRegistry = reversePageRegistry;
+        }
+
         /// <summary>
         /// This registers all the joins on a page automatically by going through the page's method attributes.
         /// </summary>
         /// <param name="pageId">The id of the given page.</param>
-        internal static void RegisterJoins<T>(ushort pageId) where T : PageLogicBase
+        public void RegisterJoins<T>(ushort pageId) where T : PageLogicBase
         {
             Type logicType = typeof(T);
 
@@ -31,21 +43,26 @@ namespace LinkLynx.Core.Utility.Dispatchers
                     if (joinAttributes == null || joinAttributes.Length == 0)
                         continue;
 
-                    ConsoleLogger.Log($"[AutoJoinRegistrar] Found {joinAttributes.Length} Join Attributes on method '{method.Name}'");
+                    consoleLogger.Log($"[AutoJoinRegistrar] Found {joinAttributes.Length} Join Attributes on method '{method.Name}'");
 
                     foreach (JoinAttribute joinAttr in joinAttributes)
                     {
                         if (joinAttr.Join is Enum joinEnum)
                         {
-                            ConsoleLogger.Log($"[AutoJoinRegistrar] Registering Join '{joinEnum}' on method '{method.Name}'");
+                            consoleLogger.Log($"[AutoJoinRegistrar] Registering Join '{joinEnum}' on method '{method.Name}'");
 
-                            LinkLynxServices.reversePageRegistry.RegisterPageKeyFromJoin(joinEnum, pageId);
+                            if(!reversePageRegistry.TryRegister(joinEnum, pageId))
+                            {
+                                consoleLogger.Log($"[AutoJoinRegistrar] Warning: Join '{joinEnum}' is already registered to another page. Skipping registration on method '{method.Name}'. Skipping...");
 
-                            DispatcherHelper.AddToDispatcher(joinEnum, BuildLambda<T>(method));
+                                continue;
+                            }
+
+                            dispatcherHelper.AddToDispatcher(joinEnum, BuildLambda<T>(method));
                         }
                         else
                         {
-                            ConsoleLogger.Log($"[AutoJoinRegistrar] Warning: Join attribute on method '{method.Name}' does not contain a valid Enum.");
+                            consoleLogger.Log($"[AutoJoinRegistrar] Warning: Join attribute on method '{method.Name}' does not contain a valid Enum.");
                         }
                     }
                 }
@@ -53,7 +70,7 @@ namespace LinkLynx.Core.Utility.Dispatchers
             catch
             (Exception ex)
             {
-                ConsoleLogger.Log($"[AutoJoinRegistrar] Error while registering joins for page ID {pageId}: {ex.Message}");
+                consoleLogger.Log($"[AutoJoinRegistrar] Error while registering joins for page ID {pageId}: {ex.Message}");
             }
         }
 
@@ -61,13 +78,13 @@ namespace LinkLynx.Core.Utility.Dispatchers
         /// A method that generates a Lambda Action to be added to the dispatcher.
         /// </summary>
         /// <param name="method">The method to be converted to the Lambda Action</param>
-        private static Action<PageLogicBase, SigEventArgs> BuildLambda<T>(MethodInfo method) where T : PageLogicBase
+        private Action<PageLogicBase, SigEventArgs> BuildLambda<T>(MethodInfo method) where T : PageLogicBase
         {
             return (page, args) =>
             {
                 if (page == null)
                 {
-                    ConsoleLogger.Log($"[AutoJoinRegistrar] Error: Page instance was null.");
+                    consoleLogger.Log($"[AutoJoinRegistrar] Error: Page instance was null.");
                     return;
                 }
 
@@ -77,12 +94,12 @@ namespace LinkLynx.Core.Utility.Dispatchers
                 }
                 catch (TargetInvocationException ex)
                 {
-                    ConsoleLogger.Log($"[AutoJoinRegistrar] Error in method '{method.Name}': {ex.InnerException?.Message ?? "Unknown inner exception"}");
-                    ConsoleLogger.Log(ex.InnerException?.StackTrace ?? "No stack trace");
+                    consoleLogger.Log($"[AutoJoinRegistrar] Error in method '{method.Name}': {ex.InnerException?.Message ?? "Unknown inner exception"}");
+                    consoleLogger.Log(ex.InnerException?.StackTrace ?? "No stack trace");
                 }
                 catch (Exception ex)
                 {
-                    ConsoleLogger.Log($"[AutoJoinRegistrar] Error: {ex.Message}");
+                    consoleLogger.Log($"[AutoJoinRegistrar] Error: {ex.Message}");
                 }
             };
         }

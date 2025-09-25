@@ -1,26 +1,26 @@
 ﻿using Crestron.SimplSharpPro;
 using LinkLynx.Core.Interfaces;
-using LinkLynx.Core.Utility.Debugging.Logging;
 using LinkLynx.Core.Utility.Helpers;
+using LinkLynx.Interfaces.Debugging;
 using System;
 using System.Collections.Generic;
 
-namespace LinkLynx.Core.Utility.Registries
+namespace LinkLynx.Implementations.Collections.Registries
 {
     /// <summary>
     /// A special class that used to link logic joins to pages, good for reverse join searching.
     /// </summary>
-    internal sealed class ReversePageRegistry : IReversePageRegistry
+    internal sealed class ReversePageRegistry : IReversePageRegistry, IDisposable
     {
-        /// <summary>
-        /// Creates and returns a new instance of a reverse page registry.
-        /// </summary>
-        public IReversePageRegistry Create() { return new ReversePageRegistry(); }
+        private readonly ILogger consoleLogger;
 
         /// <summary>
         /// Class constructor.
         /// </summary>
-        private ReversePageRegistry() { }
+        public ReversePageRegistry(ILogger consoleLogger) 
+        { 
+            this.consoleLogger = consoleLogger;
+        }
 
         private readonly Dictionary<uint, ushort> DigitalJoinPageMap = new Dictionary<uint, ushort>();
         private readonly Dictionary<uint, ushort> AnalogJoinPageMap = new Dictionary<uint, ushort>();
@@ -40,6 +40,9 @@ namespace LinkLynx.Core.Utility.Registries
                     {
                         return digitalPageID;
                     }
+
+                    consoleLogger.Log($"[ReversePageRegistry] Warning: Could not find the page associated with the signal key of '{join}' with a type of '{type}'");
+
                     break;
 
                 case eSigType.UShort:
@@ -47,6 +50,9 @@ namespace LinkLynx.Core.Utility.Registries
                     {
                         return analogPageID;
                     }
+
+                    consoleLogger.Log($"[ReversePageRegistry] Warning: Could not find the page associated with the signal key of '{join}' with a type of '{type}'");
+
                     break;
 
                 case eSigType.String:
@@ -54,6 +60,9 @@ namespace LinkLynx.Core.Utility.Registries
                     {
                         return serialPageID;
                     }
+
+                    consoleLogger.Log($"[ReversePageRegistry] Warning: Could not find the page associated with the signal key of '{join}' with a type of '{type}'");
+
                     break;
 
                 default:
@@ -74,7 +83,7 @@ namespace LinkLynx.Core.Utility.Registries
             eSigType type = EnumHelper.GetSignalTypeFromEnum(join);
             uint joinNumber = Convert.ToUInt32(join);
 
-            ConsoleLogger.Log($"[ReversePageRegistry] Log: Registered '{type}' join '{joinNumber}' to page '{pageId}'");
+            consoleLogger.Log($"[ReversePageRegistry] Log: Registering '{type}' join '{joinNumber}' to page '{pageId}'");
 
             switch (type)
             {
@@ -86,6 +95,7 @@ namespace LinkLynx.Core.Utility.Registries
                     } 
                     else
                     {
+                        consoleLogger.Log($"[ReversePageRegistry] Error: Attempted to register a duplicate key of '{joinNumber}' for a type of '{type.ToString()}'");
                         return false;
                     }
 
@@ -97,8 +107,8 @@ namespace LinkLynx.Core.Utility.Registries
                     }
                     else
                     {
+                        consoleLogger.Log($"[ReversePageRegistry] Error: Attempted to register a duplicate key of '{joinNumber}' for a type of '{type.ToString()}'");
                         return false;
-                        //throw new InvalidOperationException($"[ReversePageRegistry] Error: Duplicate analog key '{joinNumber}' was attempted to be registered to page '{pageId}'");
                     }
 
                 case eSigType.String:
@@ -109,8 +119,8 @@ namespace LinkLynx.Core.Utility.Registries
                     }
                     else
                     {
+                        consoleLogger.Log($"[ReversePageRegistry] Error: Attempted to register a duplicate key of '{joinNumber}' for a type of '{type.ToString()}'");
                         return false;
-                        //throw new InvalidOperationException($"[ReversePageRegistry] Error: Duplicate serial key '{joinNumber}' was attempted to be registered to page '{pageId}'");
                     }
 
                 default:
@@ -121,7 +131,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// <summary>
         /// Clears all the entries in the registry. Use only at system shutdown.
         /// </summary>
-        public void Clear()
+        public void Dispose()
         {
             DigitalJoinPageMap.Clear();
             AnalogJoinPageMap.Clear();

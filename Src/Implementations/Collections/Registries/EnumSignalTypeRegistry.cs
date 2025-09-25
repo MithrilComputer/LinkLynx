@@ -1,25 +1,25 @@
 ﻿using Crestron.SimplSharpPro;
 using LinkLynx.Core.Interfaces;
-using LinkLynx.Core.Utility.Debugging.Logging;
+using LinkLynx.Interfaces.Debugging;
 using System;
 using System.Collections.Generic;
 
-namespace LinkLynx.Core.Utility.Registries
+namespace LinkLynx.Implementations.Collections.Registries
 {
     /// <summary>
     /// A container class meant to hold a reference to what Enum type is associated with what eSigType it represents.
     /// </summary>
-    internal sealed class EnumSignalTypeRegistry : IEnumSignalTypeRegistry
+    internal sealed class EnumSignalTypeRegistry : IEnumSignalTypeRegistry, IDisposable
     {
-        /// <summary>
-        /// Creates a new instance of the EnumSignalTypeRegistry class as a IEnumSignalTypeRegistry.
-        /// </summary>
-        public IEnumSignalTypeRegistry Create() { return new EnumSignalTypeRegistry(); }
+        private readonly ILogger consoleLogger;
 
         /// <summary>
         /// Class constructor.
         /// </summary>
-        private EnumSignalTypeRegistry() { }
+        public EnumSignalTypeRegistry(ILogger consoleLogger) 
+        {
+            this.consoleLogger = consoleLogger;
+        }
 
         /// <summary>
         /// The registry that holds the key value pairs.
@@ -73,7 +73,7 @@ namespace LinkLynx.Core.Utility.Registries
             if (!registry.ContainsKey(enumType))
             {
                 registry.Add(enumType, type);
-                ConsoleLogger.Log($"[EnumSignalTypeRegistry] Log: Registered Enum '{enumType.FullName}' as type '{type}'");
+                consoleLogger.Log($"[EnumSignalTypeRegistry] Log: Registered Enum '{enumType.FullName}' as type '{type}'");
                 return;
             }
 
@@ -83,7 +83,7 @@ namespace LinkLynx.Core.Utility.Registries
         /// <summary>
         /// Clears the registry of all its entries.
         /// </summary>
-        public void Clear()
+        public void Dispose()
         {
             registry.Clear();
         }

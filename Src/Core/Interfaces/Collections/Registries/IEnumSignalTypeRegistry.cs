@@ -14,11 +14,6 @@ namespace LinkLynx.Core.Interfaces
         bool IsRegistered(Type enumType);
 
         /// <summary>
-        /// Clears the registry entries.
-        /// </summary>
-        void Clear();
-
-        /// <summary>
         /// The amount of entries in the registry.
         /// </summary>
         int Count { get; }

@@ -1,5 +1,5 @@
 ﻿using Crestron.SimplSharp;
-using LinkLynx.Core.Interfaces;
+using LinkLynx.Interfaces.Debugging;
 
 namespace LinkLynx.Core.Utility.Debugging.Logging
 {

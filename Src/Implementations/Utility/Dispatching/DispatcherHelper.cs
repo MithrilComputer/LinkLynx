@@ -1,16 +1,31 @@
 ﻿using Crestron.SimplSharpPro;
 using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Core.Utility.Debugging.Logging;
 using LinkLynx.Core.Utility.Helpers;
+using LinkLynx.Interfaces.Collections.Dispatchers;
+using LinkLynx.Interfaces.Utility.Dispatching;
 using System;
+using LinkLynx.Interfaces.Debugging;
 
 namespace LinkLynx.Core.Utility.Dispatchers
 {
     /// <summary>
     /// The DispatcherHelper class provides a unified interface for managing different types of signal dispatchers.
     /// </summary>
-    internal static class DispatcherHelper
+    internal class DispatcherHelper : IJoinDispatcher
     {
+        private readonly IDigitalJoinDispatcher digitalDispatcher;
+        private readonly IAnalogJoinDispatcher analogDispatcher;
+        private readonly ISerialJoinDispatcher serialDispatcher;
+        private readonly ILogger consoleLogger;
+
+        public DispatcherHelper(IDigitalJoinDispatcher digitalDispatcher, IAnalogJoinDispatcher analogDispatcher, ISerialJoinDispatcher serialDispatcher, ) 
+        {
+            this.digitalDispatcher = digitalDispatcher;
+            this.analogDispatcher = analogDispatcher;
+            this.serialDispatcher = serialDispatcher;
+        }
+
+
         /// <summary>
         /// The method to add a join ID and its corresponding action to the dispatcher.
         /// </summary>
@@ -19,21 +34,21 @@ namespace LinkLynx.Core.Utility.Dispatchers
         /// <returns>True if the join ID was added, false if it already exists.</returns>
         /// <remarks>Ensure the enum has one of these in the name to be parsed correctly "Digital", "Analog" or "Serial". 
         /// It is used to determine the signal type.</remarks>
-        internal static bool AddToDispatcher(Enum join, Action<PageLogicBase, SigEventArgs> action)
+        public bool AddToDispatcher(Enum join, Action<PageLogicBase, SigEventArgs> action)
         {
             eSigType signalType = EnumHelper.GetSignalTypeFromEnum(join);
             uint joinId = Convert.ToUInt32(join);
 
-            ConsoleLogger.Log($"[DispatcherHelper] Adding Join {joinId} of type {signalType} to dispatcher.");
+            consoleLogger.Log($"[DispatcherHelper] Adding Join {joinId} of type {signalType} to dispatcher.");
 
             switch (signalType)
             {
                 case eSigType.Bool:
-                    return LinkLynxServices.digitalDispatcher.AddToDispatcher(joinId, action);
+                    return digitalDispatcher.TryAdd(joinId, action);
                 case eSigType.UShort:
-                    return LinkLynxServices.analogDispatcher.TryAddToDispatcher(joinId, action);
+                    return analogDispatcher.TryAdd(joinId, action);
                 case eSigType.String:
-                    return LinkLynxServices.serialDispatcher.AddToDispatcher(joinId, action);
+                    return serialDispatcher.TryAdd(joinId, action);
                 default:
                     throw new Exception("[DispatcherHelper] Incorrect Enum Value Passed when attempting to add a new logic join.");
             }
@@ -45,18 +60,18 @@ namespace LinkLynx.Core.Utility.Dispatchers
         /// <param name="signalType">The type of signal to check.</param>
         /// <param name="joinId">The join id associated with the signal.</param>
         /// <returns>If the dispatcher contains the key</returns>
-        internal static bool CheckIfDispatcherContainsKey(eSigType signalType, uint joinId)
+        public bool CheckIfDispatcherContainsKey(eSigType signalType, uint joinId)
         {
             switch (signalType)
             {
                 case eSigType.Bool:
-                    return LinkLynxServices.digitalDispatcher.CheckIfDispatcherContainsKey(joinId);
+                    return digitalDispatcher.Contains(joinId);
                 case eSigType.UShort:
-                    return LinkLynxServices.analogDispatcher.CheckIfDispatcherContainsKey(joinId);
+                    return analogDispatcher.Contains(joinId);
                 case eSigType.String:
-                    return LinkLynxServices.serialDispatcher.CheckIfDispatcherContainsKey(joinId);
+                    return serialDispatcher.Contains(joinId);
                 default:
-                    ConsoleLogger.Log($"[DispatcherHelper] Unsupported signal type: {signalType}, with a Join of {joinId}");
+                    consoleLogger.Log($"[DispatcherHelper] Unsupported signal type: {signalType}, with a Join of {joinId}");
                     return false;
             }
         }
@@ -67,29 +82,20 @@ namespace LinkLynx.Core.Utility.Dispatchers
         /// <param name="signalType">The type of signal to get the action from.</param>
         /// <param name="joinId">The join id of the action.</param>
         /// <returns>The action associated with a specific join ID, Null if not found.</returns>
-        internal static Action<PageLogicBase, SigEventArgs> GetDispatcherActionFromKey(eSigType signalType, uint joinId)
+        public Action<PageLogicBase, SigEventArgs> GetDispatcherActionFromKey(eSigType signalType, uint joinId)
         {
             switch (signalType)
             {
                 case eSigType.Bool:
-                    return LinkLynxServices.digitalDispatcher.GetActionFromKey(joinId);
+                    return digitalDispatcher.Get(joinId);
                 case eSigType.UShort:
-                    return LinkLynxServices.analogDispatcher.GetActionFromKey(joinId);
+                    return analogDispatcher.Get(joinId);
                 case eSigType.String:
-                    return LinkLynxServices.serialDispatcher.GetActionFromKey(joinId);
+                    return serialDispatcher.Get(joinId);
                 default:
                     throw new FormatException("[DispatcherHelper] Input Enum Has Incorrect Formatting");
             }
         }
 
-        /// <summary>
-        /// Clears all the method dispatchers. Use only at system shutdown.
-        /// </summary>
-        internal static void Clear()
-        {
-            LinkLynxServices.digitalDispatcher.Clear();
-            LinkLynxServices.analogDispatcher.Clear();
-            LinkLynxServices.serialDispatcher.Clear();
-        }
     }
 }

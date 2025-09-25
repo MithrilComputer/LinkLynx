@@ -12,7 +12,5 @@ namespace LinkLynx.Core.Interfaces
         Func<BasicTriList, PageLogicBase> GetPage(ushort pageId);
 
         IReadOnlyDictionary<ushort, Func<BasicTriList, PageLogicBase>> GetAllRegistries();
-
-        void Clear();
     }
 }
