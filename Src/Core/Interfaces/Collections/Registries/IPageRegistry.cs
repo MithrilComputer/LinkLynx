@@ -3,7 +3,7 @@ using LinkLynx.Core.Logic.Pages;
 using System;
 using System.Collections.Generic;
 
-namespace LinkLynx.Core.Interfaces
+namespace LinkLynx.Core.Interfaces.Collections.Registries
 {
     public interface IPageRegistry
     {

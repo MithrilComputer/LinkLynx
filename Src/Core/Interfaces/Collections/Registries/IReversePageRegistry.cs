@@ -1,7 +1,7 @@
 ﻿using Crestron.SimplSharpPro;
 using System;
 
-namespace LinkLynx.Core.Interfaces
+namespace LinkLynx.Core.Interfaces.Collections.Registries
 {
     /// <summary>
     /// The interface for Reverse page registry, used for finding a Page ID from a join number.

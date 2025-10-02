@@ -1,7 +1,7 @@
 ﻿using Crestron.SimplSharpPro.DeviceSupport;
-using LinkLynx.Core.Interfaces;
+using LinkLynx.Core.Interfaces.Collections.Registries;
+using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Interfaces.Debugging;
 using System;
 using System.Collections.Generic;
 

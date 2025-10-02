@@ -1,31 +1,35 @@
 ﻿using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
+using LinkLynx.Core.Interfaces.Collections.Registries;
+using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using System;
-using LinkLynx.Core.Utility.Debugging.Logging;
 
-namespace LinkLynx.Core.Utility.Helpers
+namespace LinkLynx.Implementations.Utility.Helpers
 {
     /// <summary>
     /// Generic Helpers for the VTProIntegrationTestSimpleSharp application.
     /// </summary>
-    public static class SignalHelper
+    public class SignalHelper
     {
+        private readonly IEnumSignalTypeRegistry enumSignalTypeRegistry;
+        private readonly ILogger consoleLogger;
+
         /// <summary>
         /// Sets a logic join on a given panel.
         /// </summary>
         /// <param name="panel"> The panel to set the logic join on.</param>
         /// <param name="join"> The join to set.</param>
         /// <param name="value"> The value to set the join to.</param>
-        public static void SetLogicJoin<T>(BasicTriList panel, Enum join, T value)
+        public void SetLogicJoin<T>(BasicTriList panel, Enum join, T value)
         {
             if (panel == null)
                 throw new ArgumentNullException($"[SignalHelper] SetSerialJoin: Device is null, cannot set join.");
 
-            eSigType signalType = LinkLynxServices.enumSignalTypeRegistry.Get(join.GetType());
+            eSigType signalType = enumSignalTypeRegistry.Get(join.GetType());
             
             ushort joinNumber = Convert.ToUInt16(join);
 
-            ConsoleLogger.Log($"[SignalHelper] Setting Join '{Convert.ToUInt16(join)}' on device '{panel.ID}' as '{value}'");
+            consoleLogger.Log($"[SignalHelper] Setting Join '{Convert.ToUInt16(join)}' on device '{panel.ID}' as '{value}'");
 
             switch (signalType)
             {

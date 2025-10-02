@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LinkLynx.Interfaces.Collections.Dispatchers
+namespace LinkLynx.Core.Interfaces.Collections.Dispatchers
 {
     internal interface ISerialJoinDispatcher
     {

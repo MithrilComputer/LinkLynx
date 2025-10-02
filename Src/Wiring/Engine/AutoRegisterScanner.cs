@@ -1,13 +1,10 @@
 ﻿using Crestron.SimplSharpPro;
 using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Core.Utility.Signals.Attributes;
 using System;
 using System.Linq;
 using System.Reflection;
-using LinkLynx.Core.Utility.Debugging.Logging;
-using LinkLynx.Core.Src.Implementations.Utility.Dispatching;
 
-namespace LinkLynx.Core.Engine
+namespace LinkLynx.Wiring.Engine
 {
     /// <summary>
     /// A scanner Class made to look for all the pages in a program and register them, and their logic joins.

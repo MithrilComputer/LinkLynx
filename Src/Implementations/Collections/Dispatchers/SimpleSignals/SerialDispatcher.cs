@@ -1,11 +1,11 @@
 ﻿using Crestron.SimplSharpPro;
+using LinkLynx.Core.Interfaces.Collections.Dispatchers;
+using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Interfaces.Collections.Dispatchers;
 using System;
 using System.Collections.Generic;
-using LinkLynx.Interfaces.Debugging;
 
-namespace LinkLynx.Core.Utility.Dispatchers.Signals
+namespace LinkLynx.Implementations.Collections.Dispatchers.SimpleSignals
 {
     /// <summary>
     /// Dispatcher for serial signals in the application.

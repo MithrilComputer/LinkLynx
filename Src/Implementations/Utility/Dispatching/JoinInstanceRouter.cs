@@ -1,13 +1,9 @@
 ﻿using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
-using LinkLynx.Core.Collections;
-using LinkLynx.Core.Interfaces;
 using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Interfaces.Debugging;
-using LinkLynx.Interfaces.Utility.Dispatching;
 using System;
 
-namespace LinkLynx.Core.Utility.Dispatchers
+namespace LinkLynx.Implementations.Utility.Dispatching
 {
     /// <summary>
     /// This is a router that ensures that the right device logic is called for a given panel signal.

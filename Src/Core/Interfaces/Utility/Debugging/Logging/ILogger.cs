@@ -1,4 +1,4 @@
-﻿namespace LinkLynx.Interfaces.Debugging
+﻿namespace LinkLynx.Core.Interfaces.Utility.Debugging.Logging
 {   
     /// <summary>
     /// Public interface for logging to the console.

@@ -1,12 +1,12 @@
 ﻿using Crestron.SimplSharpPro;
+using LinkLynx.Core.Interfaces.Collections.Dispatchers;
+using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
+using LinkLynx.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Core.Utility.Helpers;
-using LinkLynx.Interfaces.Collections.Dispatchers;
-using LinkLynx.Interfaces.Utility.Dispatching;
+using LinkLynx.Core.Src.Core.Interfaces.Utility.Helpers;
 using System;
-using LinkLynx.Interfaces.Debugging;
 
-namespace LinkLynx.Core.Utility.Dispatchers
+namespace LinkLynx.Implementations.Utility.Dispatching
 {
     /// <summary>
     /// The DispatcherHelper class provides a unified interface for managing different types of signal dispatchers.
@@ -16,15 +16,21 @@ namespace LinkLynx.Core.Utility.Dispatchers
         private readonly IDigitalJoinDispatcher digitalDispatcher;
         private readonly IAnalogJoinDispatcher analogDispatcher;
         private readonly ISerialJoinDispatcher serialDispatcher;
+        
         private readonly ILogger consoleLogger;
 
-        public DispatcherHelper(IDigitalJoinDispatcher digitalDispatcher, IAnalogJoinDispatcher analogDispatcher, ISerialJoinDispatcher serialDispatcher, ) 
+        private readonly IEnumHelper enumHelper;
+
+        public DispatcherHelper(IDigitalJoinDispatcher digitalDispatcher, IAnalogJoinDispatcher analogDispatcher, ISerialJoinDispatcher serialDispatcher, ILogger consoleLogger, IEnumHelper enumHelper) 
         {
             this.digitalDispatcher = digitalDispatcher;
             this.analogDispatcher = analogDispatcher;
             this.serialDispatcher = serialDispatcher;
-        }
 
+            this.consoleLogger = consoleLogger;
+
+            this.enumHelper = enumHelper;
+        }
 
         /// <summary>
         /// The method to add a join ID and its corresponding action to the dispatcher.
@@ -36,18 +42,19 @@ namespace LinkLynx.Core.Utility.Dispatchers
         /// It is used to determine the signal type.</remarks>
         public bool AddToDispatcher(Enum join, Action<PageLogicBase, SigEventArgs> action)
         {
-            eSigType signalType = EnumHelper.GetSignalTypeFromEnum(join);
+            Core.Signals.eSigType signalType = enumHelper.GetSignalTypeFromEnum(join);
+
             uint joinId = Convert.ToUInt32(join);
 
             consoleLogger.Log($"[DispatcherHelper] Adding Join {joinId} of type {signalType} to dispatcher.");
 
             switch (signalType)
             {
-                case eSigType.Bool:
+                case Core.Signals.eSigType.Bool:
                     return digitalDispatcher.TryAdd(joinId, action);
-                case eSigType.UShort:
+                case Core.Signals.eSigType.UShort:
                     return analogDispatcher.TryAdd(joinId, action);
-                case eSigType.String:
+                case Core.Signals.eSigType.String:
                     return serialDispatcher.TryAdd(joinId, action);
                 default:
                     throw new Exception("[DispatcherHelper] Incorrect Enum Value Passed when attempting to add a new logic join.");
@@ -96,6 +103,5 @@ namespace LinkLynx.Core.Utility.Dispatchers
                     throw new FormatException("[DispatcherHelper] Input Enum Has Incorrect Formatting");
             }
         }
-
     }
 }

@@ -1,26 +1,29 @@
 ﻿using Crestron.SimplSharpPro.DeviceSupport;
-using LinkLynx.Core.Collections;
-using LinkLynx.Core.Src.Core.Interfaces;
-using LinkLynx.Core.Utility.Debugging.Logging;
+using LinkLynx.Core.Interfaces.Collections.Pools;
+using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
+using LinkLynx.Core.Src.Core.Interfaces.Utility.Factories;
+using LinkLynx.Implementations.Collections.PanelContexts;
 using System;
 using System.Collections.Generic;
 
-namespace LinkLynx.Core.Src.Core.Collections.Pools
+namespace LinkLynx.Implementations.Collections.Pools
 {
     /// <summary>
     /// The logic pool class that manages the logic groups for each panel device.
     /// </summary>
-    internal sealed class LogicGroupPool : ILogicGroupPool
+    internal sealed class LogicGroupPool : ILogicGroupPool, IDisposable
     { 
-        /// <summary>
-        /// Creates and returns a new instance of a logic group pool.
-        /// </summary>
-        public ILogicGroupPool Create() { return new LogicGroupPool(); }
+        private readonly ILogger consoleLogger;
+        private readonly IPageFactory pageFactory;
 
         /// <summary>
         /// Class constructor
         /// </summary>
-        internal LogicGroupPool() { } 
+        public LogicGroupPool(ILogger consoleLogger, IPageFactory pageFactory) 
+        { 
+            this.consoleLogger = consoleLogger;
+            this.pageFactory = pageFactory;
+        } 
 
         private readonly Dictionary<uint, PanelLogicGroup> deviceLogicPool = 
             new Dictionary<uint, PanelLogicGroup>();
@@ -28,30 +31,30 @@ namespace LinkLynx.Core.Src.Core.Collections.Pools
         /// <summary>
         /// Registers a panel device and initializes its logic group.
         /// </summary>
-        /// <param name="device">The device to initialize</param>
-        public void RegisterPanel(BasicTriList device)
+        /// <param name="panel">The device to initialize</param>
+        public void RegisterPanel(BasicTriList panel)
         {
-            if(device == null)
-                throw new ArgumentNullException(nameof(device));
+            if(panel == null)
+                throw new ArgumentNullException(nameof(panel));
 
-            uint id = device.ID;
+            uint id = panel.ID;
 
             if (id == 0)
-                throw new ArgumentException("[LogicGroupPool] Device.ID is 0 (invalid/uninitialized).", nameof(device));
+                throw new ArgumentException("[LogicGroupPool] Panel.ID is 0 (invalid/uninitialized).", nameof(panel));
 
-            if (!deviceLogicPool.ContainsKey(device.ID))
+            if (!deviceLogicPool.ContainsKey(panel.ID))
             {
-                ConsoleLogger.Log($"[LogicGroupPool] Registering panel with ID: {device.ID}");
+                consoleLogger.Log($"[LogicGroupPool] Registering Panel with ID: {panel.ID}");
 
                 PanelLogicGroup panelLogic;
 
                 try
                 {
-                    panelLogic = new PanelLogicGroup(device); // Todo make a factory
+                    panelLogic = new PanelLogicGroup(panel, pageFactory.BuildPagesForPanel(panel)); // Todo make a factory
                 }
                 catch (Exception ex)
                 {
-                    ConsoleLogger.Log($"[LogicGroupPool] PanelLogicGroup ctor failed for ID {id}: {ex.GetType().Name}: {ex.Message}");
+                    consoleLogger.Log($"[LogicGroupPool] PanelLogicGroup ctor failed for ID {id}: {ex.GetType().Name}: {ex.Message}");
                     throw; // rethrow so you see the real stack
                 }
 
@@ -61,18 +64,18 @@ namespace LinkLynx.Core.Src.Core.Collections.Pools
                 }
                 catch (Exception ex)
                 {
-                    ConsoleLogger.Log($"[LogicGroupPool] Failed adding panel ID {id} to pool: {ex.GetType().Name}: {ex.Message}");
+                    consoleLogger.Log($"[LogicGroupPool] Failed adding panel ID {id} to pool: {ex.GetType().Name}: {ex.Message}");
                     throw;
                 }
 
-                ConsoleLogger.Log($"[LogicGroupPool] Panel with ID: {device.ID} registered successfully!");
+                consoleLogger.Log($"[LogicGroupPool] Panel with ID: {panel.ID} registered successfully!");
             } else
-                throw new ArgumentException($"[LogicGroupPool] Error: Panel with ID {device.ID} is already registered.");
+                throw new ArgumentException($"[LogicGroupPool] Error: Panel with ID {panel.ID} is already registered.");
         }
 
         public void UnregisterPanel(BasicTriList device)
         {
-            ConsoleLogger.Log($"[LogicGroupPool] UnregisterPanel panel with ID: {device.ID}");
+            consoleLogger.Log($"[LogicGroupPool] UnregisterPanel panel with ID: {device.ID}");
 
             if(deviceLogicPool.ContainsKey(device.ID))
             {
@@ -137,7 +140,7 @@ namespace LinkLynx.Core.Src.Core.Collections.Pools
         /// <summary>
         /// Clears the stored logic groups, should only be called on system shutdown
         /// </summary>
-        public void Clear()
+        public void Dispose()
         {
             deviceLogicPool.Clear();
         }

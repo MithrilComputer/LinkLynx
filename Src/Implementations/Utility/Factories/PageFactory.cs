@@ -1,24 +1,34 @@
 ﻿using Crestron.SimplSharpPro.DeviceSupport;
+using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Core.Utility.Registries;
+using LinkLynx.Core.Src.Core.Interfaces.Utility.Factories;
 using System;
 using System.Collections.Generic;
 
-namespace LinkLynx.Core.Factories
+namespace LinkLynx.Implementations.Utility.Factories
 {
-    internal static class PageFactory
+    internal class PageFactory : IPageFactory
     {
+        private IPageRegistry pageRegistry;
+
+        public PageFactory(IPageRegistry pageRegistry)
+        {
+            this.pageRegistry = pageRegistry;
+        }
+
         /// <summary>
         /// Creates a list of new instantiated pages for a given panel.
         /// </summary>
         /// <param name="panel">The panel to assign the PageLogicBase's to.</param>
         /// <returns></returns>
-        internal static Dictionary<ushort, PageLogicBase> BuildPagesForPanel(BasicTriList panel)
+        public Dictionary<ushort, PageLogicBase> BuildPagesForPanel(BasicTriList panel)
         {
             Dictionary<ushort, PageLogicBase> createdPages = new Dictionary<ushort, PageLogicBase>();
 
+            // Get all the registered pages from the registry.
+            // Todo (This needs to change later to per device)
             IReadOnlyDictionary<ushort, Func<BasicTriList, PageLogicBase>> registeredPages 
-                = LinkLynxServices.pageRegistry.GetAllRegistries();
+                = pageRegistry.GetAllRegistries();
 
             foreach (KeyValuePair<ushort, Func<BasicTriList, PageLogicBase>> pair in registeredPages)
             {

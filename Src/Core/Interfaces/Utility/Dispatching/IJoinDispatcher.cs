@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LinkLynx.Interfaces.Utility.Dispatching
+namespace LinkLynx.Core.Interfaces.Utility.Dispatching
 {
     internal interface IJoinDispatcher
     {

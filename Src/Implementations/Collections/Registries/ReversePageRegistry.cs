@@ -1,7 +1,7 @@
 ﻿using Crestron.SimplSharpPro;
-using LinkLynx.Core.Interfaces;
-using LinkLynx.Core.Utility.Helpers;
-using LinkLynx.Interfaces.Debugging;
+using LinkLynx.Core.Interfaces.Collections.Registries;
+using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
+using LinkLynx.Implementations.Utility.Helpers;
 using System;
 using System.Collections.Generic;
 
@@ -13,13 +13,15 @@ namespace LinkLynx.Implementations.Collections.Registries
     internal sealed class ReversePageRegistry : IReversePageRegistry, IDisposable
     {
         private readonly ILogger consoleLogger;
+        private readonly EnumHelper enumHelper;
 
         /// <summary>
         /// Class constructor.
         /// </summary>
-        public ReversePageRegistry(ILogger consoleLogger) 
+        public ReversePageRegistry(ILogger consoleLogger, EnumHelper enumHelper) 
         { 
             this.consoleLogger = consoleLogger;
+            this.enumHelper = enumHelper;
         }
 
         private readonly Dictionary<uint, ushort> DigitalJoinPageMap = new Dictionary<uint, ushort>();
@@ -80,7 +82,7 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// <exception cref="InvalidOperationException">Gets thrown whenever a duplicate key is attempted to be used.</exception>
         public bool TryRegister(Enum join, ushort pageId)
         {
-            eSigType type = EnumHelper.GetSignalTypeFromEnum(join);
+            eSigType type = enumHelper.GetSignalTypeFromEnum(join);
             uint joinNumber = Convert.ToUInt32(join);
 
             consoleLogger.Log($"[ReversePageRegistry] Log: Registering '{type}' join '{joinNumber}' to page '{pageId}'");

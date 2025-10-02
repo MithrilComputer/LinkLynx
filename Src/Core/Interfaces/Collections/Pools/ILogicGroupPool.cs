@@ -1,7 +1,7 @@
 ﻿using Crestron.SimplSharpPro.DeviceSupport;
-using LinkLynx.Core.Collections;
+using LinkLynx.Implementations.Collections.PanelContexts;
 
-namespace LinkLynx.Core.Interfaces
+namespace LinkLynx.Core.Interfaces.Collections.Pools
 {
     public interface ILogicGroupPool
     {
@@ -14,7 +14,5 @@ namespace LinkLynx.Core.Interfaces
         void InitializePanelLogic(BasicTriList device);
 
         void SetPanelDefaults(BasicTriList device);
-
-        void Clear();
     }
 }

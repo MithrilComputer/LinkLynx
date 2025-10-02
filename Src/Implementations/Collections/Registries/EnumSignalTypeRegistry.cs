@@ -1,6 +1,6 @@
 ﻿using Crestron.SimplSharpPro;
-using LinkLynx.Core.Interfaces;
-using LinkLynx.Interfaces.Debugging;
+using LinkLynx.Core.Interfaces.Collections.Registries;
+using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using System;
 using System.Collections.Generic;
 
@@ -81,14 +81,6 @@ namespace LinkLynx.Implementations.Collections.Registries
         }
 
         /// <summary>
-        /// Clears the registry of all its entries.
-        /// </summary>
-        public void Dispose()
-        {
-            registry.Clear();
-        }
-
-        /// <summary>
         /// Checks if a type has already been registered.
         /// </summary>
         /// <param name="enumType">The Enum type to check.</param>
@@ -103,6 +95,14 @@ namespace LinkLynx.Implementations.Collections.Registries
                 throw new ArgumentException($"[EnumSignalTypeRegistry] Error: Type must be an enum. {nameof(enumType)}");
 
             return registry.ContainsKey(enumType);
+        }
+
+        /// <summary>
+        /// Clears the registry of all its entries.
+        /// </summary>
+        public void Dispose()
+        {
+            registry.Clear();
         }
     }
 }

@@ -4,15 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LinkLynx.Core.Src.Core.Signals
+namespace LinkLynx.Core.Signals
 {
-    internal class eSigType
+    public enum eSigType
     {
-        public enum eSigType
-        {
-            Digital = 0,
-            Analog = 1,
-            Serial = 2
-        }
+        Bool = 0,
+        UShort = 1,
+        String = 2
     }
 }

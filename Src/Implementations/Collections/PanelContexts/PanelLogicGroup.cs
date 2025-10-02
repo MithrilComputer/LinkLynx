@@ -1,27 +1,29 @@
 ﻿using Crestron.SimplSharpPro.DeviceSupport;
 using System.Collections.Generic;
 using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Core.Factories;
+using LinkLynx.Implementations.Utility.Factories;
+using LinkLynx.Core.Src.Core.Interfaces.Utility.Factories;
 
-namespace LinkLynx.Core.Collections
+namespace LinkLynx.Implementations.Collections.PanelContexts
 {
     /// <summary>
     /// A Grouping of logic that is served to every new panel. Contains all the logic to run the panel.
     /// </summary>
-    internal class PanelLogicGroup
+    public class PanelLogicGroup
     {
         /// <summary>
         /// The pool that contains all the logic within the panel.
         /// </summary>
-        internal readonly IReadOnlyDictionary<ushort, PageLogicBase> pageLogicPool = new Dictionary<ushort, PageLogicBase>();
+        private readonly IReadOnlyDictionary<ushort, PageLogicBase> pageLogicPool = new Dictionary<ushort, PageLogicBase>();
 
         /// <summary>
         /// PanelLogicGroup Constructor that asks the PageFactory for a copy of all the registered page logic's.
         /// </summary>
         /// <param name="panel">The panel that is bound to this logic group.</param>
-        internal PanelLogicGroup(BasicTriList panel)
+        /// <param name="pageLogicPool">The group of logic for the panel</param>
+        internal PanelLogicGroup(BasicTriList panel, Dictionary<ushort, PageLogicBase> pageLogicPool)
         {
-            pageLogicPool = PageFactory.BuildPagesForPanel(panel);
+            this.pageLogicPool = pageLogicPool;
         }
 
         /// <summary>

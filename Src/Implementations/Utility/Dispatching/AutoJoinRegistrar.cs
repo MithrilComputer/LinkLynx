@@ -2,12 +2,8 @@
 using LinkLynx.Core.Logic.Pages;
 using System;
 using System.Reflection;
-using LinkLynx.Core.Utility.Signals.Attributes;
-using LinkLynx.Interfaces.Debugging;
-using LinkLynx.Interfaces.Utility.Dispatching;
-using LinkLynx.Core.Interfaces;
 
-namespace LinkLynx.Core.Implementations.Utility.Dispatching
+namespace LinkLynx.Implementations.Utility.Dispatching
 {
     /// <summary>
     /// Responsible for automatically registering all joins at runtime. 

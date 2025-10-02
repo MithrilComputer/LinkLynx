@@ -1,24 +1,27 @@
 ﻿using Crestron.SimplSharp;
-using LinkLynx.Interfaces.Debugging;
+using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
+using System;
 
-namespace LinkLynx.Core.Utility.Debugging.Logging
+namespace LinkLynx.Implementations.Utility.Debugging.Logging
 {
     /// <summary>
     /// The main logging class in the framework, useful if Crestron console logging changes or later more advanced logging is introduced.
     /// </summary>
-    public class ConsoleLogger : ILogger
+    public sealed class ConsoleLogger : ILogger
     {
-        private ConsoleLogger() { }
+        private readonly ICrestronConsole console;
 
         /// <summary>
-        /// Creates a new instance of the console logger and returns it.
+        /// The class constructor
         /// </summary>
-        /// <returns></returns>
-        public ILogger Create() => new ConsoleLogger();
+        public ConsoleLogger(ICrestronConsole console) 
+        {
+            this.console = console;
+        }
 
         /// <summary>
         /// Logs a message to the CrestronConsole.
         /// </summary>
-        public void Log(string message) => CrestronConsole.PrintLine(message);
+        public void Log(string message) => console.PrintLine(message);
     }
 }

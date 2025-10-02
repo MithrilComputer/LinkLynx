@@ -1,7 +1,7 @@
 ﻿using Crestron.SimplSharpPro;
 using System;
 
-namespace LinkLynx.Core.Interfaces
+namespace LinkLynx.Core.Interfaces.Collections.Registries
 {
     /// <summary>
     /// An Interface designed to hold all enums that should have a Signal Type, eg, Digital, Serial, Analog.

@@ -1,9 +1,14 @@
 ﻿using LinkLynx.Core.Interfaces.Collections.Pools;
+using System;
 
-namespace LinkLynx.Core.Src.Implementations.Collections.Pools
+namespace LinkLynx.Implementations.Collections.Pools
 {
-    internal class PanelPool : IPanelPool
+    internal class PanelPool : IPanelPool, IDisposable
     {
 
+        public void Dispose()
+        {
+            
+        }
     }
 }
