@@ -1,7 +1,7 @@
 ﻿using Crestron.SimplSharpPro;
 using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
-using LinkLynx.Implementations.Utility.Helpers;
+using LinkLynx.Core.Interfaces.Utility.Helpers;
 using System;
 using System.Collections.Generic;
 
@@ -13,12 +13,12 @@ namespace LinkLynx.Implementations.Collections.Registries
     internal sealed class ReversePageRegistry : IReversePageRegistry, IDisposable
     {
         private readonly ILogger consoleLogger;
-        private readonly EnumHelper enumHelper;
+        private readonly IEnumHelper enumHelper;
 
         /// <summary>
         /// Class constructor.
         /// </summary>
-        public ReversePageRegistry(ILogger consoleLogger, EnumHelper enumHelper) 
+        public ReversePageRegistry(ILogger consoleLogger, IEnumHelper enumHelper) 
         { 
             this.consoleLogger = consoleLogger;
             this.enumHelper = enumHelper;

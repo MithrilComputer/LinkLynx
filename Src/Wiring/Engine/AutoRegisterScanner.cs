@@ -1,5 +1,9 @@
 ﻿using Crestron.SimplSharpPro;
+using LinkLynx.Core.Attributes;
+using LinkLynx.Core.Interfaces.Collections.Registries;
+using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Logic.Pages;
+using LinkLynx.Core.Src.Core.Interfaces.Utility.Dispatching;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -9,14 +13,23 @@ namespace LinkLynx.Wiring.Engine
     /// <summary>
     /// A scanner Class made to look for all the pages in a program and register them, and their logic joins.
     /// </summary>
-    internal static class AutoRegisterScanner
+    internal sealed class AutoRegisterScanner : IAutoJoinRegistrar
     {
+        private readonly ILogger consoleLogger;
+        private readonly IPageRegistry pageRegistry;
+        private readonly 
+
+        public AutoRegisterScanner(ILogger consoleLogger)
+        {
+            this.consoleLogger = consoleLogger;
+        }
+
         /// <summary>
         /// Runs the scanner, finds all the pages by attribute, then registers them, and their logic joins.
         /// </summary>
-        internal static void Run()
+        public void Run()
         {
-            ConsoleLogger.Log("[AutoRegisterScanner] Page Scanner started! Scanning...");
+            consoleLogger.Log("[AutoRegisterScanner] Page Scanner started! Scanning...");
 
             Type baseType = typeof(PageLogicBase); // Cache
 
@@ -56,16 +69,16 @@ namespace LinkLynx.Wiring.Engine
 
                         if (pageAttribute == null)
                         {
-                            ConsoleLogger.Log($"[AutoRegisterScanner] Scanned Class has no attributes, skipping {type.FullName}");
+                            consoleLogger.Log($"[AutoRegisterScanner] Scanned Class has no attributes, skipping {type.FullName}");
                             continue;
                         }
 
-                        ConsoleLogger.Log($"[AutoRegisterScanner] Scanned Page has attributes, processing {type.FullName}");
+                        consoleLogger.Log($"[AutoRegisterScanner] Scanned Page has attributes, processing {type.FullName}");
 
                         ushort pageId = pageAttribute.Id;
 
                         // Put the page factory in the registry
-                        LinkLynxServices.pageRegistry.RegisterPage(pageId, panel => (PageLogicBase)Activator.CreateInstance(type, new object[] { panel }));
+                        pageRegistry.RegisterPage(pageId, panel => (PageLogicBase)Activator.CreateInstance(type, new object[] { panel }));
 
                         // Auto wire the joins to the registrar
                         AutoWireJoins(type, pageId);
@@ -80,9 +93,9 @@ namespace LinkLynx.Wiring.Engine
         /// </summary>
         /// <param name="pageType">The type to be added to the register.</param>
         /// <param name="pageId">The id of the given type.</param>
-        private static void AutoWireJoins(Type pageType, ushort pageId)
+        private void AutoWireJoins(Type pageType, ushort pageId)
         {
-            ConsoleLogger.Log($"[AutoRegisterScanner] Attempting to wire page class {pageType.FullName}'s signal joins...");
+            consoleLogger.Log($"[AutoRegisterScanner] Attempting to wire page class {pageType.FullName}'s signal joins...");
 
             MethodInfo method = typeof(AutoJoinRegistrar)
                 .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
@@ -95,7 +108,7 @@ namespace LinkLynx.Wiring.Engine
             if (method == null)
                 throw new MissingMethodException("AutoJoinRegistrar.RegisterJoins<T>(ushort) not found.");
 
-            ConsoleLogger.Log("[AutoRegisterScanner] Registering Joins...");
+            consoleLogger.Log("[AutoRegisterScanner] Registering Joins...");
 
             method.MakeGenericMethod(pageType).Invoke(null, new object[] { pageId });
         }
@@ -106,19 +119,19 @@ namespace LinkLynx.Wiring.Engine
         /// <param name="type">This should be a type of enum, but wrapped by the type class.</param>
         private static void TryRegisterEnumSigType(Type type)
         {
-            ConsoleLogger.Log($"[AutoRegisterScanner] Found Enum '{type.FullName}' Attempting to register...");
+            consoleLogger.Log($"[AutoRegisterScanner] Found Enum '{type.FullName}' Attempting to register...");
 
             object[] attributes = type.GetCustomAttributes(typeof(SigTypeAttribute), inherit: false);
 
             if (attributes.Length == 0) 
             {
-                ConsoleLogger.Log($"[AutoRegisterScanner] Enum '{type.FullName}' Has no attributes, skipping.");
+                consoleLogger.Log($"[AutoRegisterScanner] Enum '{type.FullName}' Has no attributes, skipping.");
                 return;
             }
 
             if (attributes.Length > 1)
             {
-                ConsoleLogger.Log($"[AutoRegisterScanner] Enum '{type.FullName}' Has too many attributes, skipping.");
+                consoleLogger.Log($"[AutoRegisterScanner] Enum '{type.FullName}' Has too many attributes, skipping.");
                 return;
             }
 

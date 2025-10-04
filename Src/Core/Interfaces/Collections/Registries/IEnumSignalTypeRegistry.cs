@@ -1,4 +1,4 @@
-﻿using Crestron.SimplSharpPro;
+﻿using LinkLynx.Core.Signals;
 using System;
 
 namespace LinkLynx.Core.Interfaces.Collections.Registries
@@ -26,8 +26,6 @@ namespace LinkLynx.Core.Interfaces.Collections.Registries
         /// <summary>
         /// Gets the signal type associated with the given enum.
         /// </summary>
-        /// <param name="enumType"></param>
-        /// <returns></returns>
         eSigType Get(Type enumType);
     }
 }

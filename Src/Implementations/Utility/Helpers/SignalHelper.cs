@@ -15,6 +15,15 @@ namespace LinkLynx.Implementations.Utility.Helpers
         private readonly ILogger consoleLogger;
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public SignalHelper(IEnumSignalTypeRegistry enumSignalTypeRegistry, ILogger consoleLogger)
+        {
+            this.enumSignalTypeRegistry = enumSignalTypeRegistry;
+            this.consoleLogger = consoleLogger;
+        }
+
+        /// <summary>
         /// Sets a logic join on a given panel.
         /// </summary>
         /// <param name="panel"> The panel to set the logic join on.</param>

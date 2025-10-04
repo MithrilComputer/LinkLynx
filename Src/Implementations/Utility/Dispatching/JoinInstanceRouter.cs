@@ -1,6 +1,11 @@
 ﻿using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
+using LinkLynx.Core.Interfaces.Collections.Pools;
+using LinkLynx.Core.Interfaces.Collections.Registries;
+using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
+using LinkLynx.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Logic.Pages;
+using LinkLynx.Implementations.Collections.PanelContexts;
 using System;
 
 namespace LinkLynx.Implementations.Utility.Dispatching
@@ -15,11 +20,12 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         private readonly IReversePageRegistry reversePageRegistry;
         private readonly IJoinDispatcher dispatcherHelper;
 
-        public JoinInstanceRouter(ILogger consoleLogger, ILogicGroupPool logicGroupPool, IReversePageRegistry reversePageRegistry) 
+        public JoinInstanceRouter(ILogger consoleLogger, ILogicGroupPool logicGroupPool, IReversePageRegistry reversePageRegistry, IJoinDispatcher dispatcherHelper) 
         { 
             this.consoleLogger = consoleLogger;
             this.logicGroupPool = logicGroupPool;
             this.reversePageRegistry = reversePageRegistry;
+            this.dispatcherHelper = dispatcherHelper;
         }
 
         /// <summary>

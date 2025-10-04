@@ -1,6 +1,5 @@
-﻿using Crestron.SimplSharpPro;
-using LinkLynx.Core.Interfaces.Collections.Registries;
-using LinkLynx.Core.Src.Core.Interfaces.Utility.Helpers;
+﻿using LinkLynx.Core.Interfaces.Collections.Registries;
+using LinkLynx.Core.Interfaces.Utility.Helpers;
 using System;
 
 namespace LinkLynx.Implementations.Utility.Helpers
@@ -25,10 +24,10 @@ namespace LinkLynx.Implementations.Utility.Helpers
         /// The function is not case sensitive, so 'DiGiTal' will work just as well as as 'Digital'.
         /// </summary>
         /// <param name="joinEnum">The enum that represents the logic join.</param>
-        public eSigType GetSignalTypeFromEnum(Enum joinEnum)
+        public Core.Signals.eSigType GetSignalTypeFromEnum(Enum joinEnum)
         {
             Type enumType = joinEnum.GetType();
-            eSigType signalType = enumSignalTypeRegistry.Get(enumType);
+            Core.Signals.eSigType signalType = enumSignalTypeRegistry.Get(enumType);
 
             return signalType;
         }
