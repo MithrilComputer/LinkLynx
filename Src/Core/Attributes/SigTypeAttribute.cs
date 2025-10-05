@@ -1,4 +1,4 @@
-﻿using Crestron.SimplSharpPro;
+﻿using LinkLynx.Core.Signals;
 using System;
 
 namespace LinkLynx.Core.Attributes

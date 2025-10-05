@@ -34,7 +34,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
             if (panel == null)
                 throw new ArgumentNullException($"[SignalHelper] SetSerialJoin: Device is null, cannot set join.");
 
-            eSigType signalType = enumSignalTypeRegistry.Get(join.GetType());
+            Core.Signals.eSigType signalType = enumSignalTypeRegistry.Get(join.GetType());
             
             ushort joinNumber = Convert.ToUInt16(join);
 
@@ -42,7 +42,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
 
             switch (signalType)
             {
-                case eSigType.Bool:
+                case Core.Signals.eSigType.Bool:
 
                     if (typeof(T) == typeof(bool))
                     {
@@ -54,7 +54,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
                         throw new ArgumentException($"[SignalHelper] Error: Type mismatch when attempting to set join for a given Enum: {join}, and Value: {value}");
                     break;
 
-                case eSigType.String:
+                case Core.Signals.eSigType.String:
 
                     if (typeof(T) == typeof(string))
                     {
@@ -66,7 +66,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
                         throw new ArgumentException($"[SignalHelper] Error: Type mismatch when attempting to set join for a given Enum: {join}, and Value: {value}");
                     break;
 
-                case eSigType.UShort:
+                case Core.Signals.eSigType.UShort:
 
                     if (typeof(T) == typeof(ushort))
                     {
@@ -78,7 +78,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
                         throw new ArgumentException($"[SignalHelper] Error: Type mismatch when attempting to set join for a given Enum: {join}, and Value: {value}");
                     break;
 
-                case eSigType.NA:
+                case Core.Signals.eSigType.NA:
                         throw new ArgumentException($"[SignalHelper] Error: Cannot process a NA type!");
             }
         }

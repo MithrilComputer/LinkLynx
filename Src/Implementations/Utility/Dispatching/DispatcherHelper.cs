@@ -67,15 +67,15 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         /// <param name="signalType">The type of signal to check.</param>
         /// <param name="joinId">The join id associated with the signal.</param>
         /// <returns>If the dispatcher contains the key</returns>
-        public bool CheckIfDispatcherContainsKey(eSigType signalType, uint joinId)
+        public bool CheckIfDispatcherContainsKey(Core.Signals.eSigType signalType, uint joinId)
         {
             switch (signalType)
             {
-                case eSigType.Bool:
+                case Core.Signals.eSigType.Bool:
                     return digitalDispatcher.Contains(joinId);
-                case eSigType.UShort:
+                case Core.Signals.eSigType.UShort:
                     return analogDispatcher.Contains(joinId);
-                case eSigType.String:
+                case Core.Signals.eSigType.String:
                     return serialDispatcher.Contains(joinId);
                 default:
                     consoleLogger.Log($"[DispatcherHelper] Unsupported signal type: {signalType}, with a Join of {joinId}");
@@ -89,15 +89,15 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         /// <param name="signalType">The type of signal to get the action from.</param>
         /// <param name="joinId">The join id of the action.</param>
         /// <returns>The action associated with a specific join ID, Null if not found.</returns>
-        public Action<PageLogicBase, SigEventArgs> GetDispatcherActionFromKey(eSigType signalType, uint joinId)
+        public Action<PageLogicBase, SigEventArgs> GetDispatcherActionFromKey(Core.Signals.eSigType signalType, uint joinId)
         {
             switch (signalType)
             {
-                case eSigType.Bool:
+                case Core.Signals.eSigType.Bool:
                     return digitalDispatcher.Get(joinId);
-                case eSigType.UShort:
+                case Core.Signals.eSigType.UShort:
                     return analogDispatcher.Get(joinId);
-                case eSigType.String:
+                case Core.Signals.eSigType.String:
                     return serialDispatcher.Get(joinId);
                 default:
                     throw new FormatException("[DispatcherHelper] Input Enum Has Incorrect Formatting");
