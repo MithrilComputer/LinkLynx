@@ -9,19 +9,17 @@ namespace LinkLynx.Implementations.Utility.Debugging.Logging
     /// </summary>
     public sealed class ConsoleLogger : ILogger
     {
-        private readonly ICrestronConsole console;
-
         /// <summary>
         /// The class constructor
         /// </summary>
-        public ConsoleLogger(ICrestronConsole console) 
+        public ConsoleLogger() 
         {
-            this.console = console;
+
         }
 
         /// <summary>
         /// Logs a message to the CrestronConsole.
         /// </summary>
-        public void Log(string message) => console.PrintLine(message);
+        public void Log(string message) => CrestronConsole.PrintLine(message);
     }
 }

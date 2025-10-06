@@ -2,6 +2,7 @@
 using Crestron.SimplSharpPro.DeviceSupport;
 using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
+using LinkLynx.Core.Interfaces.Utility.Helpers;
 using System;
 
 namespace LinkLynx.Implementations.Utility.Helpers
@@ -9,7 +10,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
     /// <summary>
     /// Generic Helpers for the VTProIntegrationTestSimpleSharp application.
     /// </summary>
-    public class SignalHelper
+    public class SignalHelper : ISignalHelper
     {
         private readonly IEnumSignalTypeRegistry enumSignalTypeRegistry;
         private readonly ILogger consoleLogger;
@@ -88,7 +89,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
         /// </summary>
         /// <param name="args">The signal received</param>
         /// <returns>Bool, If the signal was a rising edge</returns>
-        public static bool IsRisingEdge(SigEventArgs args)
+        public bool IsRisingEdge(SigEventArgs args)
         {
             if (args.Sig.Type != eSigType.Bool)
                 throw new Exception("[SignalHelper] Cant check if non-digital signal is a Rising Edge");
@@ -101,7 +102,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
         /// </summary>
         /// <param name="args">The signal received</param>
         /// <returns>Bool, If the signal was a falling edge</returns>
-        public static bool IsFallingEdge(SigEventArgs args)
+        public bool IsFallingEdge(SigEventArgs args)
         {
             if (args.Sig.Type != eSigType.Bool)
                 throw new Exception("[SignalHelper] Cant check if non-digital signal is a Falling Edge");

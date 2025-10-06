@@ -36,6 +36,11 @@ namespace LinkLynx.Wiring.DI
             return this;
         }
 
+        public List<ServiceDescriptor> GetCurrentDescriptorCollection()
+        {
+            return descriptors;
+        }
+
         /// <summary>
         /// Adds a singleton service of the specified type to the service collection.
         /// </summary>

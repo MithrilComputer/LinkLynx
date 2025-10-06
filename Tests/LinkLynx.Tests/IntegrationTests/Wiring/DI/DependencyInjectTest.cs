@@ -1,23 +1,31 @@
-﻿using LinkLynx.Core.Interfaces;
-using LinkLynx.Core.Utility.Debugging.Logging;
+﻿using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Wiring.DI;
 using NUnit.Framework;
+using LinkLynx.Implementations.Utility.Debugging.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using Crestron.SimplSharp;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace LinkLynx.IntegrationTests.Wiring.DI
 {
     [TestFixture]
     public class DependencyInjectTest
     {
-        public static ServiceProvider CreateDefault()
+        [Test]
+        public void CreateDefault()
         {
             ServiceCollection services = new ServiceCollection();
 
             services.AddSingleton<ILogger, ConsoleLogger>();
+
+            var d = services.GetCurrentDescriptorCollection()[0];
+
+            Console.WriteLine($"ServiceType: {d.ServiceType} | {d.ServiceType.Assembly.FullName}");
+            Console.WriteLine($"ImplType:    {d.ImplementationType} | {d.ImplementationType.Assembly.FullName}");
+            Console.WriteLine($"Requested:   {typeof(ILogger)} | {typeof(ILogger).Assembly.FullName}");
+
+            Assert.That(d.ServiceType, Is.EqualTo(typeof(ILogger)));                 // must pass
+            Assert.That(typeof(ILogger).IsAssignableFrom(typeof(ConsoleLogger)));    // must pass
 
             ServiceProvider provider = services.BuildServiceProvider();
 
