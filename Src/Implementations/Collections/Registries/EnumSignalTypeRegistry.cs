@@ -24,7 +24,7 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// <summary>
         /// The registry that holds the key value pairs.
         /// </summary>
-        private readonly Dictionary<Type, eSigType> registry = new Dictionary<Type, eSigType>();
+        private readonly Dictionary<Type, SigType> registry = new Dictionary<Type, SigType>();
 
         /// <summary>
         /// How many items are in the registry.
@@ -38,7 +38,7 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="KeyNotFoundException"></exception>
-        public eSigType Get(Type enumType)
+        public SigType Get(Type enumType)
         {
             if(enumType == null)
                 throw new ArgumentNullException($"[EnumSignalTypeRegistry] Error: Cant get a entry in the registry with a null Key!");
@@ -46,7 +46,7 @@ namespace LinkLynx.Implementations.Collections.Registries
             if (!enumType.IsEnum) 
                 throw new ArgumentException($"[EnumSignalTypeRegistry] Error: Type must be an enum. {nameof(enumType)}");
 
-            if (registry.TryGetValue(enumType, out eSigType sigType))
+            if (registry.TryGetValue(enumType, out SigType sigType))
             {
                 return sigType;
             }
@@ -62,7 +62,7 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="InvalidOperationException"></exception>
-        public void Register(Type enumType, eSigType type)
+        public void Register(Type enumType, SigType type)
         {
             if (enumType == null)
                 throw new ArgumentNullException($"[EnumSignalTypeRegistry] Error: Can't add a null Enum in registry!");

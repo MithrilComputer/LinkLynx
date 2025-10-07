@@ -58,7 +58,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
                 }
 
                 uint join = args.Sig.Number;
-                Core.Signals.eSigType type = (Core.Signals.eSigType)Enum.Parse(typeof(Core.Signals.eSigType),args.Sig.Type.ToString(),ignoreCase: true);
+                Core.Signals.SigType type = (Core.Signals.SigType)Enum.Parse(typeof(Core.Signals.SigType),args.Sig.Type.ToString(),ignoreCase: true);
 
                 consoleLogger.Log($"[JoinInstanceRouter] Device {device.ID}, Sig {type} #{join}, Bool={args.Sig.BoolValue}");
 

@@ -12,12 +12,12 @@ namespace LinkLynx.Core.Attributes
         /// <summary>
         /// The eSigType associated with the enum.
         /// </summary>
-        public eSigType JoinType { get; }
+        public SigType JoinType { get; }
 
         /// <summary>
         /// This attribute class associates enum's with a signal type (Digital, Analog, Serial)
         /// </summary>
-        public SigTypeAttribute(eSigType joinType)
+        public SigTypeAttribute(SigType joinType)
         {
             JoinType = joinType;
         }

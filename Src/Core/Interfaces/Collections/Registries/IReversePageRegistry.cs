@@ -12,7 +12,7 @@ namespace LinkLynx.Core.Interfaces.Collections.Registries
         /// <summary>
         /// Looks up and returns the page associated with the Logic Join.
         /// </summary>
-        ushort Get(uint join, eSigType type);
+        ushort Get(uint join, SigType type);
 
         /// <summary>
         /// Registers a Logic Join to a page.

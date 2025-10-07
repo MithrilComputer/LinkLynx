@@ -35,7 +35,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
             if (panel == null)
                 throw new ArgumentNullException($"[SignalHelper] SetSerialJoin: Device is null, cannot set join.");
 
-            Core.Signals.eSigType signalType = enumSignalTypeRegistry.Get(join.GetType());
+            Core.Signals.SigType signalType = enumSignalTypeRegistry.Get(join.GetType());
             
             ushort joinNumber = Convert.ToUInt16(join);
 
@@ -43,7 +43,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
 
             switch (signalType)
             {
-                case Core.Signals.eSigType.Bool:
+                case Core.Signals.SigType.Bool:
 
                     if (typeof(T) == typeof(bool))
                     {
@@ -55,7 +55,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
                         throw new ArgumentException($"[SignalHelper] Error: Type mismatch when attempting to set join for a given Enum: {join}, and Value: {value}");
                     break;
 
-                case Core.Signals.eSigType.String:
+                case Core.Signals.SigType.String:
 
                     if (typeof(T) == typeof(string))
                     {
@@ -67,7 +67,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
                         throw new ArgumentException($"[SignalHelper] Error: Type mismatch when attempting to set join for a given Enum: {join}, and Value: {value}");
                     break;
 
-                case Core.Signals.eSigType.UShort:
+                case Core.Signals.SigType.UShort:
 
                     if (typeof(T) == typeof(ushort))
                     {
@@ -79,7 +79,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
                         throw new ArgumentException($"[SignalHelper] Error: Type mismatch when attempting to set join for a given Enum: {join}, and Value: {value}");
                     break;
 
-                case Core.Signals.eSigType.NA:
+                case Core.Signals.SigType.NA:
                         throw new ArgumentException($"[SignalHelper] Error: Cannot process a NA type!");
             }
         }

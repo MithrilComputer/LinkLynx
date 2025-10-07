@@ -21,11 +21,11 @@ namespace LinkLynx.Core.Interfaces.Collections.Registries
         /// <summary>
         /// Registers an enum to the signal type.
         /// </summary>
-        void Register(Type enumType, eSigType type);
+        void Register(Type enumType, SigType type);
 
         /// <summary>
         /// Gets the signal type associated with the given enum.
         /// </summary>
-        eSigType Get(Type enumType);
+        SigType Get(Type enumType);
     }
 }

@@ -24,10 +24,10 @@ namespace LinkLynx.Implementations.Utility.Helpers
         /// The function is not case sensitive, so 'DiGiTal' will work just as well as as 'Digital'.
         /// </summary>
         /// <param name="joinEnum">The enum that represents the logic join.</param>
-        public Core.Signals.eSigType GetSignalTypeFromEnum(Enum joinEnum)
+        public Core.Signals.SigType GetSignalTypeFromEnum(Enum joinEnum)
         {
             Type enumType = joinEnum.GetType();
-            Core.Signals.eSigType signalType = enumSignalTypeRegistry.Get(enumType);
+            Core.Signals.SigType signalType = enumSignalTypeRegistry.Get(enumType);
 
             return signalType;
         }

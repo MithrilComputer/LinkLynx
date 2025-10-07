@@ -209,6 +209,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IntegrationTests\Wiring\DI\DependencyInjectTest.cs" />
+    <Compile Include="UnitTests\SystemTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -223,9 +224,7 @@
       <Name>LinkLynx</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UnitTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -8,8 +8,8 @@ namespace LinkLynx.Core.Interfaces.Utility.Dispatching
     {
         bool AddToDispatcher(Enum join, Action<PageLogicBase, SigEventArgs> action);
 
-        bool CheckIfDispatcherContainsKey(Signals.eSigType signalType, uint joinId);
+        bool CheckIfDispatcherContainsKey(Signals.SigType signalType, uint joinId);
 
-        Action<PageLogicBase, SigEventArgs> GetDispatcherActionFromKey(Signals.eSigType signalType, uint joinId);
+        Action<PageLogicBase, SigEventArgs> GetDispatcherActionFromKey(Signals.SigType signalType, uint joinId);
     }
 }

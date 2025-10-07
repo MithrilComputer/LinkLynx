@@ -9,7 +9,7 @@ namespace LinkLynx.Core.Signals
     /// <summary>
     /// signal Type Enum (Avoid's Crestron change issues)
     /// </summary>
-    public enum eSigType
+    public enum SigType
     {
         /// <summary>
         /// Not Applicable / Not Assigned

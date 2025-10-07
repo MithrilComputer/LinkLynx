@@ -42,7 +42,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         /// It is used to determine the signal type.</remarks>
         public bool AddToDispatcher(Enum join, Action<PageLogicBase, SigEventArgs> action)
         {
-            Core.Signals.eSigType signalType = enumHelper.GetSignalTypeFromEnum(join);
+            Core.Signals.SigType signalType = enumHelper.GetSignalTypeFromEnum(join);
 
             uint joinId = Convert.ToUInt32(join);
 
@@ -50,11 +50,11 @@ namespace LinkLynx.Implementations.Utility.Dispatching
 
             switch (signalType)
             {
-                case Core.Signals.eSigType.Bool:
+                case Core.Signals.SigType.Bool:
                     return digitalDispatcher.TryAdd(joinId, action);
-                case Core.Signals.eSigType.UShort:
+                case Core.Signals.SigType.UShort:
                     return analogDispatcher.TryAdd(joinId, action);
-                case Core.Signals.eSigType.String:
+                case Core.Signals.SigType.String:
                     return serialDispatcher.TryAdd(joinId, action);
                 default:
                     throw new Exception("[DispatcherHelper] Incorrect Enum Value Passed when attempting to add a new logic join.");
@@ -67,15 +67,15 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         /// <param name="signalType">The type of signal to check.</param>
         /// <param name="joinId">The join id associated with the signal.</param>
         /// <returns>If the dispatcher contains the key</returns>
-        public bool CheckIfDispatcherContainsKey(Core.Signals.eSigType signalType, uint joinId)
+        public bool CheckIfDispatcherContainsKey(Core.Signals.SigType signalType, uint joinId)
         {
             switch (signalType)
             {
-                case Core.Signals.eSigType.Bool:
+                case Core.Signals.SigType.Bool:
                     return digitalDispatcher.Contains(joinId);
-                case Core.Signals.eSigType.UShort:
+                case Core.Signals.SigType.UShort:
                     return analogDispatcher.Contains(joinId);
-                case Core.Signals.eSigType.String:
+                case Core.Signals.SigType.String:
                     return serialDispatcher.Contains(joinId);
                 default:
                     consoleLogger.Log($"[DispatcherHelper] Unsupported signal type: {signalType}, with a Join of {joinId}");
@@ -89,15 +89,15 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         /// <param name="signalType">The type of signal to get the action from.</param>
         /// <param name="joinId">The join id of the action.</param>
         /// <returns>The action associated with a specific join ID, Null if not found.</returns>
-        public Action<PageLogicBase, SigEventArgs> GetDispatcherActionFromKey(Core.Signals.eSigType signalType, uint joinId)
+        public Action<PageLogicBase, SigEventArgs> GetDispatcherActionFromKey(Core.Signals.SigType signalType, uint joinId)
         {
             switch (signalType)
             {
-                case Core.Signals.eSigType.Bool:
+                case Core.Signals.SigType.Bool:
                     return digitalDispatcher.Get(joinId);
-                case Core.Signals.eSigType.UShort:
+                case Core.Signals.SigType.UShort:
                     return analogDispatcher.Get(joinId);
-                case Core.Signals.eSigType.String:
+                case Core.Signals.SigType.String:
                     return serialDispatcher.Get(joinId);
                 default:
                     throw new FormatException("[DispatcherHelper] Input Enum Has Incorrect Formatting");

@@ -33,11 +33,11 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// </summary>
         /// <param name="join">The join ID to search for the page.</param>
         /// <param name="type">The type of join associated with the key.</param>
-        public ushort Get(uint join, eSigType type)
+        public ushort Get(uint join, SigType type)
         {
             switch (type)
             {
-                case eSigType.Bool:
+                case SigType.Bool:
                     if (DigitalJoinPageMap.TryGetValue(join, out ushort digitalPageID))
                     {
                         return digitalPageID;
@@ -47,7 +47,7 @@ namespace LinkLynx.Implementations.Collections.Registries
 
                     break;
 
-                case eSigType.UShort:
+                case SigType.UShort:
                     if (AnalogJoinPageMap.TryGetValue(join, out ushort analogPageID))
                     {
                         return analogPageID;
@@ -57,7 +57,7 @@ namespace LinkLynx.Implementations.Collections.Registries
 
                     break;
 
-                case eSigType.String:
+                case SigType.String:
                     if (SerialJoinPageMap.TryGetValue(join, out ushort serialPageID))
                     {
                         return serialPageID;
@@ -82,14 +82,14 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// <exception cref="InvalidOperationException">Gets thrown whenever a duplicate key is attempted to be used.</exception>
         public bool TryRegister(Enum join, ushort pageId)
         {
-            eSigType type = enumHelper.GetSignalTypeFromEnum(join);
+            SigType type = enumHelper.GetSignalTypeFromEnum(join);
             uint joinNumber = Convert.ToUInt32(join);
 
             consoleLogger.Log($"[ReversePageRegistry] Log: Registering '{type}' join '{joinNumber}' to page '{pageId}'");
 
             switch (type)
             {
-                case eSigType.Bool:
+                case SigType.Bool:
                     if (!DigitalJoinPageMap.ContainsKey(joinNumber))
                     {
                         DigitalJoinPageMap.Add(joinNumber, pageId);
@@ -101,7 +101,7 @@ namespace LinkLynx.Implementations.Collections.Registries
                         return false;
                     }
 
-                case eSigType.UShort:
+                case SigType.UShort:
                     if (!AnalogJoinPageMap.ContainsKey(joinNumber))
                     {
                         AnalogJoinPageMap.Add(joinNumber, pageId);
@@ -113,7 +113,7 @@ namespace LinkLynx.Implementations.Collections.Registries
                         return false;
                     }
 
-                case eSigType.String:
+                case SigType.String:
                     if (!SerialJoinPageMap.ContainsKey(joinNumber))
                     {
                         SerialJoinPageMap.Add(joinNumber, pageId);

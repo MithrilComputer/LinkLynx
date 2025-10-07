@@ -93,6 +93,11 @@ namespace LinkLynx.Tests.UnitTests
 
             return signal;
         }
+
+        private void GenerateSignals()
+        {
+            
+        }
     }
 
 

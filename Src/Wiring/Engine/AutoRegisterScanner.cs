@@ -145,7 +145,7 @@ namespace LinkLynx.Wiring.Engine
                 return;
             }
 
-            eSigType sig = ((SigTypeAttribute)attributes[0]).JoinType;
+            SigType sig = ((SigTypeAttribute)attributes[0]).JoinType;
 
             enumSignalTypeRegistry.Register(type, sig);
         }
