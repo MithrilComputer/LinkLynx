@@ -1,5 +1,6 @@
 ﻿using Crestron.SimplSharpPro;
 using LinkLynx.Core.Logic.Pages;
+using LinkLynx.Core.CrestronPOCOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,10 @@ namespace LinkLynx.Core.Interfaces.Collections.Dispatchers
     {
         int Count { get; }
 
-        bool TryAdd(uint joinId, Action<PageLogicBase, SigEventArgs> action);
+        bool TryAdd(uint joinId, Action<PageLogicBase, SignalEventData> action);   
 
         bool Contains(uint joinId);
 
-        Action<PageLogicBase, SigEventArgs> Get(uint joinId);
+        Action<PageLogicBase, SignalEventData> Get(uint joinId);
     }
 }

@@ -4,6 +4,7 @@ using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Logic.Pages;
+using LinkLynx.Core.CrestronPOCOs;
 using System;
 using System.Reflection;
 
@@ -78,7 +79,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         /// A method that generates a Lambda Action to be added to the dispatcher.
         /// </summary>
         /// <param name="method">The method to be converted to the Lambda Action</param>
-        private Action<PageLogicBase, SigEventArgs> BuildLambda<T>(MethodInfo method) where T : PageLogicBase
+        private Action<PageLogicBase, SignalEventData> BuildLambda<T>(MethodInfo method) where T : PageLogicBase
         {
             return (page, args) =>
             {

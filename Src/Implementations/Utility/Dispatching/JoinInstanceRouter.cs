@@ -1,10 +1,10 @@
-﻿using Crestron.SimplSharpPro;
-using Crestron.SimplSharpPro.DeviceSupport;
+﻿using LinkLynx.Core.CrestronPOCOs;
 using LinkLynx.Core.Interfaces.Collections.Pools;
 using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Logic.Pages;
+using LinkLynx.Core.Signals;
 using LinkLynx.Implementations.Collections.PanelContexts;
 using System;
 
@@ -31,38 +31,38 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         /// <summary>
         /// This attempts to run the method given to the correct device logic.
         /// </summary>
-        /// <param name="device">The device to run the method on.</param>
-        /// <param name="args">The signal to be processed.</param>
-        public void Route(BasicTriList device, SigEventArgs args)
+        /// <param name="panel">The device to run the method on.</param>
+        /// <param name="data">The signal to be processed.</param>
+        public void Route(PanelDevice panel, SignalEventData data)
         {
             try
             {
-                if (device == null || args == null)
+                if (panel == null || data == null)
                 {
                     consoleLogger.Log("[Signal Processor] Device or signal is null, cannot process signal change.");
                     return;
                 }
 
-                PanelLogicGroup logicGroup = logicGroupPool.GetPanelLogicGroup(device);
+                PanelLogicGroup logicGroup = logicGroupPool.GetPanelLogicGroup(panel);
 
                 if (logicGroup == null)
                 {
-                    consoleLogger.Log($"[Signal Processor] No logic group found for device: {device.Name}");
+                    consoleLogger.Log($"[Signal Processor] No logic group found for device: {panel.Name}");
                     return;
                 }
 
-                if (device == null || args == null)
+                if (panel == null || data == null)
                 {
                     consoleLogger.Log("[SignalProcessor] Error: Device or signal is null.");
                     return;
                 }
 
-                uint join = args.Sig.Number;
-                Core.Signals.SigType type = (Core.Signals.SigType)Enum.Parse(typeof(Core.Signals.SigType),args.Sig.Type.ToString(),ignoreCase: true);
+                uint join = data.SignalJoinID;
+                SigType type = (SigType)Enum.Parse(typeof(SigType),data.SignalJoinID.ToString(),ignoreCase: true);
 
-                consoleLogger.Log($"[JoinInstanceRouter] Device {device.ID}, Sig {type} #{join}, Bool={args.Sig.BoolValue}");
+                consoleLogger.Log($"[JoinInstanceRouter] Device {panel.ID}, Sig {type} #{join}, Bool={data.SignalJoinID}");
 
-                PanelLogicGroup group = logicGroupPool.GetPanelLogicGroup(device);
+                PanelLogicGroup group = logicGroupPool.GetPanelLogicGroup(panel);
 
                 ushort pageId = reversePageRegistry.Get(join, type);
 
@@ -72,11 +72,11 @@ namespace LinkLynx.Implementations.Utility.Dispatching
 
                 if (page == null)
                 {
-                    consoleLogger.Log($"[JoinInstanceRouter] Error: Page {pageId} not found in panel group for device '{device.ID}'");
+                    consoleLogger.Log($"[JoinInstanceRouter] Error: Page {pageId} not found in panel group for device '{panel.ID}'");
                     return;
                 }
 
-                Action<PageLogicBase, SigEventArgs> action = dispatcherHelper.GetDispatcherActionFromKey(type, join);
+                Action<PageLogicBase, SignalEventData> action = dispatcherHelper.GetDispatcherActionFromKey(type, join);
 
                 if (action == null)
                 {
@@ -84,7 +84,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
                     return;
                 }
 
-                action.Invoke(page, args);
+                action.Invoke(page, data);
             }
             catch (Exception ex)
             {

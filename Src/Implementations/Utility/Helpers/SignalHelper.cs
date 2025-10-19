@@ -1,8 +1,9 @@
-﻿using Crestron.SimplSharpPro;
-using Crestron.SimplSharpPro.DeviceSupport;
+﻿using Crestron.SimplSharpPro.DeviceSupport;
 using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Helpers;
+using LinkLynx.Core.Signals;
+using LinkLynx.Core.CrestronPOCOs;
 using System;
 
 namespace LinkLynx.Implementations.Utility.Helpers
@@ -35,7 +36,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
             if (panel == null)
                 throw new ArgumentNullException($"[SignalHelper] SetSerialJoin: Device is null, cannot set join.");
 
-            Core.Signals.SigType signalType = enumSignalTypeRegistry.Get(join.GetType());
+            SigType signalType = enumSignalTypeRegistry.Get(join.GetType());
             
             ushort joinNumber = Convert.ToUInt16(join);
 
@@ -43,7 +44,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
 
             switch (signalType)
             {
-                case Core.Signals.SigType.Bool:
+                case SigType.Bool:
 
                     if (typeof(T) == typeof(bool))
                     {
@@ -55,7 +56,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
                         throw new ArgumentException($"[SignalHelper] Error: Type mismatch when attempting to set join for a given Enum: {join}, and Value: {value}");
                     break;
 
-                case Core.Signals.SigType.String:
+                case SigType.String:
 
                     if (typeof(T) == typeof(string))
                     {
@@ -67,7 +68,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
                         throw new ArgumentException($"[SignalHelper] Error: Type mismatch when attempting to set join for a given Enum: {join}, and Value: {value}");
                     break;
 
-                case Core.Signals.SigType.UShort:
+                case SigType.UShort:
 
                     if (typeof(T) == typeof(ushort))
                     {
@@ -79,7 +80,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
                         throw new ArgumentException($"[SignalHelper] Error: Type mismatch when attempting to set join for a given Enum: {join}, and Value: {value}");
                     break;
 
-                case Core.Signals.SigType.NA:
+                case SigType.NA:
                         throw new ArgumentException($"[SignalHelper] Error: Cannot process a NA type!");
             }
         }
@@ -89,12 +90,12 @@ namespace LinkLynx.Implementations.Utility.Helpers
         /// </summary>
         /// <param name="args">The signal received</param>
         /// <returns>Bool, If the signal was a rising edge</returns>
-        public bool IsRisingEdge(SigEventArgs args)
+        public bool IsRisingEdge(SignalEventData args)
         {
-            if (args.Sig.Type != eSigType.Bool)
+            if (args.SignalType != SigType.Bool || args.DigitalValue == null)
                 throw new Exception("[SignalHelper] Cant check if non-digital signal is a Rising Edge");
 
-            return args.Sig.BoolValue;
+            return (bool)args.DigitalValue;
         }
 
         /// <summary>
@@ -102,12 +103,12 @@ namespace LinkLynx.Implementations.Utility.Helpers
         /// </summary>
         /// <param name="args">The signal received</param>
         /// <returns>Bool, If the signal was a falling edge</returns>
-        public bool IsFallingEdge(SigEventArgs args)
+        public bool IsFallingEdge(SignalEventData args)
         {
-            if (args.Sig.Type != eSigType.Bool)
+            if (args.SignalType != SigType.Bool || args.DigitalValue == null)
                 throw new Exception("[SignalHelper] Cant check if non-digital signal is a Falling Edge");
 
-            return !args.Sig.BoolValue;
+            return (bool)args.DigitalValue;
         }
     }
 }

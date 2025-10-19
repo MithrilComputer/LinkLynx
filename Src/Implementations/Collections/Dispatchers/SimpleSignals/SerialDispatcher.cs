@@ -2,6 +2,7 @@
 using LinkLynx.Core.Interfaces.Collections.Dispatchers;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Logic.Pages;
+using LinkLynx.Core.CrestronPOCOs;
 using System;
 using System.Collections.Generic;
 
@@ -32,7 +33,7 @@ namespace LinkLynx.Implementations.Collections.Dispatchers.SimpleSignals
         /// <summary>
         /// A dictionary that maps digital join IDs to their corresponding actions.
         /// </summary>
-        private readonly Dictionary<uint, Action<PageLogicBase, SigEventArgs>> dispatcher = new Dictionary<uint, Action<PageLogicBase, SigEventArgs>>();
+        private readonly Dictionary<uint, Action<PageLogicBase, SignalEventData>> dispatcher = new Dictionary<uint, Action<PageLogicBase, SignalEventData>>();
 
         /// <summary>
         /// The method to add a join ID and its corresponding action to the dispatcher.
@@ -40,7 +41,7 @@ namespace LinkLynx.Implementations.Collections.Dispatchers.SimpleSignals
         /// <param name="joinId">The join ID Key</param>
         /// <param name="action">The action that is bound to the key</param>
         /// <returns>True if the join ID was added, false if it already exists.</returns>
-        public bool TryAdd(uint joinId, Action<PageLogicBase, SigEventArgs> action)
+        public bool TryAdd(uint joinId, Action<PageLogicBase, SignalEventData> action)
         {
             if (!dispatcher.ContainsKey(joinId))
             {
@@ -78,7 +79,7 @@ namespace LinkLynx.Implementations.Collections.Dispatchers.SimpleSignals
         /// </summary>
         /// <param name="joinId">The Id to get the action from</param>
         /// <returns>The action associated with the key</returns>
-        public Action<PageLogicBase, SigEventArgs> Get(uint joinId)
+        public Action<PageLogicBase, SignalEventData> Get(uint joinId)
         {
             if (dispatcher.TryGetValue(joinId, out var action))
             {

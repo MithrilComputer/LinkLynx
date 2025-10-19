@@ -4,6 +4,8 @@ using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Interfaces.Utility.Helpers;
 using LinkLynx.Core.Logic.Pages;
+using LinkLynx.Core.Signals;
+using LinkLynx.Core.CrestronPOCOs;
 using System;
 
 namespace LinkLynx.Implementations.Utility.Dispatching
@@ -40,9 +42,9 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         /// <returns>True if the join ID was added, false if it already exists.</returns>
         /// <remarks>Ensure the enum has one of these in the name to be parsed correctly "Digital", "Analog" or "Serial". 
         /// It is used to determine the signal type.</remarks>
-        public bool AddToDispatcher(Enum join, Action<PageLogicBase, SigEventArgs> action)
+        public bool AddToDispatcher(Enum join, Action<PageLogicBase, SignalEventData> action)
         {
-            Core.Signals.SigType signalType = enumHelper.GetSignalTypeFromEnum(join);
+            SigType signalType = enumHelper.GetSignalTypeFromEnum(join);
 
             uint joinId = Convert.ToUInt32(join);
 
@@ -50,11 +52,11 @@ namespace LinkLynx.Implementations.Utility.Dispatching
 
             switch (signalType)
             {
-                case Core.Signals.SigType.Bool:
+                case SigType.Bool:
                     return digitalDispatcher.TryAdd(joinId, action);
-                case Core.Signals.SigType.UShort:
+                case SigType.UShort:
                     return analogDispatcher.TryAdd(joinId, action);
-                case Core.Signals.SigType.String:
+                case SigType.String:
                     return serialDispatcher.TryAdd(joinId, action);
                 default:
                     throw new Exception("[DispatcherHelper] Incorrect Enum Value Passed when attempting to add a new logic join.");
@@ -89,15 +91,15 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         /// <param name="signalType">The type of signal to get the action from.</param>
         /// <param name="joinId">The join id of the action.</param>
         /// <returns>The action associated with a specific join ID, Null if not found.</returns>
-        public Action<PageLogicBase, SigEventArgs> GetDispatcherActionFromKey(Core.Signals.SigType signalType, uint joinId)
+        public Action<PageLogicBase, SignalEventData> GetDispatcherActionFromKey(SigType signalType, uint joinId)
         {
             switch (signalType)
             {
-                case Core.Signals.SigType.Bool:
+                case SigType.Bool:
                     return digitalDispatcher.Get(joinId);
-                case Core.Signals.SigType.UShort:
+                case SigType.UShort:
                     return analogDispatcher.Get(joinId);
-                case Core.Signals.SigType.String:
+                case SigType.String:
                     return serialDispatcher.Get(joinId);
                 default:
                     throw new FormatException("[DispatcherHelper] Input Enum Has Incorrect Formatting");

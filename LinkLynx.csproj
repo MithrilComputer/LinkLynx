@@ -40,5 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Docs\" />
+    <Folder Include="Src\Core\Interfaces\PublicAPI\" />
   </ItemGroup>
 </Project>

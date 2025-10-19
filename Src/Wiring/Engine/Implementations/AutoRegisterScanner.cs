@@ -15,7 +15,7 @@ namespace LinkLynx.Wiring.Engine
     /// <summary>
     /// A scanner Class made to look for all the pages in a program and register them, and their logic joins.
     /// </summary>
-    internal sealed class AutoRegisterScanner : IAutoRegisterScanner
+    public sealed class AutoRegisterScanner : IAutoRegisterScanner
     {
         private readonly ILogger consoleLogger;
         private readonly IPageRegistry pageRegistry;
@@ -99,7 +99,7 @@ namespace LinkLynx.Wiring.Engine
         /// </summary>
         /// <param name="pageType">The type to be added to the register.</param>
         /// <param name="pageId">The id of the given type.</param>
-        private void AutoWireJoins(Type pageType, ushort pageId)
+        public void AutoWireJoins(Type pageType, ushort pageId)
         {
             consoleLogger.Log($"[AutoRegisterScanner] Attempting to wire page class {pageType.FullName}'s signal joins...");
 
@@ -127,7 +127,7 @@ namespace LinkLynx.Wiring.Engine
         /// Attempts to register a enum marked with SigType to the EnumSignalTypeRegistry.
         /// </summary>
         /// <param name="type">This should be a type of enum, but wrapped by the type class.</param>
-        private void TryRegisterEnumSigType(Type type)
+        public void TryRegisterEnumSigType(Type type)
         {
             consoleLogger.Log($"[AutoRegisterScanner] Found Enum '{type.FullName}' Attempting to register...");
 
@@ -153,7 +153,7 @@ namespace LinkLynx.Wiring.Engine
         /// <summary>
         /// Checks if the assembly is whitelisted to be scanned.
         /// </summary>
-        private static bool CheckIfWhitelisted(Assembly assembly)
+        private bool CheckIfWhitelisted(Assembly assembly)
         {
             try
             {
