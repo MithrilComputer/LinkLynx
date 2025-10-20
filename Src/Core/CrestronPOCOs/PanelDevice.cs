@@ -32,9 +32,9 @@ namespace LinkLynx.Core.CrestronPOCOs
         public BasicTriList BasicTriList { get; set; }
 
         /// <summary>
-        /// Unique Crestron device ID of the panel.
+        /// Unique Crestron device ID of the touchpanel.
         /// </summary>
-        public uint DeviceID { get; set; }
+        public uint IPID { get; set; }
 
         /// <summary>
         /// Indicates whether the panel is currently online.
@@ -57,7 +57,7 @@ namespace LinkLynx.Core.CrestronPOCOs
         /// <param name="panel">The Crestron panel to wrap.</param>
         public PanelDevice(BasicTriList panel)
         {
-            DeviceID = panel.ID;
+            IPID = panel.ID;
             IsOnline = panel.IsOnline;
             Name = panel.Name;
         }
@@ -74,7 +74,7 @@ namespace LinkLynx.Core.CrestronPOCOs
         /// </remarks>
         public PanelDevice(uint deviceID, bool isOnline, string name)
         {
-            DeviceID = deviceID;
+            IPID = deviceID;
             IsOnline = isOnline;
             Name = name;
         }

@@ -3,31 +3,32 @@ using Crestron.SimplSharpPro.DeviceSupport;
 using LinkLynx.Core.CrestronPOCOs;
 using LinkLynx.Core.Interfaces.Collections.Pools;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
-using LinkLynx.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Src.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Src.Core.Interfaces.Wiring.Engine;
-using LinkLynx.Implementations.Utility.Debugging.Logging;
-using LinkLynx.Implementations.Utility.Dispatching;
+using LinkLynx.Implementations.Collections.Pools;
 using LinkLynx.PublicAPI.Interfaces;
 using LinkLynx.Wiring.DI;
-using LinkLynx.Wiring.Engine;
 using System;
 
 namespace LinkLynx.PublicAPI.Implementations
 {
     public sealed class LinkLynx : ILinkLynx
     {
+        private string version = "0.0.0";
+
         private readonly ILogger consoleLogger;
         private readonly IAutoRegisterScanner autoRegisterScanner;
         private readonly ILogicGroupPool logicGroupPool;
 
         private readonly IJoinInstanceRouter joinInstanceRouter;
 
+        private readonly IPanelPool panelPool;
+
         private bool autoRegisterPanelsToControlSystem;
 
         private readonly ServiceProvider serviceProvider;
 
-        public LinkLynx(ServiceProvider serviceProvider, ILogger consoleLogger, IAutoRegisterScanner autoRegisterScanner, ILogicGroupPool logicGroupPool, IJoinInstanceRouter joinInstanceRouter, bool autoRegisterPanelsToControlSystem) 
+        public LinkLynx(ServiceProvider serviceProvider, ILogger consoleLogger, IAutoRegisterScanner autoRegisterScanner, ILogicGroupPool logicGroupPool, IJoinInstanceRouter joinInstanceRouter, bool autoRegisterPanelsToControlSystem, IPanelPool panelPool) 
         {
             this.consoleLogger = consoleLogger;
             this.autoRegisterScanner = autoRegisterScanner;
@@ -35,6 +36,8 @@ namespace LinkLynx.PublicAPI.Implementations
             this.joinInstanceRouter = joinInstanceRouter;
 
             this.autoRegisterPanelsToControlSystem = autoRegisterPanelsToControlSystem;
+
+            this.panelPool = panelPool;
         }
 
         /// <summary>
@@ -48,8 +51,9 @@ namespace LinkLynx.PublicAPI.Implementations
         public void Initialize()
         {
             consoleLogger.Log("[LinkLynx] Initializing Framework...");
-            SendSplash();
             autoRegisterScanner.Run(); // your reflection scanner that registers pages + joins
+
+            SendSplash();
         }
 
         /// <summary>
@@ -64,8 +68,13 @@ namespace LinkLynx.PublicAPI.Implementations
         /// </exception>
         public void RegisterPanel(BasicTriList panel)
         {
-            logicGroupPool.RegisterPanel(panel);
-            logicGroupPool.InitializePanelLogic(panel);
+            PanelDevice panelDevice = new PanelDevice(panel);
+
+            if (!panelPool.TryAddPanel(panelDevice.IPID, panelDevice))
+                { consoleLogger.Log($"[LinkLynx] Can not register an already registered device. Did you try to register a duplicate?."); return; }
+
+            logicGroupPool.RegisterPanel(panelDevice);
+            logicGroupPool.InitializePanelLogic(panelDevice);
 
             if(autoRegisterPanelsToControlSystem)
             {
@@ -84,9 +93,21 @@ namespace LinkLynx.PublicAPI.Implementations
         /// <param name="panel">The <see cref="BasicTriList"/> instance representing the panel to reset. Cannot be <see langword="null"/>.</param>
         public void SetPanelToDefaultState(BasicTriList panel)
         {
-            logicGroupPool.SetPanelDefaults(panel);
+            PanelDevice panelDevice = panelPool.GetPanel(panel.ID);
+
+            logicGroupPool.SetPanelDefaults(panelDevice);
         }
 
+        /// <summary>
+        /// Resets the specified panel to its visually default state.
+        /// </summary>
+        public void SetPanelToDefaultState(uint panelIPID)
+        {
+            PanelDevice panelDevice = panelPool.GetPanel(panelIPID);
+
+            logicGroupPool.SetPanelDefaults(panelDevice);
+        }
+        
         /// <summary>
         /// Handles any simple signal given, Maps the signal to a device's logic.
         /// </summary>
@@ -94,7 +115,8 @@ namespace LinkLynx.PublicAPI.Implementations
         {
             // Wrap the Crestron types as my own, avoids issues with testing. Should prob use a factory at some point.
             SignalEventData signalData = new SignalEventData(args);
-            PanelDevice panelDevice = new PanelDevice(panel); 
+
+            PanelDevice panelDevice = panelPool.GetPanel(panel.ID); 
 
             joinInstanceRouter.Route(panelDevice, signalData);
         }
@@ -119,7 +141,7 @@ namespace LinkLynx.PublicAPI.Implementations
         public void SendSplash()
         {
             consoleLogger.Log(" ");
-            consoleLogger.Log($"LinkLynx by MithrilComputers v0.3.0");
+            consoleLogger.Log($"LinkLynx by MithrilComputers {version}");
             consoleLogger.Log(" ");
             consoleLogger.Log("----------- Happy Hacking! -----------");
             consoleLogger.Log(" ");

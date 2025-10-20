@@ -1,18 +1,19 @@
 ﻿using Crestron.SimplSharpPro.DeviceSupport;
+using LinkLynx.Core.CrestronPOCOs;
 using LinkLynx.Implementations.Collections.PanelContexts;
 
 namespace LinkLynx.Core.Interfaces.Collections.Pools
 {
     public interface ILogicGroupPool
     {
-        void RegisterPanel(BasicTriList device);
+        void RegisterPanel(PanelDevice device);
 
-        void UnregisterPanel(BasicTriList device);
+        void UnregisterPanel(PanelDevice device);
 
-        PanelLogicGroup GetPanelLogicGroup(BasicTriList device);
+        PanelLogicGroup GetPanelLogicGroup(PanelDevice device);
 
-        void InitializePanelLogic(BasicTriList device);
+        void InitializePanelLogic(PanelDevice device);
 
-        void SetPanelDefaults(BasicTriList device);
+        void SetPanelDefaults(PanelDevice device);
     }
 }

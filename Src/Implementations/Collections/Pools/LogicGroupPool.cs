@@ -1,4 +1,5 @@
 ﻿using Crestron.SimplSharpPro.DeviceSupport;
+using LinkLynx.Core.CrestronPOCOs;
 using LinkLynx.Core.Interfaces.Collections.Pools;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Factories;
@@ -32,19 +33,19 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// Registers a panel device and initializes its logic group.
         /// </summary>
         /// <param name="panel">The device to initialize</param>
-        public void RegisterPanel(BasicTriList panel)
+        public void RegisterPanel(PanelDevice panel)
         {
             if(panel == null)
                 throw new ArgumentNullException(nameof(panel));
 
-            uint id = panel.ID;
+            uint id = panel.IPID;
 
             if (id == 0)
                 throw new ArgumentException("[LogicGroupPool] Panel.ID is 0 (invalid/uninitialized).", nameof(panel));
 
-            if (!deviceLogicPool.ContainsKey(panel.ID))
+            if (!deviceLogicPool.ContainsKey(panel.IPID))
             {
-                consoleLogger.Log($"[LogicGroupPool] Registering Panel with ID: {panel.ID}");
+                consoleLogger.Log($"[LogicGroupPool] Registering Panel with ID: {panel.IPID}");
 
                 PanelLogicGroup panelLogic;
 

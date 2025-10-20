@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 
 namespace LinkLynx.Wiring.DI
 {
@@ -10,7 +12,9 @@ namespace LinkLynx.Wiring.DI
     public sealed class ServiceProvider : IDisposable
     {
         private readonly Dictionary<Type, ServiceDescriptor> descriptorMap = new Dictionary<Type, ServiceDescriptor>();
-        
+
+        private readonly HashSet<Type> buildStack = new HashSet<Type>();
+
         private readonly List<IDisposable> toDispose = new List<IDisposable>();
 
         private bool disposed = false;
@@ -81,46 +85,65 @@ namespace LinkLynx.Wiring.DI
             if (descriptor == null)
                 throw new ArgumentNullException("[ServiceProvider] Error: Cant take in null descriptor");
 
-            if (descriptor.Factory != null)
+            // Detect circular dependencies, Almost forgot to add this lol
+            var implementationType = descriptor.ImplementationType ?? descriptor.ServiceType;
+            if (buildStack.Contains(implementationType))
             {
-                object built = descriptor.Factory(this);
-
-                return built;
+                string chain = string.Join(" -> ", buildStack);
+                throw new InvalidOperationException(
+                    $"[ServiceProvider] Circular dependency detected: {chain} -> {implementationType}. " +
+                    $"Consider refactoring to break constructor dependency cycle (use factory, interface segregation, or mediator).");
             }
 
-            Type implementationType = descriptor.ImplementationType != null ? descriptor.ImplementationType : descriptor.ServiceType;
+            buildStack.Add(implementationType); // push
 
-            if (implementationType == null)
-                throw new InvalidOperationException("[ServiceProvider] Error: Descriptor has no implementation or service type.");
-
-            ConstructorInfo[] constructors = implementationType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
-
-            if (constructors == null || constructors.Length == 0)
-                throw new InvalidOperationException($"[ServiceProvider] Error: No public constructors found for type '{implementationType}'.");
-
-            ConstructorInfo best = constructors[0];
-
-            for (int i = 1; i < constructors.Length; i++)
+            try
             {
-                if (constructors[i].GetParameters().Length > best.GetParameters().Length)
+                // Factory registered? I sure hope so :D
+                if (descriptor.Factory != null)
                 {
-                    best = constructors[i];
+                    object built = descriptor.Factory(this);
+                    if (built == null)
+                        throw new InvalidOperationException($"[ServiceProvider] Factory returned null for {implementationType}.");
+
+                    return TrackDisposable(built);
                 }
+
+                var constructors = implementationType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
+                if (constructors == null || constructors.Length == 0)
+                    throw new InvalidOperationException($"[ServiceProvider] No public constructors found for '{implementationType}'.");
+
+                // Use the constructor with the most parameters
+                var best = constructors
+                    .OrderByDescending(c => c.GetParameters().Length)
+                    .First();
+
+                var parameters = best.GetParameters();
+                var args = new object[parameters.Length];
+
+                // Validate dependencies exist
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    var depType = parameters[i].ParameterType;
+                    try
+                    {
+                        args[i] = GetRequired(depType);
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        throw new InvalidOperationException(
+                            $"[ServiceProvider] Missing dependency '{depType}' while building '{implementationType}'. " +
+                            $"Did you forget to register it?");
+                    }
+                }
+
+                var instance = Activator.CreateInstance(implementationType, args);
+                return TrackDisposable(instance);
             }
-
-            ParameterInfo[] parameters = best.GetParameters();
-
-            object[] args = new object[parameters.Length];
-
-            for (int i = 0; i < parameters.Length; i++)
+            finally
             {
-                Type dependencyType = parameters[i].ParameterType;
-                args[i] = GetRequired(dependencyType);
+                buildStack.Remove(implementationType); // pop
             }
-
-            object instance = Activator.CreateInstance(implementationType, args);
-
-            return TrackDisposable(instance);
         }
 
         /// <summary>

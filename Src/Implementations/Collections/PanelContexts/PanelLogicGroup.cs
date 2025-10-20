@@ -1,6 +1,7 @@
 ﻿using Crestron.SimplSharpPro.DeviceSupport;
 using System.Collections.Generic;
 using LinkLynx.Core.Logic.Pages;
+using LinkLynx.Core.CrestronPOCOs;
 
 namespace LinkLynx.Implementations.Collections.PanelContexts
 {
@@ -19,7 +20,7 @@ namespace LinkLynx.Implementations.Collections.PanelContexts
         /// </summary>
         /// <param name="panel">The panel that is bound to this logic group.</param>
         /// <param name="pageLogicPool">The group of logic for the panel</param>
-        internal PanelLogicGroup(BasicTriList panel, Dictionary<ushort, PageLogicBase> pageLogicPool)
+        internal PanelLogicGroup(PanelDevice panel, Dictionary<ushort, PageLogicBase> pageLogicPool)
         {
             this.pageLogicPool = pageLogicPool;
         }
