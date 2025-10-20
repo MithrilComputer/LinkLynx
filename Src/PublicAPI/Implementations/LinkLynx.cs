@@ -1,7 +1,10 @@
 ﻿using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
+using LinkLynx.Core.CrestronPOCOs;
 using LinkLynx.Core.Interfaces.Collections.Pools;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
+using LinkLynx.Core.Interfaces.Utility.Dispatching;
+using LinkLynx.Core.Src.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Src.Core.Interfaces.Wiring.Engine;
 using LinkLynx.Implementations.Utility.Debugging.Logging;
 using LinkLynx.Implementations.Utility.Dispatching;
@@ -18,15 +21,20 @@ namespace LinkLynx.PublicAPI.Implementations
         private readonly IAutoRegisterScanner autoRegisterScanner;
         private readonly ILogicGroupPool logicGroupPool;
 
-        private readonly ISignal
+        private readonly IJoinInstanceRouter joinInstanceRouter;
+
+        private bool autoRegisterPanelsToControlSystem;
 
         private readonly ServiceProvider serviceProvider;
 
-        public LinkLynx(ServiceProvider serviceProvider, ILogger consoleLogger, IAutoRegisterScanner autoRegisterScanner, ILogicGroupPool logicGroupPool, ) 
+        public LinkLynx(ServiceProvider serviceProvider, ILogger consoleLogger, IAutoRegisterScanner autoRegisterScanner, ILogicGroupPool logicGroupPool, IJoinInstanceRouter joinInstanceRouter, bool autoRegisterPanelsToControlSystem) 
         {
             this.consoleLogger = consoleLogger;
             this.autoRegisterScanner = autoRegisterScanner;
             this.logicGroupPool = logicGroupPool;
+            this.joinInstanceRouter = joinInstanceRouter;
+
+            this.autoRegisterPanelsToControlSystem = autoRegisterPanelsToControlSystem;
         }
 
         /// <summary>
@@ -58,6 +66,16 @@ namespace LinkLynx.PublicAPI.Implementations
         {
             logicGroupPool.RegisterPanel(panel);
             logicGroupPool.InitializePanelLogic(panel);
+
+            if(autoRegisterPanelsToControlSystem)
+            {
+                eDeviceRegistrationUnRegistrationResponse registrationStatus = panel.Register();
+
+                if (registrationStatus != eDeviceRegistrationUnRegistrationResponse.Success)
+                {
+                    throw new Exception($"Failed to register panel, reason: {registrationStatus.ToString()}");
+                }
+            }
         }
 
         /// <summary>
@@ -74,7 +92,11 @@ namespace LinkLynx.PublicAPI.Implementations
         /// </summary>
         public void HandleSimpleSignal(BasicTriList panel, SigEventArgs args)
         {
-            SignalProcessor.ProcessSignalChange(panel, args);
+            // Wrap the Crestron types as my own, avoids issues with testing. Should prob use a factory at some point.
+            SignalEventData signalData = new SignalEventData(args);
+            PanelDevice panelDevice = new PanelDevice(panel); 
+
+            joinInstanceRouter.Route(panelDevice, signalData);
         }
 
         /// <summary>

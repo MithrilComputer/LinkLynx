@@ -40,6 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Docs\" />
-    <Folder Include="Src\Core\Interfaces\PublicAPI\" />
+    <Folder Include="Src\Implementations\Wiring\" />
   </ItemGroup>
 </Project>
