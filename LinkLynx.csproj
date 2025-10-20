@@ -40,6 +40,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Docs\" />
-    <Folder Include="Src\Implementations\Wiring\" />
   </ItemGroup>
 </Project>

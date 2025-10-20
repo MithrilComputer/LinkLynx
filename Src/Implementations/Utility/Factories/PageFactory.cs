@@ -4,6 +4,7 @@ using LinkLynx.Core.Logic.Pages;
 using LinkLynx.Core.Interfaces.Utility.Factories;
 using System;
 using System.Collections.Generic;
+using LinkLynx.Core.CrestronPOCOs;
 
 namespace LinkLynx.Implementations.Utility.Factories
 {
@@ -21,18 +22,18 @@ namespace LinkLynx.Implementations.Utility.Factories
         /// </summary>
         /// <param name="panel">The panel to assign the PageLogicBase's to.</param>
         /// <returns></returns>
-        public Dictionary<ushort, PageLogicBase> BuildPagesForPanel(BasicTriList panel)
+        public Dictionary<ushort, PageLogicBase> BuildPagesForPanel(PanelDevice panel)
         {
             Dictionary<ushort, PageLogicBase> createdPages = new Dictionary<ushort, PageLogicBase>();
 
             // Get all the registered pages from the registry.
-            // Todo (This needs to change later to per device)
-            IReadOnlyDictionary<ushort, Func<BasicTriList, PageLogicBase>> registeredPages 
+            // TODO (This needs to change later to per device)
+            IReadOnlyDictionary<ushort, Func<PanelDevice, PageLogicBase>> registeredPages 
                 = pageRegistry.GetAllRegistries();
 
-            foreach (KeyValuePair<ushort, Func<BasicTriList, PageLogicBase>> pair in registeredPages)
+            foreach (KeyValuePair<ushort, Func<PanelDevice, PageLogicBase>> pair in registeredPages)
             {
-                PageLogicBase page = pair.Value(panel); // This is the Func<BasicTriList, PageLogicBase>
+                PageLogicBase page = pair.Value(panel); // This is the Func<PanelDevice, PageLogicBase>
 
                 createdPages.Add(pair.Key, page);
             }

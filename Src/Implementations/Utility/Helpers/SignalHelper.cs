@@ -5,6 +5,7 @@ using LinkLynx.Core.Interfaces.Utility.Helpers;
 using LinkLynx.Core.Signals;
 using LinkLynx.Core.CrestronPOCOs;
 using System;
+using Crestron.SimplSharpPro;
 
 namespace LinkLynx.Implementations.Utility.Helpers
 {
@@ -31,13 +32,73 @@ namespace LinkLynx.Implementations.Utility.Helpers
         /// <param name="panel"> The panel to set the logic join on.</param>
         /// <param name="join"> The join to set.</param>
         /// <param name="value"> The value to set the join to.</param>
-        public void SetLogicJoin<T>(BasicTriList panel, Enum join, T value)
+        public void SetLogicJoin<T>(PanelDevice panel, Enum join, T value)
         {
             if (panel == null)
                 throw new ArgumentNullException($"[SignalHelper] SetSerialJoin: Device is null, cannot set join.");
 
             SigType signalType = enumSignalTypeRegistry.Get(join.GetType());
             
+            ushort joinNumber = Convert.ToUInt16(join);
+
+            consoleLogger.Log($"[SignalHelper] Setting Join '{Convert.ToUInt16(join)}' on device '{panel.IPID}' as '{value}'");
+
+            switch (signalType)
+            {
+                case SigType.Bool:
+
+                    if (typeof(T) == typeof(bool))
+                    {
+                        bool trueValue = (bool)(object)value;
+
+                        panel.BasicTriList.BooleanInput[joinNumber].BoolValue = trueValue;
+                    }
+                    else
+                        throw new ArgumentException($"[SignalHelper] Error: Type mismatch when attempting to set join for a given Enum: {join}, and Value: {value}");
+                    break;
+
+                case SigType.String:
+
+                    if (typeof(T) == typeof(string))
+                    {
+                        string trueValue = (string)(object)value;
+
+                        panel.BasicTriList.StringInput[joinNumber].StringValue = trueValue;
+                    }
+                    else
+                        throw new ArgumentException($"[SignalHelper] Error: Type mismatch when attempting to set join for a given Enum: {join}, and Value: {value}");
+                    break;
+
+                case SigType.UShort:
+
+                    if (typeof(T) == typeof(ushort))
+                    {
+                        ushort trueValue = (ushort)(object)value;
+
+                        panel.BasicTriList.UShortInput[joinNumber].UShortValue = trueValue;
+                    }
+                    else
+                        throw new ArgumentException($"[SignalHelper] Error: Type mismatch when attempting to set join for a given Enum: {join}, and Value: {value}");
+                    break;
+
+                case SigType.NA:
+                        throw new ArgumentException($"[SignalHelper] Error: Cannot process a NA type!");
+            }
+        }
+
+        /// <summary>
+        /// Sets a logic join on a given panel.
+        /// </summary>
+        /// <param name="panel"> The panel to set the logic join on.</param>
+        /// <param name="join"> The join to set.</param>
+        /// <param name="value"> The value to set the join to.</param>
+        public void SetLogicJoin<T>(BasicTriList panel, Enum join, T value)
+        {
+            if (panel == null)
+                throw new ArgumentNullException($"[SignalHelper] SetSerialJoin: Device is null, cannot set join.");
+
+            SigType signalType = enumSignalTypeRegistry.Get(join.GetType());
+
             ushort joinNumber = Convert.ToUInt16(join);
 
             consoleLogger.Log($"[SignalHelper] Setting Join '{Convert.ToUInt16(join)}' on device '{panel.ID}' as '{value}'");
@@ -81,7 +142,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
                     break;
 
                 case SigType.NA:
-                        throw new ArgumentException($"[SignalHelper] Error: Cannot process a NA type!");
+                    throw new ArgumentException($"[SignalHelper] Error: Cannot process a NA type!");
             }
         }
 
@@ -99,16 +160,16 @@ namespace LinkLynx.Implementations.Utility.Helpers
         }
 
         /// <summary>
-        /// Sees if a button is released on a falling edge. (Not Smart Object)
+        /// Sees if a button is pressed on a rising edge. (Not Smart Object)
         /// </summary>
         /// <param name="args">The signal received</param>
-        /// <returns>Bool, If the signal was a falling edge</returns>
-        public bool IsFallingEdge(SignalEventData args)
+        /// <returns>Bool, If the signal was a rising edge</returns>
+        public bool IsRisingEdge(SigEventArgs args)
         {
-            if (args.SignalType != SigType.Bool || args.DigitalValue == null)
-                throw new Exception("[SignalHelper] Cant check if non-digital signal is a Falling Edge");
+            if (args.Sig.Type != eSigType.Bool)
+                throw new Exception("[SignalHelper] Cant check if non-digital signal is a Rising Edge");
 
-            return (bool)args.DigitalValue;
+            return args.Sig.BoolValue;
         }
     }
 }

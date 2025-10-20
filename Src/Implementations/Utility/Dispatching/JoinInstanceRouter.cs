@@ -13,7 +13,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
     /// <summary>
     /// This is a router that ensures that the right device logic is called for a given panel signal.
     /// </summary>
-    internal class JoinInstanceRouter
+    internal class JoinInstanceRouter : IJoinInstanceRouter
     {
         private readonly ILogger consoleLogger;
         private readonly ILogicGroupPool logicGroupPool;
@@ -60,7 +60,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
                 uint join = data.SignalJoinID;
                 SigType type = (SigType)Enum.Parse(typeof(SigType),data.SignalJoinID.ToString(),ignoreCase: true);
 
-                consoleLogger.Log($"[JoinInstanceRouter] Device {panel.ID}, Sig {type} #{join}, Bool={data.SignalJoinID}");
+                consoleLogger.Log($"[JoinInstanceRouter] Device {panel.IPID}, Sig {type} #{join}, Bool={data.SignalJoinID}");
 
                 PanelLogicGroup group = logicGroupPool.GetPanelLogicGroup(panel);
 
@@ -72,7 +72,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
 
                 if (page == null)
                 {
-                    consoleLogger.Log($"[JoinInstanceRouter] Error: Page {pageId} not found in panel group for device '{panel.ID}'");
+                    consoleLogger.Log($"[JoinInstanceRouter] Error: Page {pageId} not found in panel group for device '{panel.IPID}'");
                     return;
                 }
 

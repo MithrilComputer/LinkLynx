@@ -1,6 +1,6 @@
 ﻿using LinkLynx.Core.CrestronPOCOs;
 
-namespace LinkLynx.Core.Src.Core.Interfaces.Utility.Dispatching
+namespace LinkLynx.Core.Interfaces.Utility.Dispatching
 {
     public interface IJoinInstanceRouter
     {

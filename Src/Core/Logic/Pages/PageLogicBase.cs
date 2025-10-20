@@ -1,4 +1,5 @@
 ﻿using Crestron.SimplSharpPro.DeviceSupport;
+using LinkLynx.Core.CrestronPOCOs;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("LinkLynx.Tests")]
@@ -13,13 +14,13 @@ namespace LinkLynx.Core.Logic.Pages
         /// <summary>
         /// The panel assigned to the page.
         /// </summary>
-        protected BasicTriList assignedPanel;
+        public PanelDevice assignedPanel;
 
         /// <summary>
         /// Constructs a new page, takes in a panel that acts as the host device.
         /// </summary>
         /// <param name="panel">The panel that is connected to this page's logic.</param>
-        public PageLogicBase(BasicTriList panel)
+        public PageLogicBase(PanelDevice panel)
         {
             assignedPanel = panel;
         }

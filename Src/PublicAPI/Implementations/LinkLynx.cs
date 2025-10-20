@@ -3,9 +3,8 @@ using Crestron.SimplSharpPro.DeviceSupport;
 using LinkLynx.Core.CrestronPOCOs;
 using LinkLynx.Core.Interfaces.Collections.Pools;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
-using LinkLynx.Core.Src.Core.Interfaces.Utility.Dispatching;
+using LinkLynx.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Src.Core.Interfaces.Wiring.Engine;
-using LinkLynx.Implementations.Collections.Pools;
 using LinkLynx.PublicAPI.Interfaces;
 using LinkLynx.Wiring.DI;
 using System;
@@ -38,6 +37,7 @@ namespace LinkLynx.PublicAPI.Implementations
             this.autoRegisterPanelsToControlSystem = autoRegisterPanelsToControlSystem;
 
             this.panelPool = panelPool;
+            this.serviceProvider = serviceProvider;
         }
 
         /// <summary>

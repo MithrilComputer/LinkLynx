@@ -12,7 +12,7 @@ namespace LinkLynx.Implementations.Collections.Pools
     /// <summary>
     /// The logic pool class that manages the logic groups for each panel device.
     /// </summary>
-    internal sealed class LogicGroupPool : ILogicGroupPool, IDisposable
+    public sealed class LogicGroupPool : ILogicGroupPool, IDisposable
     { 
         private readonly ILogger consoleLogger;
         private readonly IPageFactory pageFactory;
@@ -51,7 +51,7 @@ namespace LinkLynx.Implementations.Collections.Pools
 
                 try
                 {
-                    panelLogic = new PanelLogicGroup(panel, pageFactory.BuildPagesForPanel(panel)); // Todo make a factory
+                    panelLogic = new PanelLogicGroup(panel, pageFactory.BuildPagesForPanel(panel)); // TODO make a factory
                 }
                 catch (Exception ex)
                 {
@@ -69,18 +69,25 @@ namespace LinkLynx.Implementations.Collections.Pools
                     throw;
                 }
 
-                consoleLogger.Log($"[LogicGroupPool] Panel with ID: {panel.ID} registered successfully!");
+                consoleLogger.Log($"[LogicGroupPool] Panel with ID: {panel.IPID} registered successfully!");
             } else
-                throw new ArgumentException($"[LogicGroupPool] Error: Panel with ID {panel.ID} is already registered.");
+                throw new ArgumentException($"[LogicGroupPool] Error: Panel with ID {panel.IPID} is already registered.");
         }
 
-        public void UnregisterPanel(BasicTriList device)
+        /// <summary>
+        /// Unregisters a panel associated with the specified device.
+        /// </summary>
+        /// <remarks>This method removes the association of the panel with the given device. If the device
+        /// is not registered, an exception is thrown.</remarks>
+        /// <param name="device">The device whose associated panel is to be unregistered. The device must have a valid registry entry.</param>
+        /// <exception cref="ArgumentException">Thrown if the specified device does not have a registry entry.</exception>
+        public void UnregisterPanel(PanelDevice device)
         {
-            consoleLogger.Log($"[LogicGroupPool] UnregisterPanel panel with ID: {device.ID}");
+            consoleLogger.Log($"[LogicGroupPool] UnregisterPanel panel with ID: {device.IPID}");
 
-            if(deviceLogicPool.ContainsKey(device.ID))
+            if(deviceLogicPool.ContainsKey(device.IPID))
             {
-                deviceLogicPool[device.ID] = null;
+                deviceLogicPool[device.IPID] = null;
             } else
                 throw new ArgumentException($"[LogicGroupPool] Error: Panel with ID: failed to Unregister due to no registry being present.");
         }
@@ -91,15 +98,15 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// <param name="device"></param>
         /// <returns></returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        public PanelLogicGroup GetPanelLogicGroup(BasicTriList device)
+        public PanelLogicGroup GetPanelLogicGroup(PanelDevice device)
         {
-            if (deviceLogicPool.TryGetValue(device.ID, out var panelLogic))
+            if (deviceLogicPool.TryGetValue(device.IPID, out var panelLogic))
             {
                 return panelLogic;
             }
             else
             {
-                throw new KeyNotFoundException($"No logic group found for device {device.ID}");
+                throw new KeyNotFoundException($"No logic group found for device {device.IPID}");
             }
         }
 
@@ -108,15 +115,15 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// </summary>
         /// <param name="device"></param>
         /// <exception cref="KeyNotFoundException"></exception>
-        public void InitializePanelLogic(BasicTriList device)
+        public void InitializePanelLogic(PanelDevice device)
         {
-            if (deviceLogicPool.TryGetValue(device.ID, out PanelLogicGroup panelLogic))
+            if (deviceLogicPool.TryGetValue(device.IPID, out PanelLogicGroup panelLogic))
             {
                 panelLogic.InitializePageLogic();
             }
             else
             {
-                throw new KeyNotFoundException($"No logic group found for device {device.ID}");
+                throw new KeyNotFoundException($"No logic group found for device {device.IPID}");
             }
         }
 
@@ -126,15 +133,15 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// </summary>
         /// <param name="device"></param>
         /// <exception cref="KeyNotFoundException"></exception>
-        public void SetPanelDefaults(BasicTriList device)
+        public void SetPanelDefaults(PanelDevice device)
         {
-            if (deviceLogicPool.TryGetValue(device.ID, out PanelLogicGroup panelLogic))
+            if (deviceLogicPool.TryGetValue(device.IPID, out PanelLogicGroup panelLogic))
             {
                 panelLogic.SetPageDefaults();
             }
             else
             {
-                throw new KeyNotFoundException($"No logic group found for device {device.ID}");
+                throw new KeyNotFoundException($"No logic group found for device {device.IPID}");
             }
         }
 
