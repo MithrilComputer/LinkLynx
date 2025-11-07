@@ -72,7 +72,7 @@ namespace LinkLynx.PublicAPI.Implementations
             PanelDevice panelDevice = new PanelDevice(panel);
 
             if (!panelPool.TryAddPanel(panelDevice.IPID, panelDevice))
-                { consoleLogger.Log($"[LinkLynx] Can not register an already registered device. Did you try to register a duplicate?."); return; }
+                { consoleLogger.Log($"[LinkLynx] Can not register an already registered device. Did you try to register a duplicate?."); return this; }
 
             logicGroupPool.RegisterPanel(panelDevice);
             logicGroupPool.InitializePanelLogic(panelDevice);
@@ -103,7 +103,7 @@ namespace LinkLynx.PublicAPI.Implementations
         public ILinkLynx RegisterPanel(PanelDevice panel)
         {
             if (!panelPool.TryAddPanel(panel.IPID, panel))
-            { consoleLogger.Log($"[LinkLynx] Can not register an already registered device. Did you try to register a duplicate?."); return; }
+            { consoleLogger.Log($"[LinkLynx] Can not register an already registered device. Did you try to register a duplicate?."); return this; }
 
             logicGroupPool.RegisterPanel(panel);
             logicGroupPool.InitializePanelLogic(panel);
