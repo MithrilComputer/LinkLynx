@@ -16,7 +16,7 @@ namespace LinkLynx.Tests.SystemTests.Fixtures
         {
             TestBootStrap testBootStrap = new TestBootStrap();
 
-            return LinkLynxFactory.CreateLinkLynxWithCustomDI(new Core.Options.LinkLynxBuildOptions(), testBootStrap);
+            return LinkLynxFactory.CreateLinkLynxWithCustomDI(new Core.Options.LinkLynxBuildOptions(), testBootStrap).Initialize();
         }
     }
 }
