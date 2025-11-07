@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LinkLynx.Core.Interfaces.Collections.Dispatchers
 {
-    internal interface IAnalogJoinDispatcher
+    public interface IAnalogJoinDispatcher
     {
         int Count { get; }
 

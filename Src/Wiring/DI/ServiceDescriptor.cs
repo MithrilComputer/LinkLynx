@@ -33,7 +33,7 @@ namespace LinkLynx.Wiring.DI
         /// <remarks>This field is intended for internal use to store a single, shared instance of the
         /// type. It is not thread-safe and should be accessed with appropriate synchronization if used in a
         /// multithreaded context.</remarks>
-        internal object SingletonInstance; // for singleton instances
+        public object SingletonInstance; // for singleton instances
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceDescriptor"/> class with the specified service type,

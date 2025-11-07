@@ -3,7 +3,7 @@ using System;
 
 namespace LinkLynx.Core.Interfaces.Utility.Helpers
 {
-    internal interface IEnumHelper
+    public interface IEnumHelper
     {
         SigType GetSignalTypeFromEnum(Enum joinEnum);
     }

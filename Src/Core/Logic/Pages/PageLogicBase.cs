@@ -1,9 +1,6 @@
 ﻿using Crestron.SimplSharpPro.DeviceSupport;
 using LinkLynx.Core.CrestronPOCOs;
 using System.Runtime.CompilerServices;
-
-[assembly: InternalsVisibleTo("LinkLynx.Tests")]
-
 namespace LinkLynx.Core.Logic.Pages
 {
     /// <summary>

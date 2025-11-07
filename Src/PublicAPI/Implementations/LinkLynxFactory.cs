@@ -2,12 +2,15 @@
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Options;
-using LinkLynx.Core.Src.Core.Interfaces.Wiring.Engine;
+using LinkLynx.Core.Interfaces.Wiring.Engine;
 using LinkLynx.PublicAPI.Interfaces;
 using LinkLynx.Wiring.Bootstraps.Implementations;
 using LinkLynx.Wiring.DI;
 using System;
+using System.Runtime.CompilerServices;
+using LinkLynx.Wiring.Bootstraps.Interfaces;
 
+[assembly: InternalsVisibleTo("LinkLynx.Tests")]
 namespace LinkLynx.PublicAPI.Implementations
 {
     /// <summary>
@@ -31,6 +34,29 @@ namespace LinkLynx.PublicAPI.Implementations
                 LinkLynxBootstrap bootstrapper = new LinkLynxBootstrap();
 
                 ServiceProvider serviceProvider = bootstrapper.CreateDefault();
+
+                createdInstance = true;
+
+                return new LinkLynx(serviceProvider,
+                    serviceProvider.GetRequired<ILogger>(),
+                    serviceProvider.GetRequired<IAutoRegisterScanner>(),
+                    serviceProvider.GetRequired<ILogicGroupPool>(),
+                    serviceProvider.GetRequired<IJoinInstanceRouter>(),
+                    options.AutoRegisterPanelsToControlSystem,
+                    serviceProvider.GetRequired<IPanelPool>());
+            }
+
+            throw new InvalidOperationException("LinkLynx instance has already been created. Multiple instances are not supported.");
+        }
+
+        /// <summary>
+        /// Creates and initializes a default instance of the <see cref="ILinkLynx"/> interface.
+        /// </summary>
+        internal static ILinkLynx CreateLinkLynxWithCustomDI(LinkLynxBuildOptions options, ILinkLynxBootstrap bootstrap)
+        {
+            if (!createdInstance)
+            {
+                ServiceProvider serviceProvider = bootstrap.CreateDefault();
 
                 createdInstance = true;
 

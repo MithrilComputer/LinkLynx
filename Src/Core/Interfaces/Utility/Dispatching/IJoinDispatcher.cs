@@ -5,7 +5,7 @@ using System;
 
 namespace LinkLynx.Core.Interfaces.Utility.Dispatching
 {
-    internal interface IJoinDispatcher
+    public interface IJoinDispatcher
     {
         bool AddToDispatcher(Enum join, Action<PageLogicBase, SignalEventData> action);
 

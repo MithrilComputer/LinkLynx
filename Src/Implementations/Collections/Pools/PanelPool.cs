@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace LinkLynx.Implementations.Collections.Pools
 {
-    internal class PanelPool : IPanelPool, IDisposable
+    public class PanelPool : IPanelPool, IDisposable
     {
         private readonly ILogger consoleLogger;
 

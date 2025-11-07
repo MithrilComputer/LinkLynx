@@ -8,7 +8,7 @@ using LinkLynx.Core.CrestronPOCOs;
 
 namespace LinkLynx.Implementations.Utility.Factories
 {
-    internal class PageFactory : IPageFactory
+    public class PageFactory : IPageFactory
     {
         private IPageRegistry pageRegistry;
 

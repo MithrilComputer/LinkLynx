@@ -178,7 +178,7 @@ namespace LinkLynx.Wiring.DI
                     toDispose[i].Dispose();
                 }
                 catch
-                { /*swallow exceptions*/ }
+                { /*swallow exceptions*/ } //TODO log? Do anything at all lol?
             }
 
             toDispose.Clear();

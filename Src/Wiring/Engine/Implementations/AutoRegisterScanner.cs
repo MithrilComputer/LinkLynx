@@ -4,7 +4,7 @@ using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Logic.Pages;
 using LinkLynx.Core.Signals;
-using LinkLynx.Core.Src.Core.Interfaces.Wiring.Engine;
+using LinkLynx.Core.Interfaces.Wiring.Engine;
 using LinkLynx.Implementations.Utility.Dispatching;
 using System;
 using System.Linq;
@@ -37,7 +37,7 @@ namespace LinkLynx.Wiring.Engine
         {
             consoleLogger.Log("[AutoRegisterScanner] Page Scanner started! Scanning...");
 
-            Type baseType = typeof(PageLogicBase); // Cache
+            Type baseType = typeof(PageLogicBase);
 
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {

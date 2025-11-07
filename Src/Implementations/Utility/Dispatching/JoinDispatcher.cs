@@ -11,9 +11,9 @@ using System;
 namespace LinkLynx.Implementations.Utility.Dispatching
 {
     /// <summary>
-    /// The DispatcherHelper class provides a unified interface for managing different types of signal dispatchers.
+    /// The JoinDispatcher class provides a unified interface for managing different types of signal dispatchers.
     /// </summary>
-    internal class DispatcherHelper : IJoinDispatcher
+    public class JoinDispatcher : IJoinDispatcher
     {
         private readonly IDigitalJoinDispatcher digitalDispatcher;
         private readonly IAnalogJoinDispatcher analogDispatcher;
@@ -23,7 +23,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
 
         private readonly IEnumHelper enumHelper;
 
-        public DispatcherHelper(IDigitalJoinDispatcher digitalDispatcher, IAnalogJoinDispatcher analogDispatcher, ISerialJoinDispatcher serialDispatcher, ILogger consoleLogger, IEnumHelper enumHelper) 
+        public JoinDispatcher(IDigitalJoinDispatcher digitalDispatcher, IAnalogJoinDispatcher analogDispatcher, ISerialJoinDispatcher serialDispatcher, ILogger consoleLogger, IEnumHelper enumHelper) 
         {
             this.digitalDispatcher = digitalDispatcher;
             this.analogDispatcher = analogDispatcher;

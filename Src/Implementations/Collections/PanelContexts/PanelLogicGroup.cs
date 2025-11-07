@@ -20,7 +20,7 @@ namespace LinkLynx.Implementations.Collections.PanelContexts
         /// </summary>
         /// <param name="panel">The panel that is bound to this logic group.</param>
         /// <param name="pageLogicPool">The group of logic for the panel</param>
-        internal PanelLogicGroup(PanelDevice panel, Dictionary<ushort, PageLogicBase> pageLogicPool)
+        public PanelLogicGroup(PanelDevice panel, Dictionary<ushort, PageLogicBase> pageLogicPool)
         {
             this.pageLogicPool = pageLogicPool;
         }
@@ -28,7 +28,7 @@ namespace LinkLynx.Implementations.Collections.PanelContexts
         /// <summary>
         /// Initializes all the logic on the panel once at runtime.
         /// </summary>
-        internal void InitializePageLogic()
+        public void InitializePageLogic()
         {
             foreach (KeyValuePair<ushort, PageLogicBase> pair in pageLogicPool)
             {
@@ -39,7 +39,7 @@ namespace LinkLynx.Implementations.Collections.PanelContexts
         /// <summary>
         /// Sets all the page's logic and  to the default start state.
         /// </summary>
-        internal void SetPageDefaults()
+        public void SetPageDefaults()
         {
             foreach (KeyValuePair<ushort, PageLogicBase> pair in pageLogicPool)
             {
@@ -51,7 +51,7 @@ namespace LinkLynx.Implementations.Collections.PanelContexts
         /// Gets a local Page Logic bases on the given page ID.
         /// </summary>
         /// <param name="pageId">The page id to ask for</param>
-        internal PageLogicBase GetPageLogicFromId(ushort pageId)
+        public PageLogicBase GetPageLogicFromId(ushort pageId)
         {
             pageLogicPool.TryGetValue(pageId, out var logic);
             return logic;
@@ -63,7 +63,7 @@ namespace LinkLynx.Implementations.Collections.PanelContexts
         /// <typeparam name="T"></typeparam>
         /// <param name="pageId"></param>
         /// <returns></returns>
-        internal T GetPage<T>(ushort pageId) where T : PageLogicBase
+        public T GetPage<T>(ushort pageId) where T : PageLogicBase
         {
             if (pageLogicPool.TryGetValue(pageId, out var logic) && logic is T typedLogic)
                 return typedLogic;

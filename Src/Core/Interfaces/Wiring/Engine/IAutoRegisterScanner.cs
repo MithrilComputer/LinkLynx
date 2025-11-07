@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LinkLynx.Core.Src.Core.Interfaces.Wiring.Engine
+namespace LinkLynx.Core.Interfaces.Wiring.Engine
 {
     public interface IAutoRegisterScanner
     {

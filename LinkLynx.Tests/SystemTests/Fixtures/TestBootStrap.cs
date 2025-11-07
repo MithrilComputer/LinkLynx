@@ -16,28 +16,22 @@ using LinkLynx.Implementations.Utility.Helpers;
 using LinkLynx.Wiring.Bootstraps.Interfaces;
 using LinkLynx.Wiring.DI;
 using LinkLynx.Wiring.Engine;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace LinkLynx.Wiring.Bootstraps.Implementations
+namespace LinkLynx.Tests.SystemTests.Fixtures
 {
-    /// <summary>
-    /// Provides methods to initialize and configure a default <see cref="ServiceProvider"/> instance  with a predefined
-    /// set of services.
-    /// </summary>
-    /// <remarks>The <see cref="LinkLynxBootstrap"/> class is responsible for setting up a dependency
-    /// injection  container with commonly used services, such as logging, signal dispatchers, page management,  and
-    /// utility helpers. This class simplifies the process of creating a fully configured  <see cref="ServiceProvider"/>
-    /// for use in applications.</remarks>
-    public class LinkLynxBootstrap : ILinkLynxBootstrap
+    internal class TestBootStrap : ILinkLynxBootstrap
     {
-        /// <summary>
-        /// Creates and configures a default <see cref="ServiceProvider"/> instance with predefined services.
-        /// </summary>
         public ServiceProvider CreateDefault()
         {
             ServiceCollection services = new ServiceCollection();
 
             // Logging
-            services.AddSingleton<ILogger, ConsoleLogger>();
+            services.AddSingleton<ILogger, TestLogger>();
 
             // Helpers
             services.AddSingleton<IEnumHelper, EnumHelper>();

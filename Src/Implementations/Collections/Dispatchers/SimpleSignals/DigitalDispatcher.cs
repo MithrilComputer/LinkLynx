@@ -11,7 +11,7 @@ namespace LinkLynx.Implementations.Collections.Dispatchers.SimpleSignals
     /// <summary>
     /// Dispatcher for digital signals in the application.
     /// </summary>
-    internal sealed class DigitalDispatcher : IDigitalJoinDispatcher, IDisposable
+    public sealed class DigitalDispatcher : IDigitalJoinDispatcher, IDisposable
     {
         private ILogger consoleLogger;
 

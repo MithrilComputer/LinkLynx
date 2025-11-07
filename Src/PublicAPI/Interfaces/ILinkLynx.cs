@@ -1,5 +1,6 @@
 ﻿using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
+using LinkLynx.Core.CrestronPOCOs;
 
 namespace LinkLynx.PublicAPI.Interfaces
 {
@@ -48,10 +49,33 @@ namespace LinkLynx.PublicAPI.Interfaces
         void RegisterPanel(BasicTriList panel);
 
         /// <summary>
+        /// Registers a panel with the framework and creates its page logic group.
+        /// </summary>
+        /// <param name="panel">The Crestron panel to register.</param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown if <paramref name="panel"/> is null.
+        /// </exception>
+        /// <exception cref="System.ArgumentException">
+        /// Thrown if the panel is already registered.
+        /// </exception>
+        void RegisterPanel(PanelDevice panel);
+
+        /// <summary>
         /// Resets the specified panel to its visually default state.
         /// </summary>
         /// <param name="panel">The <see cref="BasicTriList"/> instance representing the panel to reset. Cannot be <see langword="null"/>.</param>
         void SetPanelToDefaultState(BasicTriList panel);
+
+        /// <summary>
+        /// Resets the specified panel to its visually default state.
+        /// </summary>
+        void SetPanelToDefaultState(uint panelIPID);
+
+        /// <summary>
+        /// Resets the specified panel to its visually default state.
+        /// </summary>
+        /// <param name="panel">The <see cref="BasicTriList"/> instance representing the panel to reset. Cannot be <see langword="null"/>.</param>
+        void SetPanelToDefaultState(PanelDevice panel);
 
         /// <summary>
         /// Handles any simple signal given, Maps the signal to a device's logic.
@@ -59,6 +83,13 @@ namespace LinkLynx.PublicAPI.Interfaces
         /// <param name="panel">The device that is responsible for the signal.</param>
         /// <param name="args">The signal instance that was created for the change.</param>
         void HandleSimpleSignal(BasicTriList panel, SigEventArgs args);
+
+        /// <summary>
+        /// Handles any simple signal given, Maps the signal to a device's logic.
+        /// </summary>
+        /// <param name="panel">The device that is responsible for the signal.</param>
+        /// <param name="args">The signal instance that was created for the change.</param>
+        void HandleSimpleSignal(PanelDevice panel, SignalEventData args);
 
         /// <summary>
         /// Releases all resources and clears registries.

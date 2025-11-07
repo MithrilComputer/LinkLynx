@@ -11,7 +11,7 @@ namespace LinkLynx.Implementations.Collections.Registries
     /// <summary>
     /// A global page registry to keep track of all the known pages.
     /// </summary>
-    internal sealed class PageRegistry : IPageRegistry, IDisposable
+    public sealed class PageRegistry : IPageRegistry, IDisposable
     {
         private readonly ILogger consoleLogger;
 

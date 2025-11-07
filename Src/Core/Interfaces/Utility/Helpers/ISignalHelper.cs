@@ -5,7 +5,7 @@ using System;
 
 namespace LinkLynx.Core.Interfaces.Utility.Helpers
 {
-    internal interface ISignalHelper
+    public interface ISignalHelper
     {
         void SetLogicJoin<T>(PanelDevice panel, Enum join, T value);
         bool IsRisingEdge(SignalEventData args);

@@ -13,7 +13,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
     /// <summary>
     /// This is a router that ensures that the right device logic is called for a given panel signal.
     /// </summary>
-    internal class JoinInstanceRouter : IJoinInstanceRouter
+    public class JoinInstanceRouter : IJoinInstanceRouter
     {
         private readonly ILogger consoleLogger;
         private readonly ILogicGroupPool logicGroupPool;
@@ -57,14 +57,11 @@ namespace LinkLynx.Implementations.Utility.Dispatching
                     return;
                 }
 
-                uint join = data.SignalJoinID;
-                SigType type = (SigType)Enum.Parse(typeof(SigType),data.SignalJoinID.ToString(),ignoreCase: true);
-
-                consoleLogger.Log($"[JoinInstanceRouter] Device {panel.IPID}, Sig {type} #{join}, Bool={data.SignalJoinID}");
+                consoleLogger.Log($"[JoinInstanceRouter] Device {panel.IPID}, Sig {data.SignalType.ToString()} #{data.SignalJoinID}");
 
                 PanelLogicGroup group = logicGroupPool.GetPanelLogicGroup(panel);
 
-                ushort pageId = reversePageRegistry.Get(join, type);
+                ushort pageId = reversePageRegistry.Get(data.SignalJoinID, data.SignalType);
 
                 consoleLogger.Log($"[JoinInstanceRouter] Resolved PageId={pageId}");
 
@@ -76,11 +73,11 @@ namespace LinkLynx.Implementations.Utility.Dispatching
                     return;
                 }
 
-                Action<PageLogicBase, SignalEventData> action = dispatcherHelper.GetDispatcherActionFromKey(type, join);
+                Action<PageLogicBase, SignalEventData> action = dispatcherHelper.GetDispatcherActionFromKey(data.SignalType, data.SignalJoinID);
 
                 if (action == null)
                 {
-                    consoleLogger.Log($"[JoinInstanceRouter] Warning: No action registered for join {join} ({type})");
+                    consoleLogger.Log($"[JoinInstanceRouter] Warning: No action registered for join {data.SignalJoinID} ({data.SignalType})");
                     return;
                 }
 

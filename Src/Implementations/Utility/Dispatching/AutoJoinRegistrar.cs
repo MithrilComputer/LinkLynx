@@ -1,11 +1,9 @@
-﻿using Crestron.SimplSharpPro;
-using LinkLynx.Core.Attributes;
+﻿using LinkLynx.Core.Attributes;
 using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Logic.Pages;
 using LinkLynx.Core.CrestronPOCOs;
-using System;
 using System.Reflection;
 
 namespace LinkLynx.Implementations.Utility.Dispatching
@@ -14,7 +12,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
     /// Responsible for automatically registering all joins at runtime. 
     /// Uses the [Join(Enum)] attribute to assign bindings to methods
     /// </summary>
-    internal class AutoJoinRegistrar : IAutoJoinRegistrar
+    public class AutoJoinRegistrar : IAutoJoinRegistrar
     {
         private ILogger consoleLogger;
         private IJoinDispatcher dispatcherHelper;

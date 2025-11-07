@@ -2,7 +2,7 @@
 
 namespace LinkLynx.Wiring.Bootstraps.Interfaces
 {
-    internal interface ILinkLynxBootstrap
+    public interface ILinkLynxBootstrap
     {
         ServiceProvider CreateDefault();
     }
