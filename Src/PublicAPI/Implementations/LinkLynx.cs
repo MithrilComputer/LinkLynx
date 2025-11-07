@@ -42,18 +42,19 @@ namespace LinkLynx.PublicAPI.Implementations
 
         /// <summary>
         /// Scans loaded assemblies for page classes, registers page factories,
-        /// and wires join handlers.
+        /// and wires join handlers. Not required unless dynamic registration is needed.
         /// </summary>
         /// <remarks>
-        /// Must be called before <see cref="RegisterPanel(BasicTriList)"/>.
         /// Safe to call multiple times; subsequent calls are no-ops.
         /// </remarks>
-        public void Initialize()
+        public ILinkLynx Initialize()
         {
             consoleLogger.Log("[LinkLynx] Initializing Framework...");
             autoRegisterScanner.Run(); // your reflection scanner that registers pages + joins
 
             SendSplash();
+
+            return this;
         }
 
         /// <summary>
@@ -66,7 +67,7 @@ namespace LinkLynx.PublicAPI.Implementations
         /// <exception cref="System.ArgumentException">
         /// Thrown if the panel is already registered.
         /// </exception>
-        public void RegisterPanel(BasicTriList panel)
+        public ILinkLynx RegisterPanel(BasicTriList panel)
         {
             PanelDevice panelDevice = new PanelDevice(panel);
 
@@ -85,6 +86,8 @@ namespace LinkLynx.PublicAPI.Implementations
                     throw new Exception($"Failed to register panel, reason: {registrationStatus.ToString()}");
                 }
             }
+
+            return this;
         }
 
         /// <summary>
@@ -97,45 +100,53 @@ namespace LinkLynx.PublicAPI.Implementations
         /// <exception cref="System.ArgumentException">
         /// Thrown if the panel is already registered.
         /// </exception>
-        public void RegisterPanel(PanelDevice panel)
+        public ILinkLynx RegisterPanel(PanelDevice panel)
         {
             if (!panelPool.TryAddPanel(panel.IPID, panel))
             { consoleLogger.Log($"[LinkLynx] Can not register an already registered device. Did you try to register a duplicate?."); return; }
 
             logicGroupPool.RegisterPanel(panel);
             logicGroupPool.InitializePanelLogic(panel);
+
+            return this;
         }
 
         /// <summary>
         /// Resets the specified panel to its visually default state.
         /// </summary>
         /// <param name="panel">The <see cref="BasicTriList"/> instance representing the panel to reset. Cannot be <see langword="null"/>.</param>
-        public void SetPanelToDefaultState(BasicTriList panel)
+        public ILinkLynx SetPanelToDefaultState(BasicTriList panel)
         {
             PanelDevice panelDevice = panelPool.GetPanel(panel.ID);
 
             logicGroupPool.SetPanelDefaults(panelDevice);
+
+            return this;
         }
 
         /// <summary>
         /// Resets the specified panel to its visually default state.
         /// </summary>
         /// <param name="panel">The <see cref="BasicTriList"/> instance representing the panel to reset. Cannot be <see langword="null"/>.</param>
-        public void SetPanelToDefaultState(PanelDevice panel)
+        public ILinkLynx SetPanelToDefaultState(PanelDevice panel)
         {
             PanelDevice panelDevice = panelPool.GetPanel(panel.IPID);
 
             logicGroupPool.SetPanelDefaults(panelDevice);
+
+            return this;
         }
 
         /// <summary>
         /// Resets the specified panel to its visually default state.
         /// </summary>
-        public void SetPanelToDefaultState(uint panelIPID)
+        public ILinkLynx SetPanelToDefaultState(uint panelIPID)
         {
             PanelDevice panelDevice = panelPool.GetPanel(panelIPID);
 
             logicGroupPool.SetPanelDefaults(panelDevice);
+
+            return this;
         }
         
         /// <summary>

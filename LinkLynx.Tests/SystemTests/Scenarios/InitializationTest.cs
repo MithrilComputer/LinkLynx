@@ -35,8 +35,6 @@ namespace LinkLynx.Tests.SystemTests.Scenarios
                 if (linkLynx == null)
                     throw new Exception("[InitializationTest] LinkLynx instance is null after creation.");
 
-                linkLynx.Initialize();
-
                 linkLynx.RegisterPanel(ExternalTouchPanelMock.PanelOne);
             }
             catch (Exception ex)

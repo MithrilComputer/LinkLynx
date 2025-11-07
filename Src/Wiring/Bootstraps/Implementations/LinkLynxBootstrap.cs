@@ -42,7 +42,7 @@ namespace LinkLynx.Wiring.Bootstraps.Implementations
             // Helpers
             services.AddSingleton<IEnumHelper, EnumHelper>();
             services.AddSingleton<ISignalHelper, SignalHelper>();
-            services.AddSingleton<JoinDispatcher, JoinDispatcher>();
+            services.AddSingleton<IJoinDispatcher, JoinDispatcher>();
 
             // Registries
             services.AddSingleton<IEnumSignalTypeRegistry, EnumSignalTypeRegistry>();

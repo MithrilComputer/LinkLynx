@@ -34,7 +34,7 @@ namespace LinkLynx.PublicAPI.Interfaces
         /// Must be called before <see cref="RegisterPanel(BasicTriList)"/>.
         /// Safe to call multiple times; subsequent calls are no-ops.
         /// </remarks>
-        void Initialize();
+        ILinkLynx Initialize();
 
         /// <summary>
         /// Registers a panel with the framework and creates its page logic group.
@@ -46,7 +46,7 @@ namespace LinkLynx.PublicAPI.Interfaces
         /// <exception cref="System.ArgumentException">
         /// Thrown if the panel is already registered.
         /// </exception>
-        void RegisterPanel(BasicTriList panel);
+        ILinkLynx RegisterPanel(BasicTriList panel);
 
         /// <summary>
         /// Registers a panel with the framework and creates its page logic group.
@@ -58,24 +58,24 @@ namespace LinkLynx.PublicAPI.Interfaces
         /// <exception cref="System.ArgumentException">
         /// Thrown if the panel is already registered.
         /// </exception>
-        void RegisterPanel(PanelDevice panel);
+        ILinkLynx RegisterPanel(PanelDevice panel);
 
         /// <summary>
         /// Resets the specified panel to its visually default state.
         /// </summary>
         /// <param name="panel">The <see cref="BasicTriList"/> instance representing the panel to reset. Cannot be <see langword="null"/>.</param>
-        void SetPanelToDefaultState(BasicTriList panel);
+        ILinkLynx SetPanelToDefaultState(BasicTriList panel);
 
         /// <summary>
         /// Resets the specified panel to its visually default state.
         /// </summary>
-        void SetPanelToDefaultState(uint panelIPID);
+        ILinkLynx SetPanelToDefaultState(uint panelIPID);
 
         /// <summary>
         /// Resets the specified panel to its visually default state.
         /// </summary>
         /// <param name="panel">The <see cref="BasicTriList"/> instance representing the panel to reset. Cannot be <see langword="null"/>.</param>
-        void SetPanelToDefaultState(PanelDevice panel);
+        ILinkLynx SetPanelToDefaultState(PanelDevice panel);
 
         /// <summary>
         /// Handles any simple signal given, Maps the signal to a device's logic.

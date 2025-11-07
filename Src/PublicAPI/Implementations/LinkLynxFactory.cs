@@ -43,7 +43,7 @@ namespace LinkLynx.PublicAPI.Implementations
                     serviceProvider.GetRequired<ILogicGroupPool>(),
                     serviceProvider.GetRequired<IJoinInstanceRouter>(),
                     options.AutoRegisterPanelsToControlSystem,
-                    serviceProvider.GetRequired<IPanelPool>());
+                    serviceProvider.GetRequired<IPanelPool>()).Initialize();
             }
 
             throw new InvalidOperationException("LinkLynx instance has already been created. Multiple instances are not supported.");
