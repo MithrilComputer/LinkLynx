@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Reflection;
-using System.Security.Claims;
 
 namespace LinkLynx.Wiring.DI
 {
@@ -22,12 +19,11 @@ namespace LinkLynx.Wiring.DI
         /// <summary>
         /// Creates a new instance of the <see cref="ServiceProvider"/> class with the specified service descriptors.
         /// </summary>
-        /// <param name="services"></param>
         /// <exception cref="ArgumentNullException"></exception>
         public ServiceProvider(IEnumerable<ServiceDescriptor> services)
         {
             if (services == null)
-                throw new ArgumentNullException("[ServiceProvider] Warning: Cant take in null services");
+                throw new ArgumentNullException(nameof(services), "[ServiceProvider] Warning: Cant take in null services");
 
             foreach (ServiceDescriptor service in services)
             {
@@ -54,7 +50,7 @@ namespace LinkLynx.Wiring.DI
         public object GetRequired(Type serviceType)
         {
             if (serviceType == null)
-                throw new ArgumentNullException("[ServiceProvider] Warning: Cant take in null serviceType");
+                throw new ArgumentNullException(nameof(serviceType), "[ServiceProvider] Warning: Cant take in null serviceType");
 
             ServiceDescriptor descriptor;
 
@@ -80,10 +76,12 @@ namespace LinkLynx.Wiring.DI
         /// <summary>
         /// Creates an instance of the service described by the given descriptor.
         /// </summary>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
         public object CreateInstanceFromDescriptor(ServiceDescriptor descriptor)
         {
             if (descriptor == null)
-                throw new ArgumentNullException("[ServiceProvider] Error: Cant take in null descriptor");
+                throw new ArgumentNullException(nameof(descriptor), "[ServiceProvider] Error: Cant take in null descriptor");
 
             // Detect circular dependencies, Almost forgot to add this lol
             var implementationType = descriptor.ImplementationType ?? descriptor.ServiceType;
@@ -177,8 +175,10 @@ namespace LinkLynx.Wiring.DI
                 {
                     toDispose[i].Dispose();
                 }
-                catch
-                { /*swallow exceptions*/ } //TODO log? Do anything at all lol?
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Dispose failed: {ex.Message}");
+                }
             }
 
             toDispose.Clear();

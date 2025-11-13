@@ -7,7 +7,7 @@ namespace LinkLynx.Core.CrestronPOCOs
     // But Crestron aggressively protects all their types and blocks inheritance,
     // dependency inversion, and mocking because sharing APIs is apparently illegal.
     // So now I must create this wrapper because their SDK was designed in the stone age and never updated again.
-    // Crestron hates joy, unit, moch tests and modern software engineering.
+    // Crestron hates joy, unit, mock tests and modern software engineering.
     // >:( 
 
     /// <summary>

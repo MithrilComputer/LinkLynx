@@ -20,6 +20,13 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         private readonly IReversePageRegistry reversePageRegistry;
         private readonly IJoinDispatcher dispatcherHelper;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="consoleLogger"></param>
+        /// <param name="logicGroupPool"></param>
+        /// <param name="reversePageRegistry"></param>
+        /// <param name="dispatcherHelper"></param>
         public JoinInstanceRouter(ILogger consoleLogger, ILogicGroupPool logicGroupPool, IReversePageRegistry reversePageRegistry, IJoinDispatcher dispatcherHelper) 
         { 
             this.consoleLogger = consoleLogger;

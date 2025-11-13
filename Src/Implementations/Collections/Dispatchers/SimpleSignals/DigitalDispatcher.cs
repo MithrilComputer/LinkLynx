@@ -1,10 +1,7 @@
-﻿using Crestron.SimplSharpPro;
-using LinkLynx.Core.Interfaces.Collections.Dispatchers;
+﻿using LinkLynx.Core.Interfaces.Collections.Dispatchers;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Logic.Pages;
 using LinkLynx.Core.CrestronPOCOs;
-using System;
-using System.Collections.Generic;
 
 namespace LinkLynx.Implementations.Collections.Dispatchers.SimpleSignals
 {
@@ -13,7 +10,7 @@ namespace LinkLynx.Implementations.Collections.Dispatchers.SimpleSignals
     /// </summary>
     public sealed class DigitalDispatcher : IDigitalJoinDispatcher, IDisposable
     {
-        private ILogger consoleLogger;
+        private readonly ILogger consoleLogger;
 
         /// <summary>
         /// Class constructor.

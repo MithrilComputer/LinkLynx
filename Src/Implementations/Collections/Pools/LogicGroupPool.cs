@@ -1,11 +1,9 @@
-﻿using Crestron.SimplSharpPro.DeviceSupport;
-using LinkLynx.Core.CrestronPOCOs;
+﻿using LinkLynx.Core.CrestronPOCOs;
 using LinkLynx.Core.Interfaces.Collections.Pools;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Factories;
+using LinkLynx.Core.Src.Implementations.Utility.Factories;
 using LinkLynx.Implementations.Collections.PanelContexts;
-using System;
-using System.Collections.Generic;
 
 namespace LinkLynx.Implementations.Collections.Pools
 {
@@ -51,7 +49,7 @@ namespace LinkLynx.Implementations.Collections.Pools
 
                 try
                 {
-                    panelLogic = new PanelLogicGroup(panel, pageFactory.BuildPagesForPanel(panel)); // TODO make a factory
+                    panelLogic = LogicGroupFactory.CreateNewLogicGroup(panel, pageFactory.BuildPagesForPanel(panel));
                 }
                 catch (Exception ex)
                 {

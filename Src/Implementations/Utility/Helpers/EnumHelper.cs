@@ -1,5 +1,6 @@
 ﻿using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Interfaces.Utility.Helpers;
+using LinkLynx.Core.Signals;
 using System;
 
 namespace LinkLynx.Implementations.Utility.Helpers
@@ -24,12 +25,11 @@ namespace LinkLynx.Implementations.Utility.Helpers
         /// The function is not case sensitive, so 'DiGiTal' will work just as well as as 'Digital'.
         /// </summary>
         /// <param name="joinEnum">The enum that represents the logic join.</param>
-        public Core.Signals.SigType GetSignalTypeFromEnum(Enum joinEnum)
+        public SigType GetSignalTypeFromEnum(Enum joinEnum)
         {
             Type enumType = joinEnum.GetType();
-            Core.Signals.SigType signalType = enumSignalTypeRegistry.Get(enumType);
 
-            return signalType;
+            return enumSignalTypeRegistry.Get(enumType);
         }
     }
 }

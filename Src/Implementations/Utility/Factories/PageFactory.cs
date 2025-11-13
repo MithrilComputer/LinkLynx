@@ -1,17 +1,21 @@
-﻿using Crestron.SimplSharpPro.DeviceSupport;
-using LinkLynx.Core.Interfaces.Collections.Registries;
+﻿using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Logic.Pages;
 using LinkLynx.Core.Interfaces.Utility.Factories;
-using System;
-using System.Collections.Generic;
 using LinkLynx.Core.CrestronPOCOs;
 
 namespace LinkLynx.Implementations.Utility.Factories
 {
+    /// <summary>
+    /// The PageFactory is responsible for creating PageLogicBase instances for a given PanelDevice
+    /// </summary>
     public class PageFactory : IPageFactory
     {
         private IPageRegistry pageRegistry;
 
+        /// <summary>
+        /// The Factory for creating pages for a panel.
+        /// </summary>
+        /// <param name="pageRegistry"></param>
         public PageFactory(IPageRegistry pageRegistry)
         {
             this.pageRegistry = pageRegistry;

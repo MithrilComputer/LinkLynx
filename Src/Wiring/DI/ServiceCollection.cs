@@ -36,6 +36,10 @@ namespace LinkLynx.Wiring.DI
             return this;
         }
 
+        /// <summary>
+        /// Retrieves the current collection of service descriptors.
+        /// </summary>
+        /// <returns>A list of <see cref="ServiceDescriptor"/> objects representing the current service configuration.</returns>
         public List<ServiceDescriptor> GetCurrentDescriptorCollection()
         {
             return descriptors;

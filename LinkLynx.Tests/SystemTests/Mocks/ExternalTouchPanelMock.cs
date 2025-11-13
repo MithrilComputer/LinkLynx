@@ -33,5 +33,17 @@ namespace LinkLynx.Tests.SystemTests.Mocks
             PanelNine = new PanelDevice(0x0B, true, "Panel Nine");
             PanelTen = new PanelDevice(0x0C, true, "Panel Ten");
         }
+
+        public static PanelDevice[] CreatePanelArray(int numberOfPanels)
+        {
+            PanelDevice[] panels = new PanelDevice[numberOfPanels];
+
+            for (int i = 0; i < numberOfPanels; i++)
+            {
+                panels[i] = new PanelDevice((uint)i + 3, true, $"Panel {i}");
+            }
+
+            return panels;
+        }
     }
 }

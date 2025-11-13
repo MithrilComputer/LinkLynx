@@ -5,25 +5,12 @@ using LinkLynx.Core.CrestronPOCOs;
 namespace LinkLynx.PublicAPI.Interfaces
 {
     /// <summary>
-    /// Public entry point for the LinkLynx framework.
-    /// Provides a minimal API to initialize the framework, register panels, and
-    /// run page-level initialization logic.
+    /// Defines the contract for managing and interacting with Crestron panels, including initialization, panel
+    /// registration, signal handling, and resource cleanup.
     /// </summary>
-    /// <remarks>
-    /// Call <see cref="Initialize"/> once at program startup, then register each panel
-    /// via <see cref="RegisterPanel"/> before using it. Finally, call
-    /// <see cref="SetPanelToDefaultState"/> to set a panel to its default UI state whenever needed.
-    /// This type is intended to be used as a single instance per program.
-    /// </remarks>
-    /// <example>
-    /// <code>
-    /// LinkLynx linkLynx = new LinkLynx();
-    /// 
-    /// linkLynx.Initialize();
-    /// linkLynx.RegisterPanel(xPanelOne);
-    /// linkLynx.InitializePanel(xPanelOne);
-    /// </code>
-    /// </example>
+    /// <remarks>This interface provides methods to initialize the framework, register panels, handle signals,
+    /// reset panels to their default state, and release resources. It is designed to support Crestron control systems
+    /// and ensures proper lifecycle management of panel logic and resources.</remarks>
     public interface ILinkLynx
     {
         /// <summary>

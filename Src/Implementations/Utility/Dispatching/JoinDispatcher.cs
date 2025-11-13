@@ -23,6 +23,9 @@ namespace LinkLynx.Implementations.Utility.Dispatching
 
         private readonly IEnumHelper enumHelper;
 
+        /// <summary>
+        /// The constructor for the JoinDispatcher class.
+        /// </summary>
         public JoinDispatcher(IDigitalJoinDispatcher digitalDispatcher, IAnalogJoinDispatcher analogDispatcher, ISerialJoinDispatcher serialDispatcher, ILogger consoleLogger, IEnumHelper enumHelper) 
         {
             this.digitalDispatcher = digitalDispatcher;

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LinkLynx.Core.Attributes
+﻿namespace LinkLynx.Core.Attributes
 {
     /// <summary>
     /// This is the attribute class for giving methods a join key.

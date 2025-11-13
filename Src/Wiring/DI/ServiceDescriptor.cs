@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LinkLynx.Wiring.DI
+﻿namespace LinkLynx.Wiring.DI
 {
     /// <summary>
     /// This class describes a service registration in the DI container.

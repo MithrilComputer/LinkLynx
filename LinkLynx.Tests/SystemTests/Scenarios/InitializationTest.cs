@@ -1,15 +1,11 @@
-﻿using Crestron.SimplSharpPro;
-using LinkLynx.Core.Attributes;
-using LinkLynx.Core.CrestronPOCOs;
-using LinkLynx.Core.Logic.Pages;
+﻿using LinkLynx.Core.CrestronPOCOs;
+using LinkLynx.Core.Options;
 using LinkLynx.Core.Signals;
 using LinkLynx.PublicAPI.Implementations;
 using LinkLynx.PublicAPI.Interfaces;
-using LinkLynx.Tests.SystemTests.Fixtures;
 using LinkLynx.Tests.SystemTests.Mocks;
 using Xunit;
 using Xunit.Abstractions;
-using static LinkLynx.Tests.SystemTests.Scenarios.InitializationTest;
 
 namespace LinkLynx.Tests.SystemTests.Scenarios
 {
@@ -17,25 +13,36 @@ namespace LinkLynx.Tests.SystemTests.Scenarios
     {
         private readonly ITestOutputHelper console = console;
 
-        private ILinkLynx linkLynx;
+        private ILinkLynx? linkLynx;
 
-        [SigType(SigType.Bool)]
-        public enum TestButtons
-        {
-            Button1 = 10
-        }
+        private System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
 
         [Fact(DisplayName = "Builds a plain LinkLynx")]
         public void Initialization()
         {
+            stopwatch.Start();
+
             try
             {
-                linkLynx = SystemTestAppFactory.CreateDefaultImplementation();
+                LinkLynxBuildOptions buildOptions = new LinkLynxBuildOptions
+                {
+                    AutoRegisterPanelsToControlSystem = false
+                };
+
+                linkLynx = LinkLynxFactory.CreateLinkLynx(buildOptions);
 
                 if (linkLynx == null)
                     throw new Exception("[InitializationTest] LinkLynx instance is null after creation.");
 
+                console.WriteLine($"Time elapsed to start LinkLynx {stopwatch.Elapsed.TotalMilliseconds.ToString()} ms");
+
+                stopwatch.Restart();
+
                 linkLynx.RegisterPanel(ExternalTouchPanelMock.PanelOne);
+
+                console.WriteLine($"Time elapsed to register panel {stopwatch.Elapsed.TotalMilliseconds.ToString()} ms");
+
+                stopwatch.Restart();
             }
             catch (Exception ex)
             {
@@ -46,32 +53,21 @@ namespace LinkLynx.Tests.SystemTests.Scenarios
             SignalEventData sig = new SignalEventData((int)TestButtons.Button1, SigType.Bool, true);
             linkLynx.HandleSimpleSignal(ExternalTouchPanelMock.PanelOne, sig);
 
-            Assert.True(TestPage.WasFired, "Expected TestPage.TestMethod to run when Button1 was routed.");
+            Assert.True(TestPage.NumberOfCalls == 1, "Expected TestPage.TestMethod to run when Button1 was routed.");
 
             linkLynx.SetPanelToDefaultState(ExternalTouchPanelMock.PanelOne);
 
-            Assert.False(TestPage.WasFired, "Expected TestPage.TestMethod to run when Button1 was routed.");
-        }
-    }
+            Assert.True(TestPage.NumberOfCalls == 0, "Expected TestPage.TestMethod to run when Button1 was routed.");
 
-    [Page(1)]
-    public class TestPage : PageLogicBase
-    {
-        public static bool WasFired { get; private set; }
+            console.WriteLine($"Time elapsed to handle signal and reset panel {stopwatch.Elapsed.TotalMilliseconds.ToString()} ms");
 
-        public TestPage(PanelDevice panel) : base(panel)
-        {
-        }
+            stopwatch.Restart();
 
-        public override void SetDefaults()
-        {
-           WasFired = false;
-        }
+            linkLynx.Cleanup();
 
-        [Join(TestButtons.Button1)]
-        public void TestMethod(SignalEventData args)
-        {
-            WasFired = true;
+            console.WriteLine($"Time elapsed to cleanup LinkLynx {stopwatch.Elapsed.TotalMilliseconds.ToString()} ms");
+
+            stopwatch.Stop();
         }
     }
 }

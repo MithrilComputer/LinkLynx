@@ -7,16 +7,24 @@ using LinkLynx.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Interfaces.Wiring.Engine;
 using LinkLynx.PublicAPI.Interfaces;
 using LinkLynx.Wiring.DI;
-using System;
 
 namespace LinkLynx.PublicAPI.Implementations
 {
+    /// <summary>
+    /// Represents the core framework for managing panels, logic groups, and signal routing in a control system.
+    /// </summary>
+    /// <remarks>The <see cref="LinkLynx"/> class provides methods for initializing the framework, registering
+    /// panels, handling signals, and managing the lifecycle of the control system. It is designed to facilitate the
+    /// integration of Crestron panels and their associated logic groups, while offering features such as automatic
+    /// registration and resource cleanup.</remarks>
     public sealed class LinkLynx : ILinkLynx
     {
         private string version = "0.0.0";
 
         private readonly ILogger consoleLogger;
+        
         private readonly IAutoRegisterScanner autoRegisterScanner;
+        
         private readonly ILogicGroupPool logicGroupPool;
 
         private readonly IJoinInstanceRouter joinInstanceRouter;
@@ -27,6 +35,19 @@ namespace LinkLynx.PublicAPI.Implementations
 
         private readonly ServiceProvider serviceProvider;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LinkLynx"/> class with the specified dependencies and
+        /// configuration options.
+        /// </summary>
+        /// <param name="serviceProvider">The <see cref="ServiceProvider"/> instance used to resolve dependencies.</param>
+        /// <param name="consoleLogger">The <see cref="ILogger"/> instance used for logging messages to the console.</param>
+        /// <param name="autoRegisterScanner">The <see cref="IAutoRegisterScanner"/> instance responsible for scanning and registering components
+        /// automatically.</param>
+        /// <param name="logicGroupPool">The <see cref="ILogicGroupPool"/> instance that manages pools of logic groups.</param>
+        /// <param name="joinInstanceRouter">The <see cref="IJoinInstanceRouter"/> instance used to route join instances.</param>
+        /// <param name="autoRegisterPanelsToControlSystem">A boolean value indicating whether panels should be automatically registered to the control system. <see
+        /// langword="true"/> to enable automatic registration; otherwise, <see langword="false"/>.</param>
+        /// <param name="panelPool">The <see cref="IPanelPool"/> instance that manages the pool of panels.</param>
         public LinkLynx(ServiceProvider serviceProvider, ILogger consoleLogger, IAutoRegisterScanner autoRegisterScanner, ILogicGroupPool logicGroupPool, IJoinInstanceRouter joinInstanceRouter, bool autoRegisterPanelsToControlSystem, IPanelPool panelPool) 
         {
             this.consoleLogger = consoleLogger;
