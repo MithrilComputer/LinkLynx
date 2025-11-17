@@ -2,12 +2,9 @@
 using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Dispatching;
+using LinkLynx.Core.Interfaces.Wiring.Engine;
 using LinkLynx.Core.Logic.Pages;
 using LinkLynx.Core.Signals;
-using LinkLynx.Core.Interfaces.Wiring.Engine;
-using LinkLynx.Implementations.Utility.Dispatching;
-using System;
-using System.Linq;
 using System.Reflection;
 
 namespace LinkLynx.Wiring.Engine
@@ -22,6 +19,9 @@ namespace LinkLynx.Wiring.Engine
         private readonly IAutoJoinRegistrar autoJoinRegistrar;
         private readonly IEnumSignalTypeRegistry enumSignalTypeRegistry;
 
+        /// <summary>
+        /// The constructor for the AutoRegisterScanner.
+        /// </summary>
         public AutoRegisterScanner(ILogger consoleLogger, IPageRegistry pageRegistry, IAutoJoinRegistrar autoJoinRegistrar, IEnumSignalTypeRegistry enumSignalTypeRegistry)
         {
             this.consoleLogger = consoleLogger;
@@ -37,8 +37,6 @@ namespace LinkLynx.Wiring.Engine
         {
             consoleLogger.Log("[AutoRegisterScanner] Page Scanner started! Scanning...");
 
-            Type baseType = typeof(PageLogicBase);
-
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 if (!CheckIfWhitelisted(assembly))
@@ -47,8 +45,6 @@ namespace LinkLynx.Wiring.Engine
                 }
 
                 Type[] types;
-
-                string name = assembly.GetName().Name;
 
                 try
                 {
@@ -94,11 +90,12 @@ namespace LinkLynx.Wiring.Engine
         }
 
         /// <summary>
-        /// Registers the joins to the global registry via the AutoJoinRegistrar. 
+        /// Registers the joins to the global registry via the AutoJoinRegistrar.
         /// Used to get around the problem of using the Type as a var.
         /// </summary>
         /// <param name="pageType">The type to be added to the register.</param>
         /// <param name="pageId">The id of the given type.</param>
+        /// <exception cref="MissingMethodException"> Is thrown when the method RegisterJoins inside AutoJoinRegistrar, is not found</exception>
         public void AutoWireJoins(Type pageType, ushort pageId)
         {
             consoleLogger.Log($"[AutoRegisterScanner] Attempting to wire page class {pageType.FullName}'s signal joins...");
@@ -133,7 +130,7 @@ namespace LinkLynx.Wiring.Engine
 
             object[] attributes = type.GetCustomAttributes(typeof(SigTypeAttribute), inherit: false);
 
-            if (attributes.Length == 0) 
+            if (attributes.Length == 0)
             {
                 consoleLogger.Log($"[AutoRegisterScanner] Enum '{type.FullName}' Has no attributes, skipping.");
                 return;
@@ -153,7 +150,7 @@ namespace LinkLynx.Wiring.Engine
         /// <summary>
         /// Checks if the assembly is whitelisted to be scanned.
         /// </summary>
-        private bool CheckIfWhitelisted(Assembly assembly)
+        private static bool CheckIfWhitelisted(Assembly assembly)
         {
             try
             {

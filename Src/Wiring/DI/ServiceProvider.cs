@@ -52,6 +52,9 @@ namespace LinkLynx.Wiring.DI
             if (serviceType == null)
                 throw new ArgumentNullException(nameof(serviceType), "[ServiceProvider] Warning: Cant take in null serviceType");
 
+            if (serviceType == typeof(ServiceProvider))
+                return this;
+
             ServiceDescriptor descriptor;
 
             if (!descriptorMap.TryGetValue(serviceType, out descriptor))

@@ -1,15 +1,13 @@
-﻿using LinkLynx.Core.Signals;
-using LinkLynx.Core.Interfaces.Collections.Registries;
+﻿using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
-using System;
-using System.Collections.Generic;
+using LinkLynx.Core.Signals;
 
 namespace LinkLynx.Implementations.Collections.Registries
 {
     /// <summary>
     /// A container class meant to hold a reference to what Enum type is associated with what eSigType it represents.
     /// </summary>
-    internal sealed class EnumSignalTypeRegistry : IEnumSignalTypeRegistry, IDisposable
+    public sealed class EnumSignalTypeRegistry : IEnumSignalTypeRegistry, IDisposable
     {
         private readonly ILogger consoleLogger;
 
@@ -24,12 +22,12 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// <summary>
         /// The registry that holds the key value pairs.
         /// </summary>
-        private readonly Dictionary<Type, SigType> registry = new Dictionary<Type, SigType>();
+        private readonly Dictionary<Type, SigType> typeRegistry = new Dictionary<Type, SigType>();
 
         /// <summary>
         /// How many items are in the registry.
         /// </summary>
-        public int Count => registry.Count;
+        public int Count => typeRegistry.Count;
 
         /// <summary>
         /// Gets a specific signal type from an enum type.
@@ -46,7 +44,7 @@ namespace LinkLynx.Implementations.Collections.Registries
             if (!enumType.IsEnum) 
                 throw new ArgumentException($"[EnumSignalTypeRegistry] Error: Type must be an enum. {nameof(enumType)}");
 
-            if (registry.TryGetValue(enumType, out SigType sigType))
+            if (typeRegistry.TryGetValue(enumType, out SigType sigType))
             {
                 return sigType;
             }
@@ -70,9 +68,9 @@ namespace LinkLynx.Implementations.Collections.Registries
             if (!enumType.IsEnum) 
                 throw new ArgumentException($"[EnumSignalTypeRegistry] Error: Type must be an enum. {nameof(enumType)}");
 
-            if (!registry.ContainsKey(enumType))
+            if (!typeRegistry.ContainsKey(enumType))
             {
-                registry.Add(enumType, type);
+                typeRegistry.Add(enumType, type);
                 consoleLogger.Log($"[EnumSignalTypeRegistry] Log: Registered Enum '{enumType.FullName}' as type '{type}'");
                 return;
             }
@@ -94,7 +92,7 @@ namespace LinkLynx.Implementations.Collections.Registries
             if (!enumType.IsEnum)
                 throw new ArgumentException($"[EnumSignalTypeRegistry] Error: Type must be an enum. {nameof(enumType)}");
 
-            return registry.ContainsKey(enumType);
+            return typeRegistry.ContainsKey(enumType);
         }
 
         /// <summary>
@@ -102,7 +100,7 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// </summary>
         public void Dispose()
         {
-            registry.Clear();
+            typeRegistry.Clear();
         }
     }
 }

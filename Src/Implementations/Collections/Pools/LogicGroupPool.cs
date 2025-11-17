@@ -11,7 +11,7 @@ namespace LinkLynx.Implementations.Collections.Pools
     /// The logic pool class that manages the logic groups for each panel device.
     /// </summary>
     public sealed class LogicGroupPool : ILogicGroupPool, IDisposable
-    { 
+    {
         private readonly ILogger consoleLogger;
         private readonly IPageFactory pageFactory;
 
@@ -19,10 +19,10 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// Class constructor
         /// </summary>
         public LogicGroupPool(ILogger consoleLogger, IPageFactory pageFactory) 
-        { 
+        {
             this.consoleLogger = consoleLogger;
             this.pageFactory = pageFactory;
-        } 
+        }
 
         private readonly Dictionary<uint, PanelLogicGroup> deviceLogicPool = 
             new Dictionary<uint, PanelLogicGroup>();
@@ -30,26 +30,26 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// <summary>
         /// Registers a panel device and initializes its logic group.
         /// </summary>
-        /// <param name="panel">The device to initialize</param>
-        public void RegisterPanel(PanelDevice panel)
+        /// <param name="device">The device to initialize</param>
+        public void RegisterPanel(PanelDevice device)
         {
-            if(panel == null)
-                throw new ArgumentNullException(nameof(panel));
+            if(device == null)
+                throw new ArgumentNullException(nameof(device));
 
-            uint id = panel.IPID;
+            uint id = device.IPID;
 
             if (id == 0)
-                throw new ArgumentException("[LogicGroupPool] Panel.ID is 0 (invalid/uninitialized).", nameof(panel));
+                throw new ArgumentException("[LogicGroupPool] Panel.ID is 0 (invalid/uninitialized).", nameof(device));
 
-            if (!deviceLogicPool.ContainsKey(panel.IPID))
+            if (!deviceLogicPool.ContainsKey(device.IPID))
             {
-                consoleLogger.Log($"[LogicGroupPool] Registering Panel with ID: {panel.IPID}");
+                consoleLogger.Log($"[LogicGroupPool] Registering Panel with ID: {device.IPID}");
 
                 PanelLogicGroup panelLogic;
 
                 try
                 {
-                    panelLogic = LogicGroupFactory.CreateNewLogicGroup(panel, pageFactory.BuildPagesForPanel(panel));
+                    panelLogic = LogicGroupFactory.CreateNewLogicGroup(device, pageFactory.BuildPagesForPanel(device));
                 }
                 catch (Exception ex)
                 {
@@ -67,9 +67,12 @@ namespace LinkLynx.Implementations.Collections.Pools
                     throw;
                 }
 
-                consoleLogger.Log($"[LogicGroupPool] Panel with ID: {panel.IPID} registered successfully!");
-            } else
-                throw new ArgumentException($"[LogicGroupPool] Error: Panel with ID {panel.IPID} is already registered.");
+                consoleLogger.Log($"[LogicGroupPool] Panel with ID: {device.IPID} registered successfully!");
+            }
+            else
+            {
+                throw new ArgumentException($"[LogicGroupPool] Error: Panel with ID {device.IPID} is already registered.");
+            }
         }
 
         /// <summary>
@@ -85,7 +88,7 @@ namespace LinkLynx.Implementations.Collections.Pools
 
             if(deviceLogicPool.ContainsKey(device.IPID))
             {
-                deviceLogicPool[device.IPID] = null;
+                deviceLogicPool.Remove(device.IPID);
             } else
                 throw new ArgumentException($"[LogicGroupPool] Error: Panel with ID: failed to Unregister due to no registry being present.");
         }

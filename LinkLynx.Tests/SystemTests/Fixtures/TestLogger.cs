@@ -1,9 +1,5 @@
 ﻿using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NUnit.Framework;
 
 namespace LinkLynx.Tests.SystemTests.Fixtures
 {
@@ -11,7 +7,7 @@ namespace LinkLynx.Tests.SystemTests.Fixtures
     {
         public void Log(string message)
         {
-            Console.WriteLine(message);
+            TestContext.WriteLine(message);
         }
     }
 }

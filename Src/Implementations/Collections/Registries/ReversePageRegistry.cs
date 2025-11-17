@@ -2,15 +2,13 @@
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Helpers;
 using LinkLynx.Core.Signals;
-using System;
-using System.Collections.Generic;
 
 namespace LinkLynx.Implementations.Collections.Registries
 {
     /// <summary>
     /// A special class that used to link logic joins to pages, good for reverse join searching.
     /// </summary>
-    internal sealed class ReversePageRegistry : IReversePageRegistry, IDisposable
+    public sealed class ReversePageRegistry : IReversePageRegistry, IDisposable
     {
         private readonly ILogger consoleLogger;
         private readonly IEnumHelper enumHelper;

@@ -6,13 +6,14 @@ using LinkLynx.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Interfaces.Utility.Factories;
 using LinkLynx.Core.Interfaces.Utility.Helpers;
 using LinkLynx.Core.Interfaces.Wiring.Engine;
+using LinkLynx.Core.Options;
 using LinkLynx.Implementations.Collections.Dispatchers.SimpleSignals;
 using LinkLynx.Implementations.Collections.Pools;
 using LinkLynx.Implementations.Collections.Registries;
-using LinkLynx.Implementations.Utility.Debugging.Logging;
 using LinkLynx.Implementations.Utility.Dispatching;
 using LinkLynx.Implementations.Utility.Factories;
 using LinkLynx.Implementations.Utility.Helpers;
+using LinkLynx.PublicAPI.Interfaces;
 using LinkLynx.Wiring.Bootstraps.Interfaces;
 using LinkLynx.Wiring.DI;
 using LinkLynx.Wiring.Engine;
@@ -21,7 +22,7 @@ namespace LinkLynx.Tests.SystemTests.Fixtures
 {
     internal class TestBootStrap : ILinkLynxBootstrap
     {
-        public ServiceProvider CreateDefault()
+        public ServiceProvider CreateDefault(LinkLynxBuildOptions options)
         {
             ServiceCollection services = new ServiceCollection();
 
@@ -31,7 +32,7 @@ namespace LinkLynx.Tests.SystemTests.Fixtures
             // Helpers
             services.AddSingleton<IEnumHelper, EnumHelper>();
             services.AddSingleton<ISignalHelper, SignalHelper>();
-            services.AddSingleton<JoinDispatcher, JoinDispatcher>();
+            services.AddSingleton<IJoinDispatcher, JoinDispatcher>();
 
             // Registries
             services.AddSingleton<IEnumSignalTypeRegistry, EnumSignalTypeRegistry>();
@@ -55,6 +56,10 @@ namespace LinkLynx.Tests.SystemTests.Fixtures
 
             // Factories
             services.AddSingleton<IPageFactory, PageFactory>();
+
+            //LinkLynx
+            services.AddSingleton(options);
+            services.AddSingleton<ILinkLynx, PublicAPI.Implementations.LinkLynx>();
 
             return services.BuildServiceProvider();
         }

@@ -5,6 +5,7 @@ using LinkLynx.Core.Interfaces.Collections.Pools;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Interfaces.Wiring.Engine;
+using LinkLynx.Core.Options;
 using LinkLynx.PublicAPI.Interfaces;
 using LinkLynx.Wiring.DI;
 
@@ -19,19 +20,19 @@ namespace LinkLynx.PublicAPI.Implementations
     /// registration and resource cleanup.</remarks>
     public sealed class LinkLynx : ILinkLynx
     {
-        private string version = "0.0.0";
+        private readonly string version = "0.0.0";
 
         private readonly ILogger consoleLogger;
-        
+
         private readonly IAutoRegisterScanner autoRegisterScanner;
-        
+
         private readonly ILogicGroupPool logicGroupPool;
 
         private readonly IJoinInstanceRouter joinInstanceRouter;
 
         private readonly IPanelPool panelPool;
 
-        private bool autoRegisterPanelsToControlSystem;
+        private readonly bool autoRegisterPanelsToControlSystem;
 
         private readonly ServiceProvider serviceProvider;
 
@@ -45,20 +46,20 @@ namespace LinkLynx.PublicAPI.Implementations
         /// automatically.</param>
         /// <param name="logicGroupPool">The <see cref="ILogicGroupPool"/> instance that manages pools of logic groups.</param>
         /// <param name="joinInstanceRouter">The <see cref="IJoinInstanceRouter"/> instance used to route join instances.</param>
-        /// <param name="autoRegisterPanelsToControlSystem">A boolean value indicating whether panels should be automatically registered to the control system. <see
+        /// <param name="options">The LinkLynx build options <see
         /// langword="true"/> to enable automatic registration; otherwise, <see langword="false"/>.</param>
         /// <param name="panelPool">The <see cref="IPanelPool"/> instance that manages the pool of panels.</param>
-        public LinkLynx(ServiceProvider serviceProvider, ILogger consoleLogger, IAutoRegisterScanner autoRegisterScanner, ILogicGroupPool logicGroupPool, IJoinInstanceRouter joinInstanceRouter, bool autoRegisterPanelsToControlSystem, IPanelPool panelPool) 
+        public LinkLynx(ServiceProvider serviceProvider, ILogger consoleLogger, IAutoRegisterScanner autoRegisterScanner, ILogicGroupPool logicGroupPool, IJoinInstanceRouter joinInstanceRouter, LinkLynxBuildOptions options, IPanelPool panelPool)
         {
             this.consoleLogger = consoleLogger;
             this.autoRegisterScanner = autoRegisterScanner;
             this.logicGroupPool = logicGroupPool;
             this.joinInstanceRouter = joinInstanceRouter;
 
-            this.autoRegisterPanelsToControlSystem = autoRegisterPanelsToControlSystem;
-
             this.panelPool = panelPool;
             this.serviceProvider = serviceProvider;
+
+            autoRegisterPanelsToControlSystem = options.AutoRegisterPanelsToControlSystem;
         }
 
         /// <summary>
@@ -88,6 +89,7 @@ namespace LinkLynx.PublicAPI.Implementations
         /// <exception cref="System.ArgumentException">
         /// Thrown if the panel is already registered.
         /// </exception>
+        /// <exception cref="InvalidOperationException">If a panel fails to register</exception>
         public ILinkLynx RegisterPanel(BasicTriList panel)
         {
             PanelDevice panelDevice = new PanelDevice(panel);
@@ -104,7 +106,7 @@ namespace LinkLynx.PublicAPI.Implementations
 
                 if (registrationStatus != eDeviceRegistrationUnRegistrationResponse.Success)
                 {
-                    throw new Exception($"Failed to register panel, reason: {registrationStatus.ToString()}");
+                    throw new InvalidOperationException($"Failed to register panel, reason: {registrationStatus.ToString()}");
                 }
             }
 
@@ -169,7 +171,7 @@ namespace LinkLynx.PublicAPI.Implementations
 
             return this;
         }
-        
+
         /// <summary>
         /// Handles any simple signal given, Maps the signal to a device's logic.
         /// </summary>
@@ -178,7 +180,7 @@ namespace LinkLynx.PublicAPI.Implementations
             // Wrap the Crestron types as my own, avoids issues with testing. Should prob use a factory at some point.
             SignalEventData signalData = new SignalEventData(args);
 
-            PanelDevice panelDevice = panelPool.GetPanel(panel.ID); 
+            PanelDevice panelDevice = panelPool.GetPanel(panel.ID);
 
             joinInstanceRouter.Route(panelDevice, signalData);
         }

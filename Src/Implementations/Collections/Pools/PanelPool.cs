@@ -1,8 +1,6 @@
 ﻿using LinkLynx.Core.CrestronPOCOs;
 using LinkLynx.Core.Interfaces.Collections.Pools;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
-using System;
-using System.Collections.Generic;
 
 namespace LinkLynx.Implementations.Collections.Pools
 {
@@ -13,11 +11,11 @@ namespace LinkLynx.Implementations.Collections.Pools
     /// devices by their unique identifiers. It ensures that duplicate panel IDs are not added to the collection and
     /// logs relevant messages for operations. This class implements <see cref="IDisposable"/> to allow proper cleanup
     /// of resources when the pool is no longer needed.</remarks>
-    public class PanelPool : IPanelPool, IDisposable
+    public sealed class PanelPool : IPanelPool, IDisposable
     {
         private readonly ILogger consoleLogger;
 
-        private Dictionary<uint, PanelDevice> panels = new Dictionary<uint, PanelDevice>();
+        private readonly Dictionary<uint, PanelDevice> panels = new Dictionary<uint, PanelDevice>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PanelPool"/> class.
@@ -66,6 +64,7 @@ namespace LinkLynx.Implementations.Collections.Pools
             return true;
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             panels.Clear();

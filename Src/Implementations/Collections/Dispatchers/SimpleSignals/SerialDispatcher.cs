@@ -11,9 +11,9 @@ namespace LinkLynx.Implementations.Collections.Dispatchers.SimpleSignals
     /// <summary>
     /// Dispatcher for serial signals in the application.
     /// </summary>
-    internal sealed class SerialDispatcher : ISerialJoinDispatcher, IDisposable
+    public sealed class SerialDispatcher : ISerialJoinDispatcher, IDisposable
     {
-        private ILogger consoleLogger;
+        private readonly ILogger consoleLogger;
 
         /// <summary>
         /// Class constructor.

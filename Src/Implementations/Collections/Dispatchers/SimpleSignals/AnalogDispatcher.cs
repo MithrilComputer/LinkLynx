@@ -11,15 +11,15 @@ namespace LinkLynx.Implementations.Collections.Dispatchers.SimpleSignals
     /// <summary>
     /// Dispatcher for analog signals in the application.
     /// </summary>
-    internal sealed class AnalogDispatcher : IAnalogJoinDispatcher, IDisposable
+    public sealed class AnalogDispatcher : IAnalogJoinDispatcher, IDisposable
     {
-        private ILogger consoleLogger;
+        private readonly ILogger consoleLogger;
 
         /// <summary>
         /// Class constructor.
         /// </summary>
-        public AnalogDispatcher(ILogger consoleLogger) 
-        { 
+        public AnalogDispatcher(ILogger consoleLogger)
+        {
             this.consoleLogger = consoleLogger;
         }
 

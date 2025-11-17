@@ -9,15 +9,18 @@ using System.Reflection;
 namespace LinkLynx.Implementations.Utility.Dispatching
 {
     /// <summary>
-    /// Responsible for automatically registering all joins at runtime. 
+    /// Responsible for automatically registering all joins at runtime.
     /// Uses the [Join(Enum)] attribute to assign bindings to methods
     /// </summary>
     public class AutoJoinRegistrar : IAutoJoinRegistrar
     {
-        private ILogger consoleLogger;
-        private IJoinDispatcher dispatcherHelper;
-        private IReversePageRegistry reversePageRegistry;
+        private readonly ILogger consoleLogger;
+        private readonly IJoinDispatcher dispatcherHelper;
+        private readonly IReversePageRegistry reversePageRegistry;
 
+        /// <summary>
+        /// The constructor for the AutoJoinRegistrar.
+        /// </summary>
         public AutoJoinRegistrar(ILogger consoleLogger, IJoinDispatcher dispatcherHelper, IReversePageRegistry reversePageRegistry)
         {
             this.consoleLogger = consoleLogger;
@@ -57,7 +60,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
                                 continue;
                             }
 
-                            dispatcherHelper.AddToDispatcher(joinEnum, BuildLambda<T>(method));
+                            dispatcherHelper.AddToDispatcher(joinEnum, BuildLambda(method));
                         }
                         else
                         {
@@ -77,7 +80,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         /// A method that generates a Lambda Action to be added to the dispatcher.
         /// </summary>
         /// <param name="method">The method to be converted to the Lambda Action</param>
-        private Action<PageLogicBase, SignalEventData> BuildLambda<T>(MethodInfo method) where T : PageLogicBase
+        private Action<PageLogicBase, SignalEventData> BuildLambda(MethodInfo method)
         {
             return (page, args) =>
             {
