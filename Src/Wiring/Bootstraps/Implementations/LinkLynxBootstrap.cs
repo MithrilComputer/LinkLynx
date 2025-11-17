@@ -14,7 +14,6 @@ using LinkLynx.Implementations.Utility.Debugging.Logging;
 using LinkLynx.Implementations.Utility.Dispatching;
 using LinkLynx.Implementations.Utility.Factories;
 using LinkLynx.Implementations.Utility.Helpers;
-using LinkLynx.PublicAPI.Implementations;
 using LinkLynx.PublicAPI.Interfaces;
 using LinkLynx.Wiring.Bootstraps.Interfaces;
 using LinkLynx.Wiring.DI;

@@ -71,7 +71,7 @@ namespace LinkLynx.Wiring.Engine
 
                         if (pageAttribute == null)
                         {
-                            consoleLogger.Log($"[AutoRegisterScanner] Scanned Class has no attributes, skipping {type.FullName}");
+                            //consoleLogger.Log($"[AutoRegisterScanner] Scanned Class has no attributes, skipping {type.FullName}");
                             continue;
                         }
 

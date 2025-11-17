@@ -1,6 +1,5 @@
 ﻿using LinkLynx.Core.Options;
 using LinkLynx.PublicAPI.Interfaces;
-using LinkLynx.Wiring.Bootstraps.Implementations;
 using LinkLynx.Wiring.DI;
 
 namespace LinkLynx.Tests.SystemTests.Fixtures

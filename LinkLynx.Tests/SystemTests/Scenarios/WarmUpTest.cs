@@ -1,4 +1,5 @@
-﻿using LinkLynx.Core.CrestronPOCOs;
+﻿using Independentsoft.Exchange;
+using LinkLynx.Core.CrestronPOCOs;
 using LinkLynx.Core.Options;
 using LinkLynx.Core.Signals;
 using LinkLynx.PublicAPI.Interfaces;
@@ -42,7 +43,7 @@ namespace LinkLynx.Tests.SystemTests.Scenarios
             SignalEventData sig = new SignalEventData((int)TestButtons.Button1, SigType.Bool, true);
             linkLynx?.HandleSimpleSignal(ExternalTouchPanelMock.PanelOne, sig);
 
-            Assert.Equals(1, TestPage.NumberOfCalls);
+            Assert.That(TestPage.NumberOfCalls, Is.EqualTo(1));
 
             TestContext.WriteLine($"Time elapsed to handle signals for 1 panel: {stopwatch.Elapsed.TotalMilliseconds} ms");
 
