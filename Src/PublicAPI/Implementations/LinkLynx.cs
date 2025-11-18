@@ -92,7 +92,7 @@ namespace LinkLynx.PublicAPI.Implementations
         /// <exception cref="InvalidOperationException">If a panel fails to register</exception>
         public ILinkLynx RegisterPanel(BasicTriList panel)
         {
-            PanelDevice panelDevice = new PanelDevice(panel);
+            PanelDevice panelDevice = new PanelDevice(panel, consoleLogger);
 
             if (!panelPool.TryAddPanel(panelDevice.IPID, panelDevice))
                 { consoleLogger.Log($"[LinkLynx] Can not register an already registered device. Did you try to register a duplicate?."); return this; }
@@ -125,6 +125,9 @@ namespace LinkLynx.PublicAPI.Implementations
         /// </exception>
         public ILinkLynx RegisterPanel(PanelDevice panel)
         {
+            if (panel == null)
+                throw new ArgumentNullException($"[LinkLynx] Cant register a null panel!");
+
             if (!panelPool.TryAddPanel(panel.IPID, panel))
             { consoleLogger.Log($"[LinkLynx] Can not register an already registered device. Did you try to register a duplicate?."); return this; }
 
@@ -175,11 +178,14 @@ namespace LinkLynx.PublicAPI.Implementations
         /// <summary>
         /// Handles any simple signal given, Maps the signal to a device's logic.
         /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="args"/> is <c>null</c>.</exception>
         public void HandleSimpleSignal(BasicTriList panel, SigEventArgs args)
         {
+            if (panel == null) throw new ArgumentNullException(nameof(panel) ,$"[LinkLynx] The Panel Given For The Signal Handling Is Null!");
+            if (args == null) throw new ArgumentNullException(nameof(panel), $"[LinkLynx] The Signal Given For The Signal Handling Is Null!");
+
             // Wrap the Crestron types as my own, avoids issues with testing. Should prob use a factory at some point.
             SignalEventData signalData = new SignalEventData(args);
-
             PanelDevice panelDevice = panelPool.GetPanel(panel.ID);
 
             joinInstanceRouter.Route(panelDevice, signalData);
@@ -188,9 +194,13 @@ namespace LinkLynx.PublicAPI.Implementations
         /// <summary>
         /// Handles any simple signal given, Maps the signal to a device's logic.
         /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="args"/> is <c>null</c>.</exception>
         public void HandleSimpleSignal(PanelDevice panel, SignalEventData args)
         {
-            joinInstanceRouter.Route(panel, args);
+            if (panel == null) throw new ArgumentNullException(nameof(panel), $"[LinkLynx] The Panel Given For The Signal Handling Is Null!");
+            if (args == null) throw new ArgumentNullException(nameof(panel), $"[LinkLynx] The Signal Given For The Signal Handling Is Null!");
+
+            joinInstanceRouter.Route(panelPool.GetPanel(panel.IPID), args);
         }
 
         /// <summary>

@@ -17,9 +17,17 @@ namespace LinkLynx.Implementations.Utility.Debugging.Logging
 
         }
 
+        /// <inheritdoc/>
+        public List<string> Messages { get; } = new List<string>();
+
         /// <summary>
         /// Logs a message to the CrestronConsole.
         /// </summary>
-        public void Log(string message) => CrestronConsole.PrintLine(message);
+        public void Log(string message)
+        {
+            CrestronConsole.PrintLine(message);
+
+            Messages.Add(message);
+        }
     }
 }

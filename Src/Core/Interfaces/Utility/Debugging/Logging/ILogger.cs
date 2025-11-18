@@ -6,6 +6,11 @@
     public interface ILogger 
     {
         /// <summary>
+        /// The list of all sent messages
+        /// </summary>
+        List<string> Messages { get; }
+
+        /// <summary>
         /// Logs to the Crestron console.
         /// </summary>
         /// <param name="message"></param>

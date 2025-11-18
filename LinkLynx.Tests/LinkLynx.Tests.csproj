@@ -25,7 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="SystemTests\TestData\" />
+    <Folder Include="UnitTests\SignalHelper\Fixtures\" />
+    <Folder Include="UnitTests\SignalHelper\Mocks\" />
   </ItemGroup>
 
 </Project>
