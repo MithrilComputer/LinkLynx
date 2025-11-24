@@ -25,6 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="UnitTests\Dependency Injection\Fixtures\" />
+    <Folder Include="UnitTests\Dependency Injection\Mocks\" />
     <Folder Include="UnitTests\SignalHelper\Fixtures\" />
     <Folder Include="UnitTests\SignalHelper\Mocks\" />
   </ItemGroup>

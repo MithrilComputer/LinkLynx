@@ -16,7 +16,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
         private readonly ILogger consoleLogger;
 
         /// <summary>
-        /// Constructor
+        /// Constructor for the signal helper class
         /// </summary>
         public SignalHelper(IEnumSignalTypeRegistry enumSignalTypeRegistry, ILogger consoleLogger)
         {
