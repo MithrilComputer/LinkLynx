@@ -1,17 +1,27 @@
-runs-on: windows-latest
+name: CI
 
-steps:
-  - uses: actions/checkout@v4
+on:
+  push:
+  pull_request:
 
-  - uses: actions/setup-dotnet@v4
-    with:
-      dotnet-version: '8.0.x'
+jobs:
+  build_and_test:
+    runs-on: windows-latest
 
-  - name: Restore
-    run: dotnet restore
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  - name: Build
-    run: dotnet build --configuration Release --no-restore
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-  - name: Test
-    run: dotnet test --configuration Release --no-build
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --configuration Release --no-build
