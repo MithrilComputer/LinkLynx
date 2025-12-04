@@ -20,7 +20,7 @@ namespace LinkLynx.PublicAPI.Implementations
     /// registration and resource cleanup.</remarks>
     public sealed class LinkLynx : ILinkLynx
     {
-        private readonly string version = "0.0.0";
+        private readonly string version = "0.3.0";
 
         private readonly ILogger consoleLogger;
 
@@ -83,10 +83,10 @@ namespace LinkLynx.PublicAPI.Implementations
         /// Registers a panel with the framework and creates its page logic group.
         /// </summary>
         /// <param name="panel">The Crestron panel to register.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// Thrown if <paramref name="panel"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentException">
+        /// <exception cref="ArgumentException">
         /// Thrown if the panel is already registered.
         /// </exception>
         /// <exception cref="InvalidOperationException">If a panel fails to register</exception>
@@ -117,10 +117,10 @@ namespace LinkLynx.PublicAPI.Implementations
         /// Registers a panel with the framework and creates its page logic group.
         /// </summary>
         /// <param name="panel">The Crestron panel to register.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// Thrown if <paramref name="panel"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentException">
+        /// <exception cref="ArgumentException">
         /// Thrown if the panel is already registered.
         /// </exception>
         public ILinkLynx RegisterPanel(PanelDevice panel)
@@ -184,7 +184,7 @@ namespace LinkLynx.PublicAPI.Implementations
             if (panel == null) throw new ArgumentNullException(nameof(panel) ,$"[LinkLynx] The Panel Given For The Signal Handling Is Null!");
             if (args == null) throw new ArgumentNullException(nameof(panel), $"[LinkLynx] The Signal Given For The Signal Handling Is Null!");
 
-            // Wrap the Crestron types as my own, avoids issues with testing. Should prob use a factory at some point.
+            // TODO Wrap the Crestron types as my own, avoids issues with testing. Should prob use a factory at some point.
             SignalEventData signalData = new SignalEventData(args);
             PanelDevice panelDevice = panelPool.GetPanel(panel.ID);
 

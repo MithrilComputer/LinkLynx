@@ -1,12 +1,11 @@
-﻿using Crestron.SimplSharpPro.DeviceSupport;
-using LinkLynx.Core.CrestronPOCOs;
-using System.Runtime.CompilerServices;
+﻿using LinkLynx.Core.CrestronPOCOs;
+
 namespace LinkLynx.Core.Logic.Pages
 {
     /// <summary>
     /// This is the base class for all panel specific logic, Represents a page's worth of logic.
     /// </summary>
-    public abstract class PageLogicBase
+    public abstract class PageLogicBlock
     {
         /// <summary>
         /// The panel assigned to the page.
@@ -17,7 +16,7 @@ namespace LinkLynx.Core.Logic.Pages
         /// Constructs a new page, takes in a panel that acts as the host device.
         /// </summary>
         /// <param name="panel">The panel that is connected to this page's logic.</param>
-        public PageLogicBase(PanelDevice panel)
+        public PageLogicBlock(PanelDevice panel)
         {
             assignedPanel = panel;
         }

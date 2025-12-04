@@ -26,18 +26,18 @@ namespace LinkLynx.Implementations.Utility.Factories
         /// </summary>
         /// <param name="panel">The panel to assign the PageLogicBase's to.</param>
         /// <returns></returns>
-        public Dictionary<ushort, PageLogicBase> BuildPagesForPanel(PanelDevice panel)
+        public Dictionary<ushort, PageLogicBlock> BuildPagesForPanel(PanelDevice panel)
         {
-            Dictionary<ushort, PageLogicBase> createdPages = new Dictionary<ushort, PageLogicBase>();
+            Dictionary<ushort, PageLogicBlock> createdPages = new Dictionary<ushort, PageLogicBlock>();
 
             // Get all the registered pages from the registry.
             // TODO (This needs to change later to per device)
-            IReadOnlyDictionary<ushort, Func<PanelDevice, PageLogicBase>> registeredPages 
+            IReadOnlyDictionary<ushort, Func<PanelDevice, PageLogicBlock>> registeredPages 
                 = pageRegistry.GetAllRegistries();
 
-            foreach (KeyValuePair<ushort, Func<PanelDevice, PageLogicBase>> pair in registeredPages)
+            foreach (KeyValuePair<ushort, Func<PanelDevice, PageLogicBlock>> pair in registeredPages)
             {
-                PageLogicBase page = pair.Value(panel); // This is the Func<PanelDevice, PageLogicBase>
+                PageLogicBlock page = pair.Value(panel); // This is the Func<PanelDevice, PageLogicBase>
 
                 createdPages.Add(pair.Key, page);
             }

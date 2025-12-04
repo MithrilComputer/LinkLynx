@@ -10,6 +10,6 @@ namespace LinkLynx.Core.Interfaces.Utility.Dispatching
         /// <summary>
         /// Registers all joins in the specified PageLogic class to the provided page ID.
         /// </summary>
-        void RegisterJoins<T>(ushort pageId) where T : PageLogicBase;
+        void RegisterJoins<T>(ushort pageId) where T : PageLogicBlock;
     }
 }

@@ -34,7 +34,7 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// <exception cref="KeyNotFoundException"> Is thrown when the ID cant be found.</exception>
         public PanelDevice GetPanel(uint panelId)
         {
-            if (panels.TryGetValue(panelId, out var panel))
+            if (panels.TryGetValue(panelId, out PanelDevice panel))
             {
                 return panel;
             }

@@ -87,7 +87,7 @@ namespace LinkLynx.Wiring.DI
                 throw new ArgumentNullException(nameof(descriptor), "[ServiceProvider] Error: Cant take in null descriptor");
 
             // Detect circular dependencies, Almost forgot to add this lol
-            var implementationType = descriptor.ImplementationType ?? descriptor.ServiceType;
+            Type implementationType = descriptor.ImplementationType ?? descriptor.ServiceType;
             if (buildStack.Contains(implementationType))
             {
                 string chain = string.Join(" -> ", buildStack);
@@ -110,22 +110,22 @@ namespace LinkLynx.Wiring.DI
                     return TrackDisposable(built);
                 }
 
-                var constructors = implementationType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
+                ConstructorInfo[] constructors = implementationType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
                 if (constructors == null || constructors.Length == 0)
                     throw new InvalidOperationException($"[ServiceProvider] No public constructors found for '{implementationType}'.");
 
-                // Use the constructor with the most parameters
-                var best = constructors
+                // Use the constructor with the most parametrs
+                ConstructorInfo best = constructors
                     .OrderByDescending(c => c.GetParameters().Length)
                     .First();
 
-                var parameters = best.GetParameters();
-                var args = new object[parameters.Length];
+                ParameterInfo[] parameters = best.GetParameters();
+                object[] args = new object[parameters.Length];
 
                 // Validate dependencies exist
                 for (int i = 0; i < parameters.Length; i++)
                 {
-                    var depType = parameters[i].ParameterType;
+                    Type depType = parameters[i].ParameterType;
                     try
                     {
                         args[i] = GetRequired(depType);
@@ -138,7 +138,7 @@ namespace LinkLynx.Wiring.DI
                     }
                 }
 
-                var instance = Activator.CreateInstance(implementationType, args);
+                Object instance = Activator.CreateInstance(implementationType, args);
                 return TrackDisposable(instance);
             }
             finally

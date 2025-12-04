@@ -12,7 +12,7 @@ namespace LinkLynx.Core.Src.Implementations.Utility.Factories
         /// <summary>
         /// Creates a new PanelLogicGroup.
         /// </summary>
-        public static PanelLogicGroup CreateNewLogicGroup(PanelDevice panel, Dictionary<ushort, PageLogicBase> pages)
+        public static PanelLogicGroup CreateNewLogicGroup(PanelDevice panel, Dictionary<ushort, PageLogicBlock> pages)
         {
             return new PanelLogicGroup(panel, pages);
         }

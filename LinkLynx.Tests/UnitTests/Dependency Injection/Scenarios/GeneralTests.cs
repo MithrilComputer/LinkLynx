@@ -1,5 +1,4 @@
 ﻿using LinkLynx.Wiring.DI;
-using Microsoft.Testing.Platform.Extensions.Messages;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 

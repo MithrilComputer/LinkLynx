@@ -80,7 +80,7 @@ namespace LinkLynx.Wiring.Engine
                         ushort pageId = pageAttribute.Id;
 
                         // Put the page factory in the registry
-                        pageRegistry.RegisterPage(pageId, panel => (PageLogicBase)Activator.CreateInstance(type, new object[] { panel }));
+                        pageRegistry.RegisterPage(pageId, panel => (PageLogicBlock)Activator.CreateInstance(type, new object[] { panel }));
 
                         // Auto wire the joins to the registrar
                         AutoWireJoins(type, pageId);

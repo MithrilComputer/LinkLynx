@@ -12,6 +12,6 @@ namespace LinkLynx.Core.Interfaces.Utility.Factories
         /// <summary>
         /// Builds and returns a dictionary of page logic instances for the specified panel device.
         /// </summary>
-        Dictionary<ushort, PageLogicBase> BuildPagesForPanel(PanelDevice panel);
+        Dictionary<ushort, PageLogicBlock> BuildPagesForPanel(PanelDevice panel);
     }
 }

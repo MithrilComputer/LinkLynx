@@ -101,7 +101,7 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// <exception cref="KeyNotFoundException"></exception>
         public PanelLogicGroup GetPanelLogicGroup(PanelDevice device)
         {
-            if (deviceLogicPool.TryGetValue(device.IPID, out var panelLogic))
+            if (deviceLogicPool.TryGetValue(device.IPID, out PanelLogicGroup panelLogic))
             {
                 return panelLogic;
             }

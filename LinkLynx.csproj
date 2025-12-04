@@ -26,6 +26,7 @@
     <!-- Keep only the packages you need. Exclude build/runtime so no CPZ targets get imported. -->
     <PackageReference Include="Crestron.SimplSharp.SDK.Library" Version="2.21.171" ExcludeAssets="build;runtime;native;contentFiles;analyzers" />
     <PackageReference Include="Crestron.SimplSharp.SDK.ProgramLibrary" Version="2.21.171" ExcludeAssets="build;runtime;native;contentFiles;analyzers" />
+    <PackageReference Include="YamlDotNet" Version="16.3.0" />
     <!-- Do NOT include Crestron.SimplSharp.SDK.Program in a library project -->
   </ItemGroup>
 
@@ -40,5 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Docs\" />
+    <Folder Include="Src\PublicAPI\Implementations\Helpers\" />
   </ItemGroup>
 </Project>

@@ -24,9 +24,9 @@ namespace LinkLynx.Core.Interfaces.Collections.Registries
         /// already registered, the existing registration will be replaced.</remarks>
         /// <param name="pageId">The unique identifier for the page to be registered. Must be a non-negative value.</param>
         /// <param name="pageLogic">A factory function that takes a <see cref="PanelDevice"/> instance and returns an instance of <see
-        /// cref="PageLogicBase"/> representing the logic for the page. This function must not return <see
+        /// cref="PageLogicBlock"/> representing the logic for the page. This function must not return <see
         /// langword="null"/>.</param>
-        void RegisterPage(ushort pageId, Func<PanelDevice, PageLogicBase> pageLogic);
+        void RegisterPage(ushort pageId, Func<PanelDevice, PageLogicBlock> pageLogic);
 
         /// <summary>
         /// Retrieves a function that resolves a page based on the specified page ID.
@@ -36,19 +36,19 @@ namespace LinkLynx.Core.Interfaces.Collections.Registries
         /// otherwise, the behavior of the function may be undefined.</remarks>
         /// <param name="pageId">The unique identifier of the page to retrieve. Must be a valid page ID.</param>
         /// <returns>A function that takes a <see cref="PanelDevice"/> as input and returns the corresponding <see
-        /// cref="PageLogicBase"/> for the specified page ID.</returns>
-        Func<PanelDevice, PageLogicBase> GetPage(ushort pageId);
+        /// cref="PageLogicBlock"/> for the specified page ID.</returns>
+        Func<PanelDevice, PageLogicBlock> GetPage(ushort pageId);
 
         /// <summary>
         /// Retrieves a read-only dictionary containing all registries, where each registry is represented  by a
         /// key-value pair of a unique identifier and a factory method.
         /// </summary>
         /// <remarks>The returned dictionary provides a mapping of registry identifiers to their
-        /// corresponding factory methods,  which can be used to create instances of <see cref="PageLogicBase"/> based
+        /// corresponding factory methods,  which can be used to create instances of <see cref="PageLogicBlock"/> based
         /// on a given <see cref="PanelDevice"/>.</remarks>
         /// <returns>A read-only dictionary where the key is a <see cref="ushort"/> representing the registry identifier,  and
         /// the value is a <see cref="Func{T, TResult}"/> that takes a <see cref="PanelDevice"/> as input  and returns a
-        /// <see cref="PageLogicBase"/> instance.</returns>
-        IReadOnlyDictionary<ushort, Func<PanelDevice, PageLogicBase>> GetAllRegistries();
+        /// <see cref="PageLogicBlock"/> instance.</returns>
+        IReadOnlyDictionary<ushort, Func<PanelDevice, PageLogicBlock>> GetAllRegistries();
     }
 }

@@ -72,7 +72,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
 
                 consoleLogger.Log($"[JoinInstanceRouter] Resolved PageId={pageId}");
 
-                PageLogicBase page = group.GetPageLogicFromId(pageId);
+                PageLogicBlock page = group.GetPageLogicFromId(pageId);
 
                 if (page == null)
                 {
@@ -80,7 +80,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
                     return;
                 }
 
-                Action<PageLogicBase, SignalEventData> action = dispatcherHelper.GetDispatcherActionFromKey(data.SignalType, data.SignalJoinID);
+                Action<PageLogicBlock, SignalEventData> action = dispatcherHelper.GetDispatcherActionFromKey(data.SignalType, data.SignalJoinID);
 
                 if (action == null)
                 {

@@ -6,7 +6,7 @@ using LinkLynx.Tests.GeneralMocks;
 namespace LinkLynx.Tests.SystemTests.Mocks
 {
     [Page(1)]
-    public class TestPage : PageLogicBase
+    public class TestPage : PageLogicBlock
     {
         public static int NumberOfCalls { get; private set; }
 

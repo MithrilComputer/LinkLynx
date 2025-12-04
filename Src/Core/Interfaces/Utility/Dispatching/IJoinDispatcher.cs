@@ -12,7 +12,7 @@ namespace LinkLynx.Core.Interfaces.Utility.Dispatching
         /// Adds an action to the dispatcher associated with a specific join.
         /// </summary>
         /// <returns>If the join was sucsessfully added</returns>
-        bool AddToDispatcher(Enum join, Action<PageLogicBase, SignalEventData> action);
+        bool AddToDispatcher(Enum join, Action<PageLogicBlock, SignalEventData> action);
 
         /// <summary>
         /// Checks if the dispatcher contains a key for the given signal type and join ID.
@@ -22,6 +22,6 @@ namespace LinkLynx.Core.Interfaces.Utility.Dispatching
         /// <summary>
         /// Gets the action associated with the specified signal type and join ID.
         /// </summary>
-        Action<PageLogicBase, SignalEventData> GetDispatcherActionFromKey(Signals.SigType signalType, uint joinId);
+        Action<PageLogicBlock, SignalEventData> GetDispatcherActionFromKey(Signals.SigType signalType, uint joinId);
     }
 }
