@@ -1,0 +1,31 @@
+﻿using LinkLynx.Core.Signals;
+using System;
+
+namespace LinkLynx.Core.Interfaces.Collections.Registries
+{
+    /// <summary>
+    /// An Interface designed to hold all enums that should have a Signal Type, eg, Digital, Serial, Analog.
+    /// </summary>
+    public interface IEnumSignalTypeRegistry
+    {
+        /// <summary>
+        /// Checks if the enum is registered.
+        /// </summary>
+        bool IsRegistered(Type enumType);
+
+        /// <summary>
+        /// The amount of entries in the registry.
+        /// </summary>
+        int Count { get; }
+
+        /// <summary>
+        /// Registers an enum to the signal type.
+        /// </summary>
+        void Register(Type enumType, SigType type);
+
+        /// <summary>
+        /// Gets the signal type associated with the given enum.
+        /// </summary>
+        SigType Get(Type enumType);
+    }
+}

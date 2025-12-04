@@ -10,22 +10,23 @@
     <Nullable>disable</Nullable>
     <Authors>$(AssemblyName) MithrilComputers</Authors>
     <Company>$(Authors) Interactive Media Systems</Company>
-    <Version>$(VersionPrefix) 0.2.0</Version>
+    <Version>$(VersionPrefix) 0.3.0</Version>
     <AssemblyVersion>0.2.0</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="LinkLynx.Tests\**" />
     <Compile Remove="Tests\**" />
+    <EmbeddedResource Remove="LinkLynx.Tests\**" />
     <EmbeddedResource Remove="Tests\**" />
+    <None Remove="LinkLynx.Tests\**" />
     <None Remove="Tests\**" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- Keep only the packages you need. Exclude build/runtime so no CPZ targets get imported. -->
-    <PackageReference Include="Crestron.SimplSharp.SDK.Library" Version="2.21.133" ExcludeAssets="build;runtime;native;contentFiles;analyzers" />
-    <PackageReference Include="Crestron.SimplSharp.SDK.ProgramLibrary" Version="2.21.133" ExcludeAssets="build;runtime;native;contentFiles;analyzers" />
-    <PackageReference Include="Microsoft.Testing.Extensions.Telemetry" Version="1.8.2" />
-    <PackageReference Include="Microsoft.Testing.Platform" Version="1.8.2" />
-    <PackageReference Include="Microsoft.Testing.Platform.MSBuild" Version="1.8.2" />
+    <PackageReference Include="Crestron.SimplSharp.SDK.Library" Version="2.21.171" ExcludeAssets="build;runtime;native;contentFiles;analyzers" />
+    <PackageReference Include="Crestron.SimplSharp.SDK.ProgramLibrary" Version="2.21.171" ExcludeAssets="build;runtime;native;contentFiles;analyzers" />
+    <PackageReference Include="YamlDotNet" Version="16.3.0" />
     <!-- Do NOT include Crestron.SimplSharp.SDK.Program in a library project -->
   </ItemGroup>
 
@@ -40,5 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Docs\" />
+    <Folder Include="Src\PublicAPI\Implementations\Helpers\" />
   </ItemGroup>
 </Project>

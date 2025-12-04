@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>      <!-- enables C# 10+ -->
+    <Nullable>enable</Nullable>            <!-- optional -->
+    <ImplicitUsings>enable</ImplicitUsings><!-- optional; generates GlobalUsings.g.cs -->
+  </PropertyGroup>
+</Project>

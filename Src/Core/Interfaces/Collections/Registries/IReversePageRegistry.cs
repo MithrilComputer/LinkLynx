@@ -1,0 +1,22 @@
+﻿
+using LinkLynx.Core.Signals;
+using System;
+
+namespace LinkLynx.Core.Interfaces.Collections.Registries
+{
+    /// <summary>
+    /// The interface for Reverse page registry, used for finding a Page ID from a join number.
+    /// </summary>
+    public interface IReversePageRegistry
+    {
+        /// <summary>
+        /// Looks up and returns the page associated with the Logic Join.
+        /// </summary>
+        ushort Get(uint join, SigType type);
+
+        /// <summary>
+        /// Registers a Logic Join to a page.
+        /// </summary>
+        bool TryRegister(Enum join, ushort pageId);
+    }
+}

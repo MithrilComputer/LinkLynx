@@ -46,16 +46,24 @@ using LinkLynx.Core.Utility.Signals.Attributes;
 // Program.cs (SIMPL# Pro Entry Point)
 public class ControlSystem : CrestronControlSystem
 {
+    private ILinkLynx linkLynx; // LinkLynx instance
+
     public ControlSystem() : base() { }
 
     public override void InitializeSystem()
     {
-        LinkLynx.Boot.Initialize();                       // 1) scan & register
+        LinkLynxBuildOptions options = new LinkLynxBuildOptions() { AutoRegisterPanelsToControlSystem = false }; // 1) Create build options
 
-        var tp = new Tsw1060(0x03, this);                 // 2) your panel
+        linkLynx = TestLinkLynxFactory.CreateLinkLynx(options); // 2) Create LinkLynx instance            
+
+        linkLynx?.Initialize(); // 3) Initialize LinkLynx
+
+        Tsw1060 tp = new Tsw1060(0x03, this);                 // 4) your panel
         tp.Register();                                      
 
-        LinkLynx.Boot.RegisterPanel(tp);                  // 3) attach logic
+        linkLynx.RegisterPanel(panel);                  // 5) Register panel with LinkLynx
+
+        tp.SigChange += (list, args) => linkLynx.HandleSimpleSignal(list, args); // 6) Route panel signals to LinkLynx
     }
 
     void _ControllerProgramEventHandler(eProgramStatusEventType programStatusEventType)
@@ -64,7 +72,7 @@ public class ControlSystem : CrestronControlSystem
         {
             case (eProgramStatusEventType.Stopping):
                     
-                SystemsLocator.LinkLynxInstance.Cleanup(); // Clean up the Framework
+                linkLynx.Cleanup(); // Clean up the Framework
 
                 break;
         }
@@ -203,7 +211,7 @@ internal class RelayPage : PageLogicBase
 - **Automatic join binding**
   - Tag handlers with `[Join(SomeJoinEnum)]` and they’re auto-registered.
   - Join type (Digital/Analog/Serial) is inferred from the 
-  [SigType(eSigType)] Attribute that is attached to the Enum, this ensures complete type safety.
+  [SigType(SigType)] Attribute that is attached to the Enum, this ensures join binding type safety.
 
 - **Signal routing pipeline**
   - `SignalProcessor` → `JoinInstanceRouter` → page action.
