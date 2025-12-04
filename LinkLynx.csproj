@@ -10,7 +10,7 @@
     <Nullable>disable</Nullable>
     <Authors>$(AssemblyName) MithrilComputers</Authors>
     <Company>$(Authors) Interactive Media Systems</Company>
-    <Version>$(VersionPrefix) 0.2.0</Version>
+    <Version>$(VersionPrefix) 0.3.0</Version>
     <AssemblyVersion>0.2.0</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
