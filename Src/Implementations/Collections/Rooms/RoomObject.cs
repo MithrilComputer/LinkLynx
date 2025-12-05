@@ -36,7 +36,7 @@ namespace LinkLynx.Implementations.Collections.Rooms
             {
                 try
                 {
-                    script.Initalize();
+                    //script.Initalize(); TODO
                 }
                 catch(Exception ex)
                 {
@@ -51,7 +51,7 @@ namespace LinkLynx.Implementations.Collections.Rooms
             {
                 try
                 {
-                    script.Start();
+                    //TODO script.Start();
                 }
                 catch (Exception ex)
                 {
@@ -66,7 +66,7 @@ namespace LinkLynx.Implementations.Collections.Rooms
             {
                 try
                 {
-                    script.Stop();
+                    //TODO script.Stop();
                 }
                 catch (Exception ex)
                 {
