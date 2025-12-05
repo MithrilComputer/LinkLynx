@@ -1,6 +1,6 @@
 ﻿namespace LinkLynx.Implementations.Collections.Rooms.Logic
 {
-    public class RoomLogicBlock
+    public class RoomScript
     {
         // TODO
     }

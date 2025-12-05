@@ -24,7 +24,7 @@ namespace LinkLynx.Tests.UnitTests.SignalHelper.Scenarios
 
             typeRegistry.Register(typeof(TestButtons), SigType.Bool);
 
-            PanelDevice panel = new PanelDevice(0x03, true, "TestPanel", logger);
+            TouchPanelDevice panel = new TouchPanelDevice(0x03, true, "TestPanel", logger);
 
             signalHelper.SetLogicJoin(panel, TestButtons.Button1, true);
 
@@ -42,7 +42,7 @@ namespace LinkLynx.Tests.UnitTests.SignalHelper.Scenarios
 
             typeRegistry.Register(typeof(TestButtons), SigType.Bool);
 
-            PanelDevice panel = null;
+            TouchPanelDevice panel = null;
 
             Assert.Throws<ArgumentNullException>(() => signalHelper.SetLogicJoin(panel, TestButtons.Button1, true));
         }
@@ -58,7 +58,7 @@ namespace LinkLynx.Tests.UnitTests.SignalHelper.Scenarios
 
             typeRegistry.Register(typeof(TestButtons), SigType.Bool);
 
-            PanelDevice panel = new PanelDevice(0x03, true, "TestPanel", logger);
+            TouchPanelDevice panel = new TouchPanelDevice(0x03, true, "TestPanel", logger);
 
             Assert.Throws<ArgumentException>(() => signalHelper.SetLogicJoin(panel, TestButtons.Button1, "Fail Me"));
         }
@@ -72,7 +72,7 @@ namespace LinkLynx.Tests.UnitTests.SignalHelper.Scenarios
 
             ISignalHelper signalHelper = new Implementations.Utility.Helpers.SignalHelper(typeRegistry, logger);
 
-            PanelDevice panel = new PanelDevice(0x03, true, "TestPanel", logger);
+            TouchPanelDevice panel = new TouchPanelDevice(0x03, true, "TestPanel", logger);
 
             Assert.Throws<KeyNotFoundException>(() => signalHelper.SetLogicJoin(panel, TestButtons.Button1, true));
         }
@@ -86,7 +86,7 @@ namespace LinkLynx.Tests.UnitTests.SignalHelper.Scenarios
 
             ISignalHelper signalHelper = new Implementations.Utility.Helpers.SignalHelper(typeRegistry, logger);
 
-            PanelDevice panel = new PanelDevice(0x03, true, "TestPanel", logger);
+            TouchPanelDevice panel = new TouchPanelDevice(0x03, true, "TestPanel", logger);
 
             Assert.Throws<ArgumentNullException>(() => signalHelper.SetLogicJoin(panel, null, true));
         }

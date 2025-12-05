@@ -16,7 +16,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
     public class JoinInstanceRouter : IJoinInstanceRouter
     {
         private readonly ILogger consoleLogger;
-        private readonly ILogicGroupPool logicGroupPool;
+        private readonly IPanelScriptGroupPool logicGroupPool;
         private readonly IReversePageRegistry reversePageRegistry;
         private readonly IJoinDispatcher dispatcherHelper;
 
@@ -27,7 +27,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         /// <param name="logicGroupPool"></param>
         /// <param name="reversePageRegistry"></param>
         /// <param name="dispatcherHelper"></param>
-        public JoinInstanceRouter(ILogger consoleLogger, ILogicGroupPool logicGroupPool, IReversePageRegistry reversePageRegistry, IJoinDispatcher dispatcherHelper) 
+        public JoinInstanceRouter(ILogger consoleLogger, IPanelScriptGroupPool logicGroupPool, IReversePageRegistry reversePageRegistry, IJoinDispatcher dispatcherHelper) 
         { 
             this.consoleLogger = consoleLogger;
             this.logicGroupPool = logicGroupPool;
@@ -40,7 +40,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         /// </summary>
         /// <param name="panel">The device to run the method on.</param>
         /// <param name="data">The signal to be processed.</param>
-        public void Route(PanelDevice panel, SignalEventData data)
+        public void Route(TouchPanelDevice panel, SignalEventData data)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
 
                 consoleLogger.Log($"[JoinInstanceRouter] Resolved PageId={pageId}");
 
-                PageLogicBlock page = group.GetPageLogicFromId(pageId);
+                PageLogicScript page = group.GetPageLogicFromId(pageId);
 
                 if (page == null)
                 {
@@ -80,7 +80,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
                     return;
                 }
 
-                Action<PageLogicBlock, SignalEventData> action = dispatcherHelper.GetDispatcherActionFromKey(data.SignalType, data.SignalJoinID);
+                Action<PageLogicScript, SignalEventData> action = dispatcherHelper.GetDispatcherActionFromKey(data.SignalType, data.SignalJoinID);
 
                 if (action == null)
                 {

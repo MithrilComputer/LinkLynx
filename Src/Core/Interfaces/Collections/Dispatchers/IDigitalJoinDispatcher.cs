@@ -22,7 +22,7 @@ namespace LinkLynx.Core.Interfaces.Collections.Dispatchers
         /// <summary>
         /// Try's to add a new action for the specified join ID.
         /// </summary>
-        bool TryAdd(uint joinId, Action<PageLogicBlock, SignalEventData> action);
+        bool TryAdd(uint joinId, Action<PageLogicScript, SignalEventData> action);
 
         /// <summary>
         /// Checks if an action for the specified join ID exists.
@@ -32,6 +32,6 @@ namespace LinkLynx.Core.Interfaces.Collections.Dispatchers
         /// <summary>
         /// Gets the action associated with the specified join ID.
         /// </summary>
-        Action<PageLogicBlock, SignalEventData> Get(uint joinId);
+        Action<PageLogicScript, SignalEventData> Get(uint joinId);
     }
 }

@@ -32,7 +32,7 @@ namespace LinkLynx.Implementations.Utility.Helpers
         /// <param name="value"> The value to set the join to.</param>
         /// <exception cref="ArgumentNullException"><paramref name="panel"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"></exception>
-        public void SetLogicJoin<T>(PanelDevice panel, Enum join, T value)
+        public void SetLogicJoin<T>(TouchPanelDevice panel, Enum join, T value)
         {
             if(join == null)
                 throw new ArgumentNullException(nameof(join), $"[SignalHelper] SetSerialJoin: Enum is null, cannot set join.");

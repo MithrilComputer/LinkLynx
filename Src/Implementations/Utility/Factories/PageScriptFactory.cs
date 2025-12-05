@@ -8,15 +8,15 @@ namespace LinkLynx.Implementations.Utility.Factories
     /// <summary>
     /// The PageFactory is responsible for creating PageLogicBase instances for a given PanelDevice
     /// </summary>
-    public class PageFactory : IPageFactory
+    public class PageScriptFactory : IPageScriptFactory
     {
-        private IPageRegistry pageRegistry;
+        private IPageScriptRegistry pageRegistry;
 
         /// <summary>
         /// The Factory for creating pages for a panel.
         /// </summary>
         /// <param name="pageRegistry"></param>
-        public PageFactory(IPageRegistry pageRegistry)
+        public PageScriptFactory(IPageScriptRegistry pageRegistry)
         {
             this.pageRegistry = pageRegistry;
         }
@@ -26,18 +26,19 @@ namespace LinkLynx.Implementations.Utility.Factories
         /// </summary>
         /// <param name="panel">The panel to assign the PageLogicBase's to.</param>
         /// <returns></returns>
-        public Dictionary<ushort, PageLogicBlock> BuildPagesForPanel(PanelDevice panel)
+        public Dictionary<ushort, PageLogicScript> BuildPagesForPanel(TouchPanelDevice panel)
         {
-            Dictionary<ushort, PageLogicBlock> createdPages = new Dictionary<ushort, PageLogicBlock>();
+            // The ushort is the page ID
+            Dictionary<ushort, PageLogicScript> createdPages = new Dictionary<ushort, PageLogicScript>();
 
             // Get all the registered pages from the registry.
             // TODO (This needs to change later to per device)
-            IReadOnlyDictionary<ushort, Func<PanelDevice, PageLogicBlock>> registeredPages 
+            IReadOnlyDictionary<ushort, Func<TouchPanelDevice, PageLogicScript>> registeredPages 
                 = pageRegistry.GetAllRegistries();
 
-            foreach (KeyValuePair<ushort, Func<PanelDevice, PageLogicBlock>> pair in registeredPages)
+            foreach (KeyValuePair<ushort, Func<TouchPanelDevice, PageLogicScript>> pair in registeredPages)
             {
-                PageLogicBlock page = pair.Value(panel); // This is the Func<PanelDevice, PageLogicBase>
+                PageLogicScript page = pair.Value(panel); // This is the Func<PanelDevice, PageLogicBase>
 
                 createdPages.Add(pair.Key, page);
             }

@@ -1,10 +1,16 @@
-﻿using LinkLynx.Implementations.Collections.Rooms.Logic;
+﻿using LinkLynx.Core.CrestronPOCOs;
+using LinkLynx.Implementations.Collections.Rooms.Logic;
 
 namespace LinkLynx.Implementations.Collections.Rooms
 {
     public class RoomObject
     {
-        List<RoomLogicBlock> logicBlocks = new List<RoomLogicBlock>();
-        // TODO
+        List<RoomScript> scripts = new List<RoomScript>();
+        
+        List<RoomObject> childRooms = new List<RoomObject>();
+
+        List<TouchPanelDevice> touchPanels = new List<TouchPanelDevice>();
+
+
     }
 }

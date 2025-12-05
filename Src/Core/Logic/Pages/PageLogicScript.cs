@@ -5,18 +5,18 @@ namespace LinkLynx.Core.Logic.Pages
     /// <summary>
     /// This is the base class for all panel specific logic, Represents a page's worth of logic.
     /// </summary>
-    public abstract class PageLogicBlock
+    public abstract class PageLogicScript
     {
         /// <summary>
         /// The panel assigned to the page.
         /// </summary>
-        public PanelDevice assignedPanel;
+        public TouchPanelDevice assignedPanel;
 
         /// <summary>
         /// Constructs a new page, takes in a panel that acts as the host device.
         /// </summary>
         /// <param name="panel">The panel that is connected to this page's logic.</param>
-        public PageLogicBlock(PanelDevice panel)
+        public PageLogicScript(TouchPanelDevice panel)
         {
             assignedPanel = panel;
         }

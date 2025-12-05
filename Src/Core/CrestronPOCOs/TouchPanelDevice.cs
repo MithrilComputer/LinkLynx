@@ -20,14 +20,14 @@ namespace LinkLynx.Core.CrestronPOCOs
     /// management. It exists to break direct dependencies on <see cref="BasicTriList"/> in areas
     /// where mocking or dependency inversion is required.
     /// </remarks>
-    public class PanelDevice
+    public class TouchPanelDevice
     {
         /// <summary>
         /// The original Crestron <see cref="BasicTriList"/> instance associated with this panel,
         /// if available.
         /// </summary>
         /// <remarks>
-        /// This property may be <c>null</c> when the <see cref="PanelDevice"/> is created using
+        /// This property may be <c>null</c> when the <see cref="TouchPanelDevice"/> is created using
         /// the simplified constructor for testing or offline usage.
         /// </remarks>
         public BasicTriList BasicTriList { get; set; }
@@ -54,11 +54,11 @@ namespace LinkLynx.Core.CrestronPOCOs
         private ILogger logger;
 
         /// <summary>
-        /// Creates a new <see cref="PanelDevice"/> wrapper from an existing Crestron
+        /// Creates a new <see cref="TouchPanelDevice"/> wrapper from an existing Crestron
         /// <see cref="BasicTriList"/> instance.
         /// </summary>
         /// <param name="panel">The Crestron panel to wrap.</param>
-        public PanelDevice(BasicTriList panel, ILogger logger)
+        public TouchPanelDevice(BasicTriList panel, ILogger logger)
         {
             IPID = panel.ID;
             IsOnline = panel.IsOnline;
@@ -70,7 +70,7 @@ namespace LinkLynx.Core.CrestronPOCOs
         }
 
         /// <summary>
-        /// Creates a <see cref="PanelDevice"/> instance using manual panel metadata.
+        /// Creates a <see cref="TouchPanelDevice"/> instance using manual panel metadata.
         /// </summary>
         /// <param name="deviceID">The Crestron device ID.</param>
         /// <param name="isOnline">Initial online status of the panel.</param>
@@ -79,7 +79,7 @@ namespace LinkLynx.Core.CrestronPOCOs
         /// Use this constructor when running unit tests or working offline where no
         /// physical <see cref="BasicTriList"/> instance is available.
         /// </remarks>
-        public PanelDevice(uint deviceID, bool isOnline, string name, ILogger logger)
+        public TouchPanelDevice(uint deviceID, bool isOnline, string name, ILogger logger)
         {
             IPID = deviceID;
             IsOnline = isOnline;
@@ -91,7 +91,7 @@ namespace LinkLynx.Core.CrestronPOCOs
         /// <summary>
         /// Sets a Digital signal on the panel.
         /// </summary>
-        public PanelDevice SetDigitalSignal(ushort joinNumber, bool signal)
+        public TouchPanelDevice SetDigitalSignal(ushort joinNumber, bool signal)
         {
             if (BasicTriList == null)
             {
@@ -114,7 +114,7 @@ namespace LinkLynx.Core.CrestronPOCOs
         /// <summary>
         /// Sets a Analog signal on the panel.
         /// </summary>
-        public PanelDevice SetAnalogSignal(ushort joinNumber, ushort signal)
+        public TouchPanelDevice SetAnalogSignal(ushort joinNumber, ushort signal)
         {
             if (BasicTriList == null)
             {
@@ -138,7 +138,7 @@ namespace LinkLynx.Core.CrestronPOCOs
         /// <summary>
         /// Sets a Serial signal on the panel.
         /// </summary>
-        public PanelDevice SetSerialSignal(ushort joinNumber, string signal)
+        public TouchPanelDevice SetSerialSignal(ushort joinNumber, string signal)
         {
             if (BasicTriList == null)
             {

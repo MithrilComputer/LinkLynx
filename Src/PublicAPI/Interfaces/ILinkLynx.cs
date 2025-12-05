@@ -45,7 +45,7 @@ namespace LinkLynx.PublicAPI.Interfaces
         /// <exception cref="System.ArgumentException">
         /// Thrown if the panel is already registered.
         /// </exception>
-        ILinkLynx RegisterPanel(PanelDevice panel);
+        ILinkLynx RegisterPanel(TouchPanelDevice panel);
 
         /// <summary>
         /// Resets the specified panel to its visually default state.
@@ -62,7 +62,7 @@ namespace LinkLynx.PublicAPI.Interfaces
         /// Resets the specified panel to its visually default state.
         /// </summary>
         /// <param name="panel">The <see cref="BasicTriList"/> instance representing the panel to reset. Cannot be <see langword="null"/>.</param>
-        ILinkLynx SetPanelToDefaultState(PanelDevice panel);
+        ILinkLynx SetPanelToDefaultState(TouchPanelDevice panel);
 
         /// <summary>
         /// Handles any simple signal given, Maps the signal to a device's logic.
@@ -76,7 +76,7 @@ namespace LinkLynx.PublicAPI.Interfaces
         /// </summary>
         /// <param name="panel">The device that is responsible for the signal.</param>
         /// <param name="args">The signal instance that was created for the change.</param>
-        void HandleSimpleSignal(PanelDevice panel, SignalEventData args);
+        void HandleSimpleSignal(TouchPanelDevice panel, SignalEventData args);
 
         /// <summary>
         /// Releases all resources and clears registries.

@@ -9,21 +9,21 @@ namespace LinkLynx.Implementations.Collections.PanelContexts
     public class PanelLogicGroup
     {
         /// <summary>
-        /// The pool that contains all the <see cref="PageLogicBlock"/>s constructed for the assigned panel.
+        /// The pool that contains all the <see cref="PageLogicScript"/>s constructed for the assigned panel.
         /// </summary>
-        private readonly IReadOnlyDictionary<ushort, PageLogicBlock> pageLogicPool;
+        private readonly IReadOnlyDictionary<ushort, PageLogicScript> pageLogicPool;
 
         /// <summary>
         /// The panel that is assigned to this logic group.
         /// </summary>
-        public PanelDevice AssignedPanel { get; private set; }
+        public TouchPanelDevice AssignedPanel { get; private set; }
 
         /// <summary>
         /// PanelLogicGroup Constructor that asks the PageFactory for a copy of all the registered page logic's.
         /// </summary>
         /// <param name="panel">The panel that is bound to this logic group.</param>
         /// <param name="pageLogicPool">The group of logic for the panel</param>
-        public PanelLogicGroup(PanelDevice panel, Dictionary<ushort, PageLogicBlock> pageLogicPool)
+        public PanelLogicGroup(TouchPanelDevice panel, Dictionary<ushort, PageLogicScript> pageLogicPool)
         {
             this.pageLogicPool = pageLogicPool;
             AssignedPanel = panel;
@@ -34,7 +34,7 @@ namespace LinkLynx.Implementations.Collections.PanelContexts
         /// </summary>
         public void InitializePageLogic()
         {
-            foreach (KeyValuePair<ushort, PageLogicBlock> pair in pageLogicPool)
+            foreach (KeyValuePair<ushort, PageLogicScript> pair in pageLogicPool)
             {
                 pair.Value.Initialize();
             }
@@ -45,7 +45,7 @@ namespace LinkLynx.Implementations.Collections.PanelContexts
         /// </summary>
         public void SetPageDefaults()
         {
-            foreach (KeyValuePair<ushort, PageLogicBlock> pair in pageLogicPool)
+            foreach (KeyValuePair<ushort, PageLogicScript> pair in pageLogicPool)
             {
                 pair.Value.SetDefaults();
             }
@@ -55,7 +55,7 @@ namespace LinkLynx.Implementations.Collections.PanelContexts
         /// Gets a local Page Logic bases on the given page ID.
         /// </summary>
         /// <param name="pageId">The page id to ask for</param>
-        public PageLogicBlock GetPageLogicFromId(ushort pageId)
+        public PageLogicScript GetPageLogicFromId(ushort pageId)
         {
             pageLogicPool.TryGetValue(pageId, out var logic);
             return logic;
@@ -67,7 +67,7 @@ namespace LinkLynx.Implementations.Collections.PanelContexts
         /// <typeparam name="T"></typeparam>
         /// <param name="pageId"></param>
         /// <returns></returns>
-        public T GetPage<T>(ushort pageId) where T : PageLogicBlock
+        public T GetPage<T>(ushort pageId) where T : PageLogicScript
         {
             if (pageLogicPool.TryGetValue(pageId, out var logic) && logic is T typedLogic)
                 return typedLogic;

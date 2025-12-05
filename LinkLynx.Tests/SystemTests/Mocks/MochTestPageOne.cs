@@ -6,11 +6,11 @@ using LinkLynx.Tests.GeneralMocks;
 namespace LinkLynx.Tests.SystemTests.Mocks
 {
     [Page(1)]
-    public class TestPage : PageLogicBlock
+    public class TestPage : PageLogicScript
     {
         public static int NumberOfCalls { get; private set; }
 
-        public TestPage(PanelDevice panel) : base(panel)
+        public TestPage(TouchPanelDevice panel) : base(panel)
         {
         }
 

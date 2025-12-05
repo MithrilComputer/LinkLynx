@@ -39,7 +39,7 @@ namespace LinkLynx.Tests.SystemTests.Scenarios
 
             stopwatch.Restart();
 
-            PanelDevice panel = new PanelDevice(0x03, true, "TestPanel", logger);
+            TouchPanelDevice panel = new TouchPanelDevice(0x03, true, "TestPanel", logger);
 
             linkLynx?.RegisterPanel(panel);
 
@@ -81,7 +81,7 @@ namespace LinkLynx.Tests.SystemTests.Scenarios
 
             TestContext.WriteLine($"Time elapsed to start LinkLynx: {stopwatch.Elapsed.TotalMilliseconds} ms");
 
-            PanelDevice[] panels = TouchPanelMocks.CreatePanelArray(MaxPanels, logger);
+            TouchPanelDevice[] panels = TouchPanelMocks.CreatePanelArray(MaxPanels, logger);
 
             stopwatch.Restart();
 

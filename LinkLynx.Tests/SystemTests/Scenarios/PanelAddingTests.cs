@@ -30,7 +30,7 @@ namespace LinkLynx.Tests.SystemTests.Scenarios
 
             linkLynx?.Initialize();
 
-            PanelDevice? nullPanel = null;
+            TouchPanelDevice? nullPanel = null;
 
             Assert.Throws<ArgumentNullException>(() => linkLynx?.RegisterPanel(nullPanel));
 
@@ -59,7 +59,7 @@ namespace LinkLynx.Tests.SystemTests.Scenarios
 
             linkLynx?.Initialize();
 
-            PanelDevice panel = new PanelDevice(0x03, true, "DuplicateTestPanel", logger);
+            TouchPanelDevice panel = new TouchPanelDevice(0x03, true, "DuplicateTestPanel", logger);
 
             linkLynx?.RegisterPanel(panel);
 

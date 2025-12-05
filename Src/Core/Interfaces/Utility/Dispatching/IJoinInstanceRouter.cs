@@ -10,6 +10,6 @@ namespace LinkLynx.Core.Interfaces.Utility.Dispatching
         /// <summary>
         /// Routes the given signal event data to the appropriate join instance on the specified panel device.
         /// </summary>
-        void Route(PanelDevice panel, SignalEventData data);
+        void Route(TouchPanelDevice panel, SignalEventData data);
     }
 }

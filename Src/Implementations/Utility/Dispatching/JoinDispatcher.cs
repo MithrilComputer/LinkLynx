@@ -45,7 +45,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         /// <returns>True if the join ID was added, false if it already exists.</returns>
         /// <remarks>Ensure the enum has one of these in the name to be parsed correctly "Digital", "Analog" or "Serial". 
         /// It is used to determine the signal type.</remarks>
-        public bool AddToDispatcher(Enum join, Action<PageLogicBlock, SignalEventData> action)
+        public bool AddToDispatcher(Enum join, Action<PageLogicScript, SignalEventData> action)
         {
             SigType signalType = enumHelper.GetSignalTypeFromEnum(join);
 
@@ -94,7 +94,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         /// <param name="signalType">The type of signal to get the action from.</param>
         /// <param name="joinId">The join id of the action.</param>
         /// <returns>The action associated with a specific join ID, Null if not found.</returns>
-        public Action<PageLogicBlock, SignalEventData> GetDispatcherActionFromKey(SigType signalType, uint joinId)
+        public Action<PageLogicScript, SignalEventData> GetDispatcherActionFromKey(SigType signalType, uint joinId)
         {
             switch (signalType)
             {

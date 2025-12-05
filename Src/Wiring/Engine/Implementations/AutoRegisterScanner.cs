@@ -15,14 +15,14 @@ namespace LinkLynx.Wiring.Engine
     public sealed class AutoRegisterScanner : IAutoRegisterScanner
     {
         private readonly ILogger consoleLogger;
-        private readonly IPageRegistry pageRegistry;
+        private readonly IPageScriptRegistry pageRegistry;
         private readonly IAutoJoinRegistrar autoJoinRegistrar;
         private readonly IEnumSignalTypeRegistry enumSignalTypeRegistry;
 
         /// <summary>
         /// The constructor for the AutoRegisterScanner.
         /// </summary>
-        public AutoRegisterScanner(ILogger consoleLogger, IPageRegistry pageRegistry, IAutoJoinRegistrar autoJoinRegistrar, IEnumSignalTypeRegistry enumSignalTypeRegistry)
+        public AutoRegisterScanner(ILogger consoleLogger, IPageScriptRegistry pageRegistry, IAutoJoinRegistrar autoJoinRegistrar, IEnumSignalTypeRegistry enumSignalTypeRegistry)
         {
             this.consoleLogger = consoleLogger;
             this.pageRegistry = pageRegistry;
@@ -80,7 +80,7 @@ namespace LinkLynx.Wiring.Engine
                         ushort pageId = pageAttribute.Id;
 
                         // Put the page factory in the registry
-                        pageRegistry.RegisterPage(pageId, panel => (PageLogicBlock)Activator.CreateInstance(type, new object[] { panel }));
+                        pageRegistry.RegisterPage(pageId, panel => (PageLogicScript)Activator.CreateInstance(type, new object[] { panel }));
 
                         // Auto wire the joins to the registrar
                         AutoWireJoins(type, pageId);

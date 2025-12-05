@@ -7,12 +7,14 @@ namespace LinkLynx.Core.Src.Implementations.Utility.Factories
     /// <summary>
     /// This class is responsible for creating logic groups.
     /// </summary>
-    public static class LogicGroupFactory
+    public static class PanelScriptGroupFactory
     {
+        // TODO Take a look at this factory later.
+
         /// <summary>
         /// Creates a new PanelLogicGroup.
         /// </summary>
-        public static PanelLogicGroup CreateNewLogicGroup(PanelDevice panel, Dictionary<ushort, PageLogicBlock> pages)
+        public static PanelLogicGroup CreateNewLogicGroup(TouchPanelDevice panel, Dictionary<ushort, PageLogicScript> pages)
         {
             return new PanelLogicGroup(panel, pages);
         }

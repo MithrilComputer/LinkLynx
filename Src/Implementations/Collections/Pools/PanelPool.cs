@@ -15,7 +15,7 @@ namespace LinkLynx.Implementations.Collections.Pools
     {
         private readonly ILogger consoleLogger;
 
-        private readonly Dictionary<uint, PanelDevice> panels = new Dictionary<uint, PanelDevice>();
+        private readonly Dictionary<uint, TouchPanelDevice> panels = new Dictionary<uint, TouchPanelDevice>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PanelPool"/> class.
@@ -32,9 +32,9 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// <param name="panelId">The PanelID to attempt to retrieve</param>
         /// <returns>The Panel Added with the ID</returns>
         /// <exception cref="KeyNotFoundException"> Is thrown when the ID cant be found.</exception>
-        public PanelDevice GetPanel(uint panelId)
+        public TouchPanelDevice GetPanel(uint panelId)
         {
-            if (panels.TryGetValue(panelId, out PanelDevice panel))
+            if (panels.TryGetValue(panelId, out TouchPanelDevice panel))
             {
                 return panel;
             }
@@ -48,10 +48,10 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// panel with the specified ID already exists, the method logs a message and returns <see
         /// langword="false"/>.</remarks>
         /// <param name="panelId">The unique identifier for the panel to add.</param>
-        /// <param name="panel">The <see cref="PanelDevice"/> instance to associate with the specified panel ID.</param>
+        /// <param name="panel">The <see cref="TouchPanelDevice"/> instance to associate with the specified panel ID.</param>
         /// <returns><see langword="true"/> if the panel was successfully added; otherwise, <see langword="false"/> if a panel
         /// with the specified ID already exists in the collection.</returns>
-        public bool TryAddPanel(uint panelId, PanelDevice panel)
+        public bool TryAddPanel(uint panelId, TouchPanelDevice panel)
         {
             if (panels.ContainsKey(panelId))
             {

@@ -28,7 +28,7 @@ namespace LinkLynx.Implementations.Collections.Dispatchers.SimpleSignals
         /// <summary>
         /// A dictionary that maps digital join IDs to their corresponding actions.
         /// </summary>
-        private readonly Dictionary<uint, Action<PageLogicBlock, SignalEventData>> dispatcher = new Dictionary<uint, Action<PageLogicBlock, SignalEventData>>();
+        private readonly Dictionary<uint, Action<PageLogicScript, SignalEventData>> dispatcher = new Dictionary<uint, Action<PageLogicScript, SignalEventData>>();
 
         /// <summary>
         /// The method to add a join ID and its corresponding action to the dispatcher.
@@ -36,7 +36,7 @@ namespace LinkLynx.Implementations.Collections.Dispatchers.SimpleSignals
         /// <param name="joinId">The join ID Key</param>
         /// <param name="action">The action that is bound to the key</param>
         /// <returns>True if the join ID was added, false if it already exists.</returns>
-        public bool TryAdd(uint joinId, Action<PageLogicBlock, SignalEventData> action)
+        public bool TryAdd(uint joinId, Action<PageLogicScript, SignalEventData> action)
         {   
             if (!dispatcher.ContainsKey(joinId))
             {
@@ -74,7 +74,7 @@ namespace LinkLynx.Implementations.Collections.Dispatchers.SimpleSignals
         /// </summary>
         /// <param name="joinId">The Id to get the action from</param>
         /// <returns>The action associated with the key</returns>
-        public Action<PageLogicBlock, SignalEventData> Get(uint joinId)
+        public Action<PageLogicScript, SignalEventData> Get(uint joinId)
         {
             if (dispatcher.TryGetValue(joinId, out var action))
             {

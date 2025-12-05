@@ -26,7 +26,7 @@ namespace LinkLynx.PublicAPI.Implementations
 
         private readonly IAutoRegisterScanner autoRegisterScanner;
 
-        private readonly ILogicGroupPool logicGroupPool;
+        private readonly IPanelScriptGroupPool logicGroupPool;
 
         private readonly IJoinInstanceRouter joinInstanceRouter;
 
@@ -44,12 +44,12 @@ namespace LinkLynx.PublicAPI.Implementations
         /// <param name="consoleLogger">The <see cref="ILogger"/> instance used for logging messages to the console.</param>
         /// <param name="autoRegisterScanner">The <see cref="IAutoRegisterScanner"/> instance responsible for scanning and registering components
         /// automatically.</param>
-        /// <param name="logicGroupPool">The <see cref="ILogicGroupPool"/> instance that manages pools of logic groups.</param>
+        /// <param name="logicGroupPool">The <see cref="IPanelScriptGroupPool"/> instance that manages pools of logic groups.</param>
         /// <param name="joinInstanceRouter">The <see cref="IJoinInstanceRouter"/> instance used to route join instances.</param>
         /// <param name="options">The LinkLynx build options <see
         /// langword="true"/> to enable automatic registration; otherwise, <see langword="false"/>.</param>
         /// <param name="panelPool">The <see cref="IPanelPool"/> instance that manages the pool of panels.</param>
-        public LinkLynx(ServiceProvider serviceProvider, ILogger consoleLogger, IAutoRegisterScanner autoRegisterScanner, ILogicGroupPool logicGroupPool, IJoinInstanceRouter joinInstanceRouter, LinkLynxBuildOptions options, IPanelPool panelPool)
+        public LinkLynx(ServiceProvider serviceProvider, ILogger consoleLogger, IAutoRegisterScanner autoRegisterScanner, IPanelScriptGroupPool logicGroupPool, IJoinInstanceRouter joinInstanceRouter, LinkLynxBuildOptions options, IPanelPool panelPool)
         {
             this.consoleLogger = consoleLogger;
             this.autoRegisterScanner = autoRegisterScanner;
@@ -92,7 +92,7 @@ namespace LinkLynx.PublicAPI.Implementations
         /// <exception cref="InvalidOperationException">If a panel fails to register</exception>
         public ILinkLynx RegisterPanel(BasicTriList panel)
         {
-            PanelDevice panelDevice = new PanelDevice(panel, consoleLogger);
+            TouchPanelDevice panelDevice = new TouchPanelDevice(panel, consoleLogger);
 
             if (!panelPool.TryAddPanel(panelDevice.IPID, panelDevice))
                 { consoleLogger.Log($"[LinkLynx] Can not register an already registered device. Did you try to register a duplicate?."); return this; }
@@ -123,7 +123,7 @@ namespace LinkLynx.PublicAPI.Implementations
         /// <exception cref="ArgumentException">
         /// Thrown if the panel is already registered.
         /// </exception>
-        public ILinkLynx RegisterPanel(PanelDevice panel)
+        public ILinkLynx RegisterPanel(TouchPanelDevice panel)
         {
             if (panel == null)
                 throw new ArgumentNullException($"[LinkLynx] Cant register a null panel!");
@@ -143,7 +143,7 @@ namespace LinkLynx.PublicAPI.Implementations
         /// <param name="panel">The <see cref="BasicTriList"/> instance representing the panel to reset. Cannot be <see langword="null"/>.</param>
         public ILinkLynx SetPanelToDefaultState(BasicTriList panel)
         {
-            PanelDevice panelDevice = panelPool.GetPanel(panel.ID);
+            TouchPanelDevice panelDevice = panelPool.GetPanel(panel.ID);
 
             logicGroupPool.SetPanelDefaults(panelDevice);
 
@@ -154,9 +154,9 @@ namespace LinkLynx.PublicAPI.Implementations
         /// Resets the specified panel to its visually default state.
         /// </summary>
         /// <param name="panel">The <see cref="BasicTriList"/> instance representing the panel to reset. Cannot be <see langword="null"/>.</param>
-        public ILinkLynx SetPanelToDefaultState(PanelDevice panel)
+        public ILinkLynx SetPanelToDefaultState(TouchPanelDevice panel)
         {
-            PanelDevice panelDevice = panelPool.GetPanel(panel.IPID);
+            TouchPanelDevice panelDevice = panelPool.GetPanel(panel.IPID);
 
             logicGroupPool.SetPanelDefaults(panelDevice);
 
@@ -168,7 +168,7 @@ namespace LinkLynx.PublicAPI.Implementations
         /// </summary>
         public ILinkLynx SetPanelToDefaultState(uint panelIPID)
         {
-            PanelDevice panelDevice = panelPool.GetPanel(panelIPID);
+            TouchPanelDevice panelDevice = panelPool.GetPanel(panelIPID);
 
             logicGroupPool.SetPanelDefaults(panelDevice);
 
@@ -186,7 +186,7 @@ namespace LinkLynx.PublicAPI.Implementations
 
             // TODO Wrap the Crestron types as my own, avoids issues with testing. Should prob use a factory at some point.
             SignalEventData signalData = new SignalEventData(args);
-            PanelDevice panelDevice = panelPool.GetPanel(panel.ID);
+            TouchPanelDevice panelDevice = panelPool.GetPanel(panel.ID);
 
             joinInstanceRouter.Route(panelDevice, signalData);
         }
@@ -195,7 +195,7 @@ namespace LinkLynx.PublicAPI.Implementations
         /// Handles any simple signal given, Maps the signal to a device's logic.
         /// </summary>
         /// <exception cref="ArgumentNullException"><paramref name="args"/> is <c>null</c>.</exception>
-        public void HandleSimpleSignal(PanelDevice panel, SignalEventData args)
+        public void HandleSimpleSignal(TouchPanelDevice panel, SignalEventData args)
         {
             if (panel == null) throw new ArgumentNullException(nameof(panel), $"[LinkLynx] The Panel Given For The Signal Handling Is Null!");
             if (args == null) throw new ArgumentNullException(nameof(panel), $"[LinkLynx] The Signal Given For The Signal Handling Is Null!");

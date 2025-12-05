@@ -5,13 +5,13 @@ namespace LinkLynx.Tests.GeneralMocks
 {
     public static class TouchPanelMocks
     {
-        public static PanelDevice[] CreatePanelArray(int numberOfPanels, ILogger logger)
+        public static TouchPanelDevice[] CreatePanelArray(int numberOfPanels, ILogger logger)
         {
-            PanelDevice[] panels = new PanelDevice[numberOfPanels];
+            TouchPanelDevice[] panels = new TouchPanelDevice[numberOfPanels];
 
             for (int i = 0; i < numberOfPanels; i++)
             {
-                panels[i] = new PanelDevice((uint)i + 3, true, $"Panel {i}", logger);
+                panels[i] = new TouchPanelDevice((uint)i + 3, true, $"Panel {i}", logger);
             }
 
             return panels;

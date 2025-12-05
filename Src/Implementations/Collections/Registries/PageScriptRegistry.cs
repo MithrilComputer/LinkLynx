@@ -1,24 +1,21 @@
-﻿using Crestron.SimplSharpPro.DeviceSupport;
-using LinkLynx.Core.CrestronPOCOs;
+﻿using LinkLynx.Core.CrestronPOCOs;
 using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Logic.Pages;
-using System;
-using System.Collections.Generic;
 
 namespace LinkLynx.Implementations.Collections.Registries
 {
     /// <summary>
     /// A global page registry to keep track of all the known pages.
     /// </summary>
-    public sealed class PageRegistry : IPageRegistry, IDisposable
+    public sealed class PageScriptRegistry : IPageScriptRegistry, IDisposable
     {
         private readonly ILogger consoleLogger;
 
         /// <summary>
         /// Class constructor.
         /// </summary>
-        public PageRegistry(ILogger consoleLogger) 
+        public PageScriptRegistry(ILogger consoleLogger) 
         {
             this.consoleLogger = consoleLogger;
         }
@@ -26,7 +23,7 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// <summary>
         /// The dictionary that stores all the page types that are added to the program.
         /// </summary>
-        private readonly Dictionary<ushort, Func<PanelDevice, PageLogicBlock>> pageRegistry = new Dictionary<ushort, Func<PanelDevice, PageLogicBlock>>();
+        private readonly Dictionary<ushort, Func<TouchPanelDevice, PageLogicScript>> pageRegistry = new Dictionary<ushort, Func<TouchPanelDevice, PageLogicScript>>();
 
         /// <summary>
         /// Adds a new page to the global page registry.
@@ -34,7 +31,7 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// <param name="pageId">The page id.</param>
         /// <param name="pageLogic">The page logic reference.</param>
         /// <exception cref="ArgumentException"></exception>
-        public void RegisterPage(ushort pageId, Func<PanelDevice, PageLogicBlock> pageLogic)
+        public void RegisterPage(ushort pageId, Func<TouchPanelDevice, PageLogicScript> pageLogic)
         {
             if (pageRegistry.ContainsKey(pageId))
             {
@@ -51,9 +48,9 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// </summary>
         /// <param name="pageId">The id of the page to get.</param>
         /// <returns>A Func that represents the page logic that is stored with the key.</returns>
-        public Func<PanelDevice, PageLogicBlock> GetPage(ushort pageId)
+        public Func<TouchPanelDevice, PageLogicScript> GetPage(ushort pageId)
         {
-            if (pageRegistry.TryGetValue(pageId, out Func<PanelDevice, PageLogicBlock> page))
+            if (pageRegistry.TryGetValue(pageId, out Func<TouchPanelDevice, PageLogicScript> page))
             {
                 return page;
             }
@@ -68,7 +65,7 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// Gets the current set of registered pages.
         /// </summary>
         /// <returns>A dictionary of page IDs and their factory functions.</returns>
-        public IReadOnlyDictionary<ushort, Func<PanelDevice, PageLogicBlock>> GetAllRegistries()
+        public IReadOnlyDictionary<ushort, Func<TouchPanelDevice, PageLogicScript>> GetAllRegistries()
         {
             return pageRegistry;
         }

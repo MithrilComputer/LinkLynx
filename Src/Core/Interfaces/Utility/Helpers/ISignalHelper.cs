@@ -13,7 +13,7 @@ namespace LinkLynx.Core.Interfaces.Utility.Helpers
         /// <summary>
         /// Sets a logic join on a specified panel device to a given value.
         /// </summary>
-        void SetLogicJoin<T>(PanelDevice panel, Enum join, T value);
+        void SetLogicJoin<T>(TouchPanelDevice panel, Enum join, T value);
 
         /// <summary>
         /// Detects if a signal event represents a rising edge transition.

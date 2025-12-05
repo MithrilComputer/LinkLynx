@@ -10,15 +10,15 @@ namespace LinkLynx.Implementations.Collections.Pools
     /// <summary>
     /// The logic pool class that manages the logic groups for each panel device.
     /// </summary>
-    public sealed class LogicGroupPool : ILogicGroupPool, IDisposable
+    public sealed class PanelScriptGroupPool : IPanelScriptGroupPool, IDisposable
     {
         private readonly ILogger consoleLogger;
-        private readonly IPageFactory pageFactory;
+        private readonly IPageScriptFactory pageFactory;
 
         /// <summary>
         /// Class constructor
         /// </summary>
-        public LogicGroupPool(ILogger consoleLogger, IPageFactory pageFactory) 
+        public PanelScriptGroupPool(ILogger consoleLogger, IPageScriptFactory pageFactory) 
         {
             this.consoleLogger = consoleLogger;
             this.pageFactory = pageFactory;
@@ -31,7 +31,7 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// Registers a panel device and initializes its logic group.
         /// </summary>
         /// <param name="device">The device to initialize</param>
-        public void RegisterPanel(PanelDevice device)
+        public void RegisterPanel(TouchPanelDevice device)
         {
             if(device == null)
                 throw new ArgumentNullException(nameof(device));
@@ -49,7 +49,7 @@ namespace LinkLynx.Implementations.Collections.Pools
 
                 try
                 {
-                    panelLogic = LogicGroupFactory.CreateNewLogicGroup(device, pageFactory.BuildPagesForPanel(device));
+                    panelLogic = PanelScriptGroupFactory.CreateNewLogicGroup(device, pageFactory.BuildPagesForPanel(device));
                 }
                 catch (Exception ex)
                 {
@@ -82,7 +82,7 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// is not registered, an exception is thrown.</remarks>
         /// <param name="device">The device whose associated panel is to be unregistered. The device must have a valid registry entry.</param>
         /// <exception cref="ArgumentException">Thrown if the specified device does not have a registry entry.</exception>
-        public void UnregisterPanel(PanelDevice device)
+        public void UnregisterPanel(TouchPanelDevice device)
         {
             consoleLogger.Log($"[LogicGroupPool] UnregisterPanel panel with ID: {device.IPID}");
 
@@ -99,7 +99,7 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// <param name="device"></param>
         /// <returns></returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        public PanelLogicGroup GetPanelLogicGroup(PanelDevice device)
+        public PanelLogicGroup GetPanelLogicGroup(TouchPanelDevice device)
         {
             if (deviceLogicPool.TryGetValue(device.IPID, out PanelLogicGroup panelLogic))
             {
@@ -116,7 +116,7 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// </summary>
         /// <param name="device"></param>
         /// <exception cref="KeyNotFoundException"></exception>
-        public void InitializePanelLogic(PanelDevice device)
+        public void InitializePanelLogic(TouchPanelDevice device)
         {
             if (deviceLogicPool.TryGetValue(device.IPID, out PanelLogicGroup panelLogic))
             {
@@ -134,7 +134,7 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// </summary>
         /// <param name="device"></param>
         /// <exception cref="KeyNotFoundException"></exception>
-        public void SetPanelDefaults(PanelDevice device)
+        public void SetPanelDefaults(TouchPanelDevice device)
         {
             if (deviceLogicPool.TryGetValue(device.IPID, out PanelLogicGroup panelLogic))
             {

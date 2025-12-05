@@ -37,11 +37,11 @@ namespace LinkLynx.Tests.SystemTests.Fixtures
 
             // Registries
             services.AddSingleton<IEnumSignalTypeRegistry, EnumSignalTypeRegistry>();
-            services.AddSingleton<IPageRegistry, PageRegistry>();
+            services.AddSingleton<IPageScriptRegistry, PageScriptRegistry>();
             services.AddSingleton<IReversePageRegistry, ReversePageRegistry>();
 
             // Pools
-            services.AddSingleton<ILogicGroupPool, LogicGroupPool>();
+            services.AddSingleton<IPanelScriptGroupPool, PanelScriptGroupPool>();
             services.AddSingleton<IPanelPool, PanelPool>();
 
             // Dispatchers
@@ -56,7 +56,7 @@ namespace LinkLynx.Tests.SystemTests.Fixtures
             services.AddSingleton<IAutoRegisterScanner, AutoRegisterScanner>();
 
             // Factories
-            services.AddSingleton<IPageFactory, PageFactory>();
+            services.AddSingleton<IPageScriptFactory, PageScriptFactory>();
 
             //LinkLynx
             services.AddSingleton(options);

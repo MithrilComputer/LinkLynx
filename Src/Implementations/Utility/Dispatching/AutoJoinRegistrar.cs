@@ -32,7 +32,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         /// This registers all the joins on a page automatically by going through the page's method attributes.
         /// </summary>
         /// <param name="pageId">The id of the given page.</param>
-        public void RegisterJoins<T>(ushort pageId) where T : PageLogicBlock
+        public void RegisterJoins<T>(ushort pageId) where T : PageLogicScript
         {
             Type logicType = typeof(T);
 
@@ -80,7 +80,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         /// A method that generates a Lambda Action to be added to the dispatcher.
         /// </summary>
         /// <param name="method">The method to be converted to the Lambda Action</param>
-        private Action<PageLogicBlock, SignalEventData> BuildLambda(MethodInfo method)
+        private Action<PageLogicScript, SignalEventData> BuildLambda(MethodInfo method)
         {
             return (page, args) =>
             {
