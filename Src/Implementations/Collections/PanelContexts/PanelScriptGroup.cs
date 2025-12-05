@@ -1,4 +1,4 @@
-﻿using LinkLynx.Core.CrestronPOCOs;
+﻿using LinkLynx.Core.CrestronWrappers;
 using LinkLynx.Core.Logic.Pages;
 
 namespace LinkLynx.Implementations.Collections.PanelContexts
@@ -55,24 +55,55 @@ namespace LinkLynx.Implementations.Collections.PanelContexts
         /// Gets a local Page Logic bases on the given page ID.
         /// </summary>
         /// <param name="pageId">The page id to ask for</param>
-        public PageLogicScript GetPageLogicFromId(ushort pageId)
+        public PageLogicScript GetScriptLogicFromId(ushort pageId)
         {
             pageLogicPool.TryGetValue(pageId, out var logic);
             return logic;
         }
 
         /// <summary>
-        /// 
+        /// Gets a typed page logic script from the pool.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="pageId"></param>
-        /// <returns></returns>
-        public T GetPage<T>(ushort pageId) where T : PageLogicScript
+        /// <typeparam name="T">The type you're attempting to get.</typeparam>
+        /// <param name="pageId">The pageId of the Type your trying to get.</param>
+        public T GetScriptFromTypeAndID<T>(ushort pageId) where T : PageLogicScript
         {
             if (pageLogicPool.TryGetValue(pageId, out var logic) && logic is T typedLogic)
                 return typedLogic;
 
             return null;
+        }
+
+        /// <summary>
+        /// Gets the first typed page logic script from the pool.
+        /// </summary>
+        /// <typeparam name="T">The type you're attempting to get.</typeparam>
+        public T GetScriptFromType<T>() where T : PageLogicScript
+        {
+            foreach (PageLogicScript logic in pageLogicPool.Values)
+            {
+                if (logic is T typedLogic)
+                    return typedLogic;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets all typed page logic script from the pool given a type.
+        /// </summary>
+        /// <typeparam name="T">The type you're attempting to get.</typeparam>
+        public List<T> GetScriptsFromType<T>() where T : PageLogicScript
+        {
+            List<T> values = new List<T>();
+
+            foreach (PageLogicScript logic in pageLogicPool.Values)
+            {
+                if (logic is T typedLogic)
+                    values.Add(typedLogic);
+            }
+
+            return values;
         }
     }
 }

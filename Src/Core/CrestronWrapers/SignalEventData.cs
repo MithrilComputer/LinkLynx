@@ -1,14 +1,14 @@
 ﻿using Crestron.SimplSharpPro;
 using LinkLynx.Core.Signals;
 
-namespace LinkLynx.Core.CrestronPOCOs
+namespace LinkLynx.Core.CrestronWrappers
 {
     // I did'nt want to make this class.
     // But Crestron aggressively protects all their types and blocks inheritance,
     // dependency inversion, and mocking because sharing APIs is apparently illegal.
     // So now I must create this wrapper because their SDK was designed in the stone age and never updated again.
     // Crestron hates joy, unit, mock tests and modern software engineering.
-    // >:( 
+    // >:(
 
     /// <summary>
     /// Stores the information of a signal event from a panel. Its a wrapper class for the Crestron SigEventArgs used for mostly testing.

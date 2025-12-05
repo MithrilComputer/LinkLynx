@@ -1,4 +1,4 @@
-﻿using LinkLynx.Core.CrestronPOCOs;
+﻿using LinkLynx.Core.CrestronWrappers;
 using LinkLynx.Core.Interfaces.Collections.Pools;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Factories;
@@ -28,9 +28,9 @@ namespace LinkLynx.Implementations.Collections.Pools
             new Dictionary<uint, PanelScriptGroup>();
 
         /// <summary>
-        /// Registers a panel device and initializes its logic group.
+        /// Registers a Panel Device and initializes its logic group.
         /// </summary>
-        /// <param name="device">The device to initialize</param>
+        /// <param name="device">The Device to initialize</param>
         public void RegisterPanel(TouchPanelDevice device)
         {
             if(device == null)
@@ -59,7 +59,7 @@ namespace LinkLynx.Implementations.Collections.Pools
 
                 try
                 {
-                    device.LoadedScripts = panelLogic;
+                    device.SetLoadedScripts(panelLogic);
                     deviceLogicPool.Add(id, panelLogic);
                 }
                 catch (Exception ex)

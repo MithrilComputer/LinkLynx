@@ -1,4 +1,4 @@
-﻿using LinkLynx.Core.CrestronPOCOs;
+﻿using LinkLynx.Core.CrestronWrappers;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 
 namespace LinkLynx.Tests.GeneralMocks

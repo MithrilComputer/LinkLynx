@@ -1,7 +1,7 @@
 ﻿using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Logic.Pages;
 using LinkLynx.Core.Interfaces.Utility.Factories;
-using LinkLynx.Core.CrestronPOCOs;
+using LinkLynx.Core.CrestronWrappers;
 
 namespace LinkLynx.Implementations.Utility.Factories
 {

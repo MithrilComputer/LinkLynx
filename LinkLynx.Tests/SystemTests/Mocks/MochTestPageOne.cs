@@ -1,5 +1,5 @@
 ﻿using LinkLynx.Core.Attributes;
-using LinkLynx.Core.CrestronPOCOs;
+using LinkLynx.Core.CrestronWrappers;
 using LinkLynx.Core.Logic.Pages;
 using LinkLynx.Tests.GeneralMocks;
 

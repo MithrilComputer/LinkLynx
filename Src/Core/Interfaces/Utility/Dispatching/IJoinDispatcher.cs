@@ -1,5 +1,5 @@
 ﻿using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Core.CrestronPOCOs;
+using LinkLynx.Core.CrestronWrappers;
 
 namespace LinkLynx.Core.Interfaces.Utility.Dispatching
 {

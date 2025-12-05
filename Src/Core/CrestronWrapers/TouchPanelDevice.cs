@@ -1,9 +1,8 @@
-﻿using Crestron.SimplSharpPro;
-using Crestron.SimplSharpPro.DeviceSupport;
+﻿using Crestron.SimplSharpPro.DeviceSupport;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Implementations.Collections.PanelContexts;
 
-namespace LinkLynx.Core.CrestronPOCOs
+namespace LinkLynx.Core.CrestronWrappers
 {
     // I did'nt want to make this class.
     // But Crestron aggressively protects all their types and blocks inheritance,
@@ -37,7 +36,7 @@ namespace LinkLynx.Core.CrestronPOCOs
         /// <summary>
         /// All the loaded script instances assigned to this panel in the form of a <see cref="PanelScriptGroup"/>
         /// </summary>
-        public PanelScriptGroup LoadedScripts { get; private set; }
+        public PanelScriptGroup ScriptGroup { get; private set; }
 
         /// <summary>
         /// Unique Crestron device ID of the touchpanel.
@@ -61,6 +60,7 @@ namespace LinkLynx.Core.CrestronPOCOs
         /// <see cref="BasicTriList"/> instance.
         /// </summary>
         /// <param name="panel">The Crestron panel to wrap.</param>
+        /// <param name="logger">Used for logging to the console.</param>
         public TouchPanelDevice(BasicTriList panel, ILogger logger)
         {
             IPID = panel.ID;
@@ -99,7 +99,7 @@ namespace LinkLynx.Core.CrestronPOCOs
         /// <param name="scripts">The <see cref="PanelScriptGroup"/> being assigned to the panel.</param>
         public TouchPanelDevice SetLoadedScripts(PanelScriptGroup scripts)
         {
-            LoadedScripts = scripts;
+            ScriptGroup = scripts;
             return this;
         }
 

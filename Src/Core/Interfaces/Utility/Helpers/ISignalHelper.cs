@@ -1,6 +1,6 @@
 ﻿using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
-using LinkLynx.Core.CrestronPOCOs;
+using LinkLynx.Core.CrestronWrappers;
 using System;
 
 namespace LinkLynx.Core.Interfaces.Utility.Helpers

@@ -1,4 +1,4 @@
-﻿using LinkLynx.Core.CrestronPOCOs;
+﻿using LinkLynx.Core.CrestronWrappers;
 using LinkLynx.Core.Interfaces.Collections.Pools;
 using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
@@ -72,7 +72,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
 
                 consoleLogger.Log($"[JoinInstanceRouter] Resolved PageId={pageId}");
 
-                PageLogicScript page = group.GetPageLogicFromId(pageId);
+                PageLogicScript page = group.GetScriptLogicFromId(pageId);
 
                 if (page == null)
                 {

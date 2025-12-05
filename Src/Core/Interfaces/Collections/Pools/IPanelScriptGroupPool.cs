@@ -1,5 +1,5 @@
 ﻿using Crestron.SimplSharpPro.DeviceSupport;
-using LinkLynx.Core.CrestronPOCOs;
+using LinkLynx.Core.CrestronWrappers;
 using LinkLynx.Implementations.Collections.PanelContexts;
 
 namespace LinkLynx.Core.Interfaces.Collections.Pools

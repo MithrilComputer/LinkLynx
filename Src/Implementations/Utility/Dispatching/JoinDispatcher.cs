@@ -5,7 +5,7 @@ using LinkLynx.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Interfaces.Utility.Helpers;
 using LinkLynx.Core.Logic.Pages;
 using LinkLynx.Core.Signals;
-using LinkLynx.Core.CrestronPOCOs;
+using LinkLynx.Core.CrestronWrappers;
 using System;
 
 namespace LinkLynx.Implementations.Utility.Dispatching

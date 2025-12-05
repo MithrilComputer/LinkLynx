@@ -1,4 +1,4 @@
-﻿using LinkLynx.Core.CrestronPOCOs;
+﻿using LinkLynx.Core.CrestronWrappers;
 
 namespace LinkLynx.Core.Interfaces.Collections.Pools
 {

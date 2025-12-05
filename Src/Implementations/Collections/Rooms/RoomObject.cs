@@ -1,4 +1,4 @@
-﻿using LinkLynx.Core.CrestronPOCOs;
+﻿using LinkLynx.Core.CrestronWrappers;
 using LinkLynx.Implementations.Collections.Rooms.Logic;
 
 namespace LinkLynx.Implementations.Collections.Rooms

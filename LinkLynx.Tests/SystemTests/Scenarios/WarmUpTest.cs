@@ -1,5 +1,5 @@
 ﻿using Independentsoft.Exchange;
-using LinkLynx.Core.CrestronPOCOs;
+using LinkLynx.Core.CrestronWrappers;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Options;
 using LinkLynx.Core.Signals;
