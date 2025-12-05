@@ -24,8 +24,8 @@ namespace LinkLynx.Implementations.Collections.Pools
             this.pageFactory = pageFactory;
         }
 
-        private readonly Dictionary<uint, PanelLogicGroup> deviceLogicPool = 
-            new Dictionary<uint, PanelLogicGroup>();
+        private readonly Dictionary<uint, PanelScriptGroup> deviceLogicPool = 
+            new Dictionary<uint, PanelScriptGroup>();
 
         /// <summary>
         /// Registers a panel device and initializes its logic group.
@@ -45,7 +45,7 @@ namespace LinkLynx.Implementations.Collections.Pools
             {
                 consoleLogger.Log($"[LogicGroupPool] Registering Panel with ID: {device.IPID}");
 
-                PanelLogicGroup panelLogic;
+                PanelScriptGroup panelLogic;
 
                 try
                 {
@@ -59,6 +59,7 @@ namespace LinkLynx.Implementations.Collections.Pools
 
                 try
                 {
+                    device.LoadedScripts = panelLogic;
                     deviceLogicPool.Add(id, panelLogic);
                 }
                 catch (Exception ex)
@@ -99,9 +100,9 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// <param name="device"></param>
         /// <returns></returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        public PanelLogicGroup GetPanelLogicGroup(TouchPanelDevice device)
+        public PanelScriptGroup GetPanelLogicGroup(TouchPanelDevice device)
         {
-            if (deviceLogicPool.TryGetValue(device.IPID, out PanelLogicGroup panelLogic))
+            if (deviceLogicPool.TryGetValue(device.IPID, out PanelScriptGroup panelLogic))
             {
                 return panelLogic;
             }
@@ -118,7 +119,7 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// <exception cref="KeyNotFoundException"></exception>
         public void InitializePanelLogic(TouchPanelDevice device)
         {
-            if (deviceLogicPool.TryGetValue(device.IPID, out PanelLogicGroup panelLogic))
+            if (deviceLogicPool.TryGetValue(device.IPID, out PanelScriptGroup panelLogic))
             {
                 panelLogic.InitializePageLogic();
             }
@@ -136,7 +137,7 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// <exception cref="KeyNotFoundException"></exception>
         public void SetPanelDefaults(TouchPanelDevice device)
         {
-            if (deviceLogicPool.TryGetValue(device.IPID, out PanelLogicGroup panelLogic))
+            if (deviceLogicPool.TryGetValue(device.IPID, out PanelScriptGroup panelLogic))
             {
                 panelLogic.SetPageDefaults();
             }

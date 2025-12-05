@@ -1,5 +1,7 @@
-﻿using Crestron.SimplSharpPro.DeviceSupport;
+﻿using Crestron.SimplSharpPro;
+using Crestron.SimplSharpPro.DeviceSupport;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
+using LinkLynx.Implementations.Collections.PanelContexts;
 
 namespace LinkLynx.Core.CrestronPOCOs
 {
@@ -33,6 +35,11 @@ namespace LinkLynx.Core.CrestronPOCOs
         public BasicTriList BasicTriList { get; set; }
 
         /// <summary>
+        /// All the loaded script instances assigned to this panel in the form of a <see cref="PanelScriptGroup"/>
+        /// </summary>
+        public PanelScriptGroup LoadedScripts { get; private set; }
+
+        /// <summary>
         /// Unique Crestron device ID of the touchpanel.
         /// </summary>
         public uint IPID { get; set; }
@@ -40,10 +47,6 @@ namespace LinkLynx.Core.CrestronPOCOs
         /// <summary>
         /// Indicates whether the panel is currently online.
         /// </summary>
-        /// <remarks>
-        /// This state is not dynamically updated and reflects only the status at the time
-        /// of instantiation unless updated manually.
-        /// </remarks>
         public bool IsOnline { get; set; }
 
         /// <summary>
@@ -65,6 +68,8 @@ namespace LinkLynx.Core.CrestronPOCOs
             Name = panel.Name;
 
             BasicTriList = panel;
+
+            BasicTriList.OnlineStatusChange += (_, e) => IsOnline = e.DeviceOnLine;
 
             this.logger = logger;
         }
@@ -89,6 +94,16 @@ namespace LinkLynx.Core.CrestronPOCOs
         }
 
         /// <summary>
+        /// Sets the loaded scripts for this panel.
+        /// </summary>
+        /// <param name="scripts">The <see cref="PanelScriptGroup"/> being assigned to the panel.</param>
+        public TouchPanelDevice SetLoadedScripts(PanelScriptGroup scripts)
+        {
+            LoadedScripts = scripts;
+            return this;
+        }
+
+        /// <summary>
         /// Sets a Digital signal on the panel.
         /// </summary>
         public TouchPanelDevice SetDigitalSignal(ushort joinNumber, bool signal)
@@ -104,7 +119,7 @@ namespace LinkLynx.Core.CrestronPOCOs
                 BasicTriList.BooleanInput[joinNumber].BoolValue = signal;
             }
             catch (Exception e) {
-                logger.Log($"[PanelDevice] Failed to set Digital signal on panel: {IPID} Because: {e} Stack Trace {e.StackTrace}");
+                logger.Log($"[PanelDevice] Failed to set Digital signal on panel: {IPID} Because: {e} ,Stack Trace: {e.StackTrace}");
                 return this;
             }
 
@@ -128,7 +143,7 @@ namespace LinkLynx.Core.CrestronPOCOs
             }
             catch (Exception e)
             {
-                logger.Log($"[PanelDevice] Failed to set Analog signal on panel: {IPID} Because: {e} Stack Trace {e.StackTrace}");
+                logger.Log($"[PanelDevice] Failed to set Analog signal on panel: {IPID} Because: {e} ,Stack Trace: {e.StackTrace}");
                 return this;
             }
 
@@ -152,7 +167,7 @@ namespace LinkLynx.Core.CrestronPOCOs
             }
             catch (Exception e)
             {
-                logger.Log($"[PanelDevice] Failed to set Serial signal on panel: {IPID} Because: {e} Stack Trace {e.StackTrace}");
+                logger.Log($"[PanelDevice] Failed to set Serial signal on panel: {IPID} Because: {e} ,Stack Trace: {e.StackTrace}");
                 return this;
             }
 

@@ -50,7 +50,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
                     return;
                 }
 
-                PanelLogicGroup logicGroup = logicGroupPool.GetPanelLogicGroup(panel);
+                PanelScriptGroup logicGroup = logicGroupPool.GetPanelLogicGroup(panel);
 
                 if (logicGroup == null)
                 {
@@ -66,7 +66,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
 
                 consoleLogger.Log($"[JoinInstanceRouter] Device {panel.IPID}, Sig {data.SignalType.ToString()} #{data.SignalJoinID}");
 
-                PanelLogicGroup group = logicGroupPool.GetPanelLogicGroup(panel);
+                PanelScriptGroup group = logicGroupPool.GetPanelLogicGroup(panel);
 
                 ushort pageId = reversePageRegistry.Get(data.SignalJoinID, data.SignalType);
 

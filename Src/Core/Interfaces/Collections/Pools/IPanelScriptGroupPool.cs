@@ -22,7 +22,7 @@ namespace LinkLynx.Core.Interfaces.Collections.Pools
         /// <summary>
         /// Gets the logic group associated with the specified panel device.
         /// </summary>
-        PanelLogicGroup GetPanelLogicGroup(TouchPanelDevice device);
+        PanelScriptGroup GetPanelLogicGroup(TouchPanelDevice device);
 
         /// <summary>
         /// Initializes the panel logic for the specified panel device.

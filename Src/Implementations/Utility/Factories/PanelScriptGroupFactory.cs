@@ -14,9 +14,9 @@ namespace LinkLynx.Core.Src.Implementations.Utility.Factories
         /// <summary>
         /// Creates a new PanelLogicGroup.
         /// </summary>
-        public static PanelLogicGroup CreateNewLogicGroup(TouchPanelDevice panel, Dictionary<ushort, PageLogicScript> pages)
+        public static PanelScriptGroup CreateNewLogicGroup(TouchPanelDevice panel, Dictionary<ushort, PageLogicScript> pages)
         {
-            return new PanelLogicGroup(panel, pages);
+            return new PanelScriptGroup(panel, pages);
         }
     }
 }

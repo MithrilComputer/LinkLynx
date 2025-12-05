@@ -4,9 +4,9 @@ using LinkLynx.Core.Logic.Pages;
 namespace LinkLynx.Implementations.Collections.PanelContexts
 {
     /// <summary>
-    /// A Grouping of logic that is served to every new panel. Contains all the logic to run the panel.
+    /// A group of page logic scripts instances assigned to a specific panel.
     /// </summary>
-    public class PanelLogicGroup
+    public class PanelScriptGroup
     {
         /// <summary>
         /// The pool that contains all the <see cref="PageLogicScript"/>s constructed for the assigned panel.
@@ -23,7 +23,7 @@ namespace LinkLynx.Implementations.Collections.PanelContexts
         /// </summary>
         /// <param name="panel">The panel that is bound to this logic group.</param>
         /// <param name="pageLogicPool">The group of logic for the panel</param>
-        public PanelLogicGroup(TouchPanelDevice panel, Dictionary<ushort, PageLogicScript> pageLogicPool)
+        public PanelScriptGroup(TouchPanelDevice panel, Dictionary<ushort, PageLogicScript> pageLogicPool)
         {
             this.pageLogicPool = pageLogicPool;
             AssignedPanel = panel;
