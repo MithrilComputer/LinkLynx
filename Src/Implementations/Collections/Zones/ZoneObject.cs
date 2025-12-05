@@ -2,7 +2,7 @@
 
 namespace LinkLynx.Implementations.Collections.Zones
 {
-    internal class ZoneObject
+    public class ZoneObject
     {
         List<ZoneScript> logicBlocks = new List<ZoneScript>();
         // TODO

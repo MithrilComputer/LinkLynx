@@ -1,6 +1,6 @@
 ﻿namespace LinkLynx.Implementations.Collections.Zones.Logic
 {
-    internal class ZoneScript
+    public class ZoneScript
     {
         // TODO
     }
