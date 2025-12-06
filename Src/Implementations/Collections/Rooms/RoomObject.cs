@@ -7,25 +7,55 @@ using LinkLynx.Implementations.Service.Domains;
 
 namespace LinkLynx.Implementations.Collections.Rooms
 {
+    /// <summary>
+    /// The RoomObject class represents a room within a zone, containing properties and methods to manage its state, scripts, devices, and child rooms.
+    /// </summary>
     public class RoomObject
     {
+        /// <summary>
+        /// The unique identifier for this room.
+        /// </summary>
         public ushort RoomID { get; private set; }
 
+        /// <summary>
+        /// The name of this room.
+        /// </summary>
         public string RoomName { get; private set; }
 
+        /// <summary>
+        /// The script group associated with this room.
+        /// </summary>
         public RoomScriptGroup ScriptGroup { get; private set; }
 
-        private List<RoomObject> childRooms = new List<RoomObject>();
+        /// <summary>
+        /// A list of child rooms contained within this room.
+        /// </summary>
+        private readonly List<RoomObject> childRooms = new List<RoomObject>();
 
+        /// <summary>
+        /// The parent room of this room, null if this is a top-level room.
+        /// </summary>
         public RoomObject ParentRoom { get; private set; }
 
+        /// <summary>
+        /// The parent zone that contains this room.
+        /// </summary>
         public ZoneObject ParentZone { get; private set; }
 
+        /// <summary>
+        /// The top level Domain.
+        /// </summary>
         public DomainManager DomainManager { get; private set; }
 
-        private List<TouchPanelDevice> touchPanels = new List<TouchPanelDevice>();
+        /// <summary>
+        /// A list of touch panel devices associated with this room.
+        /// </summary>
+        private readonly List<TouchPanelDevice> touchPanels = new List<TouchPanelDevice>();
 
-        private List<DeviceContext> devices = new List<DeviceContext>();
+        /// <summary>
+        /// A list of device contexts associated with this room.
+        /// </summary>
+        private readonly List<DeviceContext> devices = new List<DeviceContext>();
 
         private ILogger logger;
 
@@ -35,41 +65,11 @@ namespace LinkLynx.Implementations.Collections.Rooms
             {
                 try
                 {
-                    script.Initalize();
+                    script.Initialize();
                 }
                 catch(Exception ex)
                 {
                     logger.Log($"[RoomObject, Name: {RoomName}, ID: {RoomID}] Warning: Can't Initialize Script: {script.GetType().FullName}");
-                }
-            }
-        }
-
-        public virtual void Start()
-        {
-            foreach (RoomScript script in ScriptGroup.Scripts)
-            {
-                try
-                {
-                    script.Start();
-                }
-                catch (Exception ex)
-                {
-                    logger.Log($"[RoomObject, Name: {RoomName}, ID: {RoomID}] Warning: Can't Start Script: {script.GetType().FullName} ");
-                }
-            }
-        }
-
-        public virtual void Stop()
-        {
-            foreach (RoomScript script in ScriptGroup.Scripts)
-            {
-                try
-                {
-                    script.Stop();
-                }
-                catch (Exception ex)
-                {
-                    logger.Log($"[RoomObject, Name: {RoomName}, ID: {RoomID}] Warning: Can't Stop Script: {script.GetType().FullName} ");
                 }
             }
         }

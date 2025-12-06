@@ -1,8 +1,5 @@
-﻿using Crestron.SimplSharpPro.DeviceSupport;
-using LinkLynx.Core.CrestronWrappers;
-using LinkLynx.Core.Logic.Pages;
-using System;
-using System.Collections.Generic;
+﻿using LinkLynx.Core.CrestronWrappers;
+using LinkLynx.Implementations.Collections.Pages.Logic;
 
 namespace LinkLynx.Core.Interfaces.Collections.Registries
 {

@@ -1,6 +1,9 @@
 ﻿using Crestron.SimplSharpPro.DeviceSupport;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
-using LinkLynx.Implementations.Collections.PanelContexts;
+using LinkLynx.Implementations.Collections.Pages.Contexts;
+using LinkLynx.Implementations.Collections.Rooms;
+using LinkLynx.Implementations.Collections.Zones;
+using LinkLynx.Implementations.Service.Domains;
 
 namespace LinkLynx.Core.CrestronWrappers
 {
@@ -37,6 +40,23 @@ namespace LinkLynx.Core.CrestronWrappers
         /// All the loaded script instances assigned to this panel in the form of a <see cref="PanelScriptGroup"/>
         /// </summary>
         public PanelScriptGroup ScriptGroup { get; private set; }
+
+        /// <summary>
+        /// The <see cref="RoomObject"/> parent that this panel is assigned to, Null if unassigned.
+        /// </summary>
+        public RoomObject ParentRoom { get; private set; }
+
+        /// <summary>
+        /// The <see cref="ZoneObject"/> parent that this panel is assigned to, Null if unassigned.
+        /// </summary>
+        public ZoneObject ParentZone { get; private set; }
+
+        /// <summary>
+        /// The top level <see cref="DomainManager"/> that this panel is assigned to, only Null if issues.
+        /// </summary>
+        public DomainManager Domain { get; private set; }
+
+
 
         /// <summary>
         /// Unique Crestron device ID of the touchpanel.

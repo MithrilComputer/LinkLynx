@@ -1,6 +1,6 @@
 ﻿using LinkLynx.Core.Attributes;
 using LinkLynx.Core.CrestronWrappers;
-using LinkLynx.Core.Logic.Pages;
+using LinkLynx.Implementations.Collections.Pages.Logic;
 using LinkLynx.Tests.GeneralMocks;
 
 namespace LinkLynx.Tests.SystemTests.Mocks

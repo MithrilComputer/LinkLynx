@@ -3,7 +3,7 @@ using LinkLynx.Core.Interfaces.Collections.Pools;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Factories;
 using LinkLynx.Core.Src.Implementations.Utility.Factories;
-using LinkLynx.Implementations.Collections.PanelContexts;
+using LinkLynx.Implementations.Collections.Pages.Contexts;
 
 namespace LinkLynx.Implementations.Collections.Pools
 {

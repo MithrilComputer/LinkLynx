@@ -1,6 +1,6 @@
 ﻿using LinkLynx.Core.CrestronWrappers;
-using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Implementations.Collections.PanelContexts;
+using LinkLynx.Implementations.Collections.Pages.Contexts;
+using LinkLynx.Implementations.Collections.Pages.Logic;
 
 namespace LinkLynx.Core.Src.Implementations.Utility.Factories
 {

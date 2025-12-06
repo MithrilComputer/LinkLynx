@@ -1,12 +1,10 @@
-﻿using Crestron.SimplSharpPro;
+﻿using LinkLynx.Core.CrestronWrappers;
 using LinkLynx.Core.Interfaces.Collections.Dispatchers;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Interfaces.Utility.Helpers;
-using LinkLynx.Core.Logic.Pages;
 using LinkLynx.Core.Signals;
-using LinkLynx.Core.CrestronWrappers;
-using System;
+using LinkLynx.Implementations.Collections.Pages.Logic;
 
 namespace LinkLynx.Implementations.Utility.Dispatching
 {
@@ -76,11 +74,11 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         {
             switch (signalType)
             {
-                case Core.Signals.SigType.Bool:
+                case SigType.Bool:
                     return digitalDispatcher.Contains(joinId);
-                case Core.Signals.SigType.UShort:
+                case SigType.UShort:
                     return analogDispatcher.Contains(joinId);
-                case Core.Signals.SigType.String:
+                case SigType.String:
                     return serialDispatcher.Contains(joinId);
                 default:
                     consoleLogger.Log($"[DispatcherHelper] Unsupported signal type: {signalType}, with a Join of {joinId}");

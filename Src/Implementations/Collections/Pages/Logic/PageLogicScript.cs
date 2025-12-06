@@ -1,6 +1,6 @@
 ﻿using LinkLynx.Core.CrestronWrappers;
 
-namespace LinkLynx.Core.Logic.Pages
+namespace LinkLynx.Implementations.Collections.Pages.Logic
 {
     /// <summary>
     /// This is the base class for all panel specific logic, Represents a page's worth of logic.
@@ -10,7 +10,7 @@ namespace LinkLynx.Core.Logic.Pages
         /// <summary>
         /// The panel assigned to the page.
         /// </summary>
-        public TouchPanelDevice OwnerPanel { get; }
+        public TouchPanelDevice OwnerPanel { get; private set; }
 
         /// <summary>
         /// Constructs a new page, takes in a panel that acts as the host device.
@@ -22,12 +22,12 @@ namespace LinkLynx.Core.Logic.Pages
         }
 
         /// <summary>
-        /// This sets all the page logic values to default.
+        /// Allows for initialization of the page logic at runtime.
         /// </summary>
         public virtual void Initialize() { }
 
         /// <summary>
-        /// This sets all the page logic values to default.
+        /// Allows for setting the page logic to default states.
         /// </summary>
         public abstract void SetDefaults();
     }

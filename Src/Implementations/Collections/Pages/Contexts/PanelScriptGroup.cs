@@ -1,7 +1,7 @@
 ﻿using LinkLynx.Core.CrestronWrappers;
-using LinkLynx.Core.Logic.Pages;
+using LinkLynx.Implementations.Collections.Pages.Logic;
 
-namespace LinkLynx.Implementations.Collections.PanelContexts
+namespace LinkLynx.Implementations.Collections.Pages.Contexts
 {
     /// <summary>
     /// A group of page logic scripts instances assigned to a specific panel.

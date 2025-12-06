@@ -3,8 +3,8 @@ using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Dispatching;
 using LinkLynx.Core.Interfaces.Wiring.Engine;
-using LinkLynx.Core.Logic.Pages;
 using LinkLynx.Core.Signals;
+using LinkLynx.Implementations.Collections.Pages.Logic;
 using System.Reflection;
 
 namespace LinkLynx.Wiring.Engine

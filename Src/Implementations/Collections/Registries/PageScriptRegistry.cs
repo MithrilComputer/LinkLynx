@@ -1,7 +1,7 @@
 ﻿using LinkLynx.Core.CrestronWrappers;
 using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
-using LinkLynx.Core.Logic.Pages;
+using LinkLynx.Implementations.Collections.Pages.Logic;
 
 namespace LinkLynx.Implementations.Collections.Registries
 {
@@ -24,6 +24,7 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// The dictionary that stores all the page types that are added to the program.
         /// </summary>
         private readonly Dictionary<ushort, Func<TouchPanelDevice, PageLogicScript>> pageRegistry = new Dictionary<ushort, Func<TouchPanelDevice, PageLogicScript>>();
+
 
         /// <summary>
         /// Adds a new page to the global page registry.

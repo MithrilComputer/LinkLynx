@@ -1,4 +1,4 @@
-﻿using LinkLynx.Core.Logic.Pages;
+﻿using LinkLynx.Implementations.Collections.Pages.Logic;
 
 namespace LinkLynx.Core.Interfaces.Utility.Dispatching
 {

@@ -3,10 +3,8 @@ using LinkLynx.Core.Interfaces.Collections.Pools;
 using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Dispatching;
-using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Core.Signals;
-using LinkLynx.Implementations.Collections.PanelContexts;
-using System;
+using LinkLynx.Implementations.Collections.Pages.Contexts;
+using LinkLynx.Implementations.Collections.Pages.Logic;
 
 namespace LinkLynx.Implementations.Utility.Dispatching
 {
@@ -21,14 +19,10 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         private readonly IJoinDispatcher dispatcherHelper;
 
         /// <summary>
-        /// 
+        /// The constructor for the Join Instance Router.
         /// </summary>
-        /// <param name="consoleLogger"></param>
-        /// <param name="logicGroupPool"></param>
-        /// <param name="reversePageRegistry"></param>
-        /// <param name="dispatcherHelper"></param>
         public JoinInstanceRouter(ILogger consoleLogger, IPanelScriptGroupPool logicGroupPool, IReversePageRegistry reversePageRegistry, IJoinDispatcher dispatcherHelper) 
-        { 
+        {
             this.consoleLogger = consoleLogger;
             this.logicGroupPool = logicGroupPool;
             this.reversePageRegistry = reversePageRegistry;

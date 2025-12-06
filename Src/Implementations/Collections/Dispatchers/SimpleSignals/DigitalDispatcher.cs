@@ -1,7 +1,7 @@
-﻿using LinkLynx.Core.Interfaces.Collections.Dispatchers;
+﻿using LinkLynx.Core.CrestronWrappers;
+using LinkLynx.Core.Interfaces.Collections.Dispatchers;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
-using LinkLynx.Core.Logic.Pages;
-using LinkLynx.Core.CrestronWrappers;
+using LinkLynx.Implementations.Collections.Pages.Logic;
 
 namespace LinkLynx.Implementations.Collections.Dispatchers.SimpleSignals
 {
