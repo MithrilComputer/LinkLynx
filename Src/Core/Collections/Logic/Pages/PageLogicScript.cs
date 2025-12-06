@@ -10,7 +10,7 @@ namespace LinkLynx.Core.Logic.Pages
         /// <summary>
         /// The panel assigned to the page.
         /// </summary>
-        public TouchPanelDevice assignedPanel;
+        public TouchPanelDevice OwnerPanel { get; }
 
         /// <summary>
         /// Constructs a new page, takes in a panel that acts as the host device.
@@ -18,7 +18,7 @@ namespace LinkLynx.Core.Logic.Pages
         /// <param name="panel">The panel that is connected to this page's logic.</param>
         public PageLogicScript(TouchPanelDevice panel)
         {
-            assignedPanel = panel;
+            OwnerPanel = panel;
         }
 
         /// <summary>

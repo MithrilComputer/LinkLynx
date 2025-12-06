@@ -12,6 +12,7 @@ namespace LinkLynx.Tests.SystemTests.Mocks
 
         public TestPage(TouchPanelDevice panel) : base(panel)
         {
+            
         }
 
         public override void SetDefaults()
