@@ -2,6 +2,10 @@
 {
     public class RoomScript
     {
-        // TODO
+        public virtual void Initalize() { }
+
+        public virtual void Start() { }
+
+        public virtual void Stop() { }
     }
 }

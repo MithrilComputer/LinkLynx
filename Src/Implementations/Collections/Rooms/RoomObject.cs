@@ -1,5 +1,4 @@
-﻿using Crestron.SimplSharpPro.AudioDistribution;
-using LinkLynx.Core.CrestronWrappers;
+﻿using LinkLynx.Core.CrestronWrappers;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Implementations.Collections.Rooms.Contexts;
 using LinkLynx.Implementations.Collections.Rooms.Logic;
@@ -36,7 +35,7 @@ namespace LinkLynx.Implementations.Collections.Rooms
             {
                 try
                 {
-                    //script.Initalize(); TODO
+                    script.Initalize();
                 }
                 catch(Exception ex)
                 {
@@ -51,7 +50,7 @@ namespace LinkLynx.Implementations.Collections.Rooms
             {
                 try
                 {
-                    //TODO script.Start();
+                    script.Start();
                 }
                 catch (Exception ex)
                 {
@@ -66,7 +65,7 @@ namespace LinkLynx.Implementations.Collections.Rooms
             {
                 try
                 {
-                    //TODO script.Stop();
+                    script.Stop();
                 }
                 catch (Exception ex)
                 {
