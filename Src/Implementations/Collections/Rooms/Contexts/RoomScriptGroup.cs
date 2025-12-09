@@ -5,12 +5,12 @@ namespace LinkLynx.Implementations.Collections.Rooms.Contexts
     /// <summary>
     /// A collection of RoomScript instances assigned to a specific RoomObject.
     /// </summary>
-    public class RoomScriptGroup
+    public sealed class RoomScriptGroup
     {
         /// <summary>
         /// The scripts assigned to the room.
         /// </summary>
-        public List<RoomScript> Scripts { get; private set; }
+        private readonly List<RoomScript> scripts;
 
         /// <summary>
         /// The room that is assigned to this script group.
@@ -24,8 +24,24 @@ namespace LinkLynx.Implementations.Collections.Rooms.Contexts
         /// <param name="scripts">List of scripts being assigned to the room.</param>
         public RoomScriptGroup(RoomObject room, List<RoomScript> scripts)
         {
-            Scripts = scripts;
+            this.scripts = scripts;
             AssignedRoom = room;
+        }
+
+        /// <summary>
+        /// Adds a <see cref="RoomScript"/> to the pool.
+        /// </summary>
+        public void AddScript(RoomScript script)
+        {
+            scripts.Add(script);
+        }
+
+        /// <summary>
+        /// Removes a <see cref="RoomScript"/> from the pool.
+        /// </summary>
+        public void RemoveScript(RoomScript script)
+        {
+            scripts.Remove(script);
         }
 
         /// <summary>
@@ -33,7 +49,7 @@ namespace LinkLynx.Implementations.Collections.Rooms.Contexts
         /// </summary>
         public void InitializeRoomScripts()
         {
-            foreach (RoomScript script in Scripts)
+            foreach (RoomScript script in scripts)
             {
                 script.Initialize();
             }
@@ -45,7 +61,7 @@ namespace LinkLynx.Implementations.Collections.Rooms.Contexts
         /// <typeparam name="T">The type you're attempting to get.</typeparam>
         public T GetScriptFromType<T>() where T : RoomScript
         {
-            foreach (RoomScript script in Scripts)
+            foreach (RoomScript script in scripts)
             {
                 if (script is T typedScript)
                     return typedScript;
@@ -62,7 +78,7 @@ namespace LinkLynx.Implementations.Collections.Rooms.Contexts
         {
             List<T> values = new List<T>();
 
-            foreach (RoomScript script in Scripts)
+            foreach (RoomScript script in scripts)
             {
                 if (script is T typedScript)
                     values.Add(typedScript);

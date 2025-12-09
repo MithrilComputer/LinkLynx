@@ -1,4 +1,5 @@
 ﻿using LinkLynx.Core.CrestronWrappers;
+using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Implementations.Collections.Pages.Logic;
 
 namespace LinkLynx.Implementations.Collections.Pages.Contexts
@@ -6,7 +7,10 @@ namespace LinkLynx.Implementations.Collections.Pages.Contexts
     /// <summary>
     /// A group of page logic scripts instances assigned to a specific panel.
     /// </summary>
-    public class PanelScriptGroup
+    /// <remarks>
+    /// You can't add or remove scripts from this group at runtime since it's built at compile time to keep things stable.
+    /// </remarks>
+    public sealed class PanelScriptGroup
     {
         /// <summary>
         /// The pool that contains all the <see cref="PageLogicScript"/>s constructed for the assigned panel.
@@ -19,13 +23,19 @@ namespace LinkLynx.Implementations.Collections.Pages.Contexts
         public TouchPanelDevice AssignedPanel { get; private set; }
 
         /// <summary>
+        /// A logger instance for logging within the panel script group.
+        /// </summary>
+        private readonly ILogger logger;
+
+        /// <summary>
         /// PanelLogicGroup Constructor that asks the PageFactory for a copy of all the registered page logic's.
         /// </summary>
         /// <param name="panel">The panel that is bound to this logic group.</param>
         /// <param name="pageLogicPool">The group of logic for the panel</param>
-        public PanelScriptGroup(TouchPanelDevice panel, Dictionary<ushort, PageLogicScript> pageLogicPool)
+        public PanelScriptGroup(TouchPanelDevice panel, Dictionary<ushort, PageLogicScript> pageLogicPool, ILogger logger)
         {
             this.pageLogicPool = pageLogicPool;
+            this.logger = logger;
             AssignedPanel = panel;
         }
 

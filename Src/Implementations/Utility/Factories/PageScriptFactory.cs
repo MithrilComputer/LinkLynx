@@ -10,12 +10,11 @@ namespace LinkLynx.Implementations.Utility.Factories
     /// </summary>
     public class PageScriptFactory : IPageScriptFactory
     {
-        private IPageScriptRegistry pageRegistry;
+        private readonly IPageScriptRegistry pageRegistry;
 
         /// <summary>
         /// The Factory for creating pages for a panel.
         /// </summary>
-        /// <param name="pageRegistry"></param>
         public PageScriptFactory(IPageScriptRegistry pageRegistry)
         {
             this.pageRegistry = pageRegistry;
@@ -25,7 +24,6 @@ namespace LinkLynx.Implementations.Utility.Factories
         /// Creates a list of new instantiated pages for a given panel.
         /// </summary>
         /// <param name="panel">The panel to assign the PageLogicBase's to.</param>
-        /// <returns></returns>
         public Dictionary<ushort, PageLogicScript> BuildPagesForPanel(TouchPanelDevice panel)
         {
             // The ushort is the page ID

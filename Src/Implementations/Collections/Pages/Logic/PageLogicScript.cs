@@ -15,8 +15,8 @@ namespace LinkLynx.Implementations.Collections.Pages.Logic
         /// <summary>
         /// Constructs a new page, takes in a panel that acts as the host device.
         /// </summary>
-        /// <param name="panel">The panel that is connected to this page's logic.</param>
-        public PageLogicScript(TouchPanelDevice panel)
+        /// <param name="panel">The <see cref="TouchPanelDevice"> panel that is connected to this page's logic.</param>
+        protected PageLogicScript(TouchPanelDevice panel)
         {
             OwnerPanel = panel;
         }

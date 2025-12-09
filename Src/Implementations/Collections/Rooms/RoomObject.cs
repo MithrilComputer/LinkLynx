@@ -15,17 +15,17 @@ namespace LinkLynx.Implementations.Collections.Rooms
         /// <summary>
         /// The unique identifier for this room.
         /// </summary>
-        public ushort RoomID { get; private set; }
+        public ushort RoomID { get; }
 
         /// <summary>
         /// The name of this room.
         /// </summary>
-        public string RoomName { get; private set; }
+        public string RoomName { get; }
 
         /// <summary>
         /// The script group associated with this room.
         /// </summary>
-        public RoomScriptGroup ScriptGroup { get; private set; }
+        public RoomScriptGroup ScriptGroup { get; }
 
         /// <summary>
         /// A list of child rooms contained within this room.
@@ -35,17 +35,17 @@ namespace LinkLynx.Implementations.Collections.Rooms
         /// <summary>
         /// The parent room of this room, null if this is a top-level room.
         /// </summary>
-        public RoomObject ParentRoom { get; private set; }
+        public RoomObject ParentRoom { get; }
 
         /// <summary>
         /// The parent zone that contains this room.
         /// </summary>
-        public ZoneObject ParentZone { get; private set; }
+        public ZoneObject ParentZone { get; }
 
         /// <summary>
         /// The top level Domain.
         /// </summary>
-        public DomainManager DomainManager { get; private set; }
+        public DomainManager DomainManager { get; }
 
         /// <summary>
         /// A list of touch panel devices associated with this room.
@@ -57,44 +57,37 @@ namespace LinkLynx.Implementations.Collections.Rooms
         /// </summary>
         private readonly List<DeviceContext> devices = new List<DeviceContext>();
 
-        private ILogger logger;
+        /// <summary>
+        /// The logger instance for logging messages.
+        /// </summary>
+        private readonly ILogger logger;
 
-        public virtual void Initialize()
-        {
-            foreach(RoomScript script in ScriptGroup.Scripts)
-            {
-                try
-                {
-                    script.Initialize();
-                }
-                catch(Exception ex)
-                {
-                    logger.Log($"[RoomObject, Name: {RoomName}, ID: {RoomID}] Warning: Can't Initialize Script: {script.GetType().FullName}");
-                }
-            }
-        }
-
-        public RoomObject(ushort roomId, string roomName, DomainManager domainManager, ZoneObject parentZone, ILogger logger, RoomObject parentRoom = null)
+        /// <summary>
+        /// The constructor for the RoomObject class.
+        /// </summary>
+        public RoomObject(ushort roomId, string roomName, DomainManager domainManager, ZoneObject parentZone, RoomScriptGroup scriptGroup, ILogger logger, RoomObject parentRoom = null)
         {
             RoomID = roomId;
             RoomName = roomName;
             DomainManager = domainManager;
             ParentZone = parentZone;
             ParentRoom = parentRoom;
+            ScriptGroup = scriptGroup;
 
             this.logger = logger;
         }
 
-        public RoomObject SetRoomScriptGroup(RoomScriptGroup scriptGroup)
+        /// <summary>
+        /// Initializes the room by invoking the Initialize method on each script in the ScriptGroup.
+        /// </summary>
+        public virtual void Initialize()
         {
-            if (scriptGroup == null)
-                throw new ArgumentNullException(nameof(scriptGroup));
-
-            ScriptGroup = scriptGroup;
-
-            return this;
+            ScriptGroup.InitializeRoomScripts();
         }
 
+        /// <summary>
+        /// Adds a child room to this room.
+        /// </summary>
         public RoomObject AddChildRoom(RoomObject room)
         {
             if (room == null)
@@ -108,6 +101,9 @@ namespace LinkLynx.Implementations.Collections.Rooms
             return this;
         }
 
+        /// <summary>
+        /// Removes a child room from this room.
+        /// </summary>
         public RoomObject RemoveChildRoom(RoomObject room)
         {
             if (room == null)
@@ -121,6 +117,9 @@ namespace LinkLynx.Implementations.Collections.Rooms
             return this;
         }
 
+        /// <summary>
+        /// Adds a touch panel device to this room.
+        /// </summary>
         public RoomObject AddTouchPanel(TouchPanelDevice panel)
         {
             if (panel == null)
@@ -134,6 +133,9 @@ namespace LinkLynx.Implementations.Collections.Rooms
             return this;
         }
 
+        /// <summary>
+        /// Removes a touch panel device from this room.
+        /// </summary>
         public RoomObject RemoveTouchPanel(TouchPanelDevice panel)
         {
             if (panel == null)
@@ -147,6 +149,9 @@ namespace LinkLynx.Implementations.Collections.Rooms
             return this;
         }
 
+        /// <summary>
+        /// Adds a device context to this room.
+        /// </summary>
         public RoomObject AddDevice(DeviceContext device)
         {
             if (device == null)
@@ -160,6 +165,9 @@ namespace LinkLynx.Implementations.Collections.Rooms
             return this;
         }
 
+        /// <summary>
+        /// Removes a device context from this room.
+        /// </summary>
         public RoomObject RemoveDevice(DeviceContext device)
         {
             if (device == null)
