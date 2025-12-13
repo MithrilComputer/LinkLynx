@@ -21,6 +21,9 @@
         /// <param name="parentRoom">The <see cref="RoomObject"/> parent bound to the script.</param>
         protected RoomScript(RoomObject parentRoom)
         {
+            if (parentRoom == null)
+                throw new ArgumentNullException(nameof(parentRoom), $"[RoomScript] Error: Cant make new room script without assigning a valid Parent Room!!");
+
             ParentRoom = parentRoom;
         }
     }

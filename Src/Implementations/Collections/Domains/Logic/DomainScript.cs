@@ -1,5 +1,4 @@
-﻿using LinkLynx.Implementations.Collections.Rooms;
-using LinkLynx.Implementations.Service.Domains;
+﻿using LinkLynx.Implementations.Service.Domains;
 
 namespace LinkLynx.Implementations.Collections.Domains.Logic
 {
@@ -13,8 +12,14 @@ namespace LinkLynx.Implementations.Collections.Domains.Logic
         /// </summary>
         public DomainManager ParentDomain { get; }
 
-        public DomainScript(DomainManager parentDomain)
+        /// <summary>
+        /// The constructor for the <see cref="DomainScript"/>.
+        /// </summary>
+        protected DomainScript(DomainManager parentDomain)
         {
+            if (parentDomain == null)
+                throw new ArgumentNullException(nameof(parentDomain), $"[DomainScript] Error: Cant make new domain script without assigning a valid Parent Domain!!");
+
             ParentDomain = parentDomain;
         }
 

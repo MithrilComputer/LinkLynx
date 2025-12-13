@@ -1,10 +1,11 @@
-﻿using Crestron.SimplSharpPro.AudioDistribution;
-using LinkLynx.Core.CrestronWrappers;
+﻿using LinkLynx.Core.CrestronWrappers;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
-using LinkLynx.Implementations.Collections.Rooms;
 
 namespace LinkLynx.Core.Src.Implementations.Collections.Devices.Contexts
 {
+    /// <summary>
+    /// A general collection of device contexts.
+    /// </summary>
     public class GeneralDeviceGroup
     {
         /// <summary>

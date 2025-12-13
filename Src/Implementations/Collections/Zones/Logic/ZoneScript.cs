@@ -20,6 +20,9 @@
         /// </summary>
         protected ZoneScript(ZoneObject parentZone)
         {
+            if (parentZone == null)
+                throw new ArgumentNullException(nameof(parentZone), $"[ZoneScript] Error: Cant make new zone script without assigning a valid Parent Zone!!");
+
             ParentZone = parentZone;
         }
     }

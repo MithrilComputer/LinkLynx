@@ -49,7 +49,20 @@ namespace LinkLynx.Implementations.Utility.Dispatching
 
                     foreach (JoinAttribute joinAttr in joinAttributes)
                     {
-                        if (joinAttr.Join is Enum joinEnum)
+                        switch (joinAttr.LogicJoin)
+                        {
+                            case Enum joinEnum:
+                                consoleLogger.Log($"[AutoJoinRegistrar] Registering Join '{joinEnum}' on method '{method.Name}'");
+                                if(!reversePageRegistry.TryRegister(joinEnum, pageId))
+                                {
+                                    consoleLogger.Log($"[AutoJoinRegistrar] Warning: Join '{joinEnum}' is already registered to another page. Skipping registration on method '{method.Name}'. Skipping...");
+                                    continue;
+                                }
+                                dispatcherHelper.AddToDispatcher(joinEnum, BuildLambda(method));
+                                break;
+                        }
+
+                        if (joinAttr.LogicJoin is Enum joinEnum)
                         {
                             consoleLogger.Log($"[AutoJoinRegistrar] Registering Join '{joinEnum}' on method '{method.Name}'");
 
@@ -61,6 +74,10 @@ namespace LinkLynx.Implementations.Utility.Dispatching
                             }
 
                             dispatcherHelper.AddToDispatcher(joinEnum, BuildLambda(method));
+                        }
+                        else if()
+                        {
+
                         }
                         else
                         {

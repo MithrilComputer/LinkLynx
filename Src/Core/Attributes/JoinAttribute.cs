@@ -9,7 +9,7 @@
         /// <summary>
         /// The join enum
         /// </summary>
-        public object Join { get; }
+        public object LogicJoin { get; }
 
         /// <summary>
         /// This is the attribute class for giving methods a join key.
@@ -17,7 +17,7 @@
         /// <param name="join">The join enum</param>
         public JoinAttribute(object join)
         {
-            Join = join;
+            LogicJoin = join;
         }
     }
 }
