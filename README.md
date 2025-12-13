@@ -1,6 +1,6 @@
 # LinkLynx
 
-![WakaTime](https://drewsawsomewakasite.site/api/badge/Drew/interval:any/project:LinkLynx)
+![WakaTime](https://drewsawsomewakasite.site/api/badge/Drew/interval:any/project:LinkLynx) [![CI](https://github.com/MithrilComputer/LinkLynx/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/MithrilComputer/LinkLynx/actions/workflows/CI.yml) ![License](https://img.shields.io/github/license/MithrilComputer/LinkLynx) ![Last Commit](https://img.shields.io/github/last-commit/MithrilComputer/LinkLynx)
 
 LinkLynx is a lightweight development framework designed to drastically speed up and simplify development for most small to medium Crestron programs for 4-Series Processors Only. (Pre Release Early Alpha!!)
 
