@@ -34,7 +34,7 @@ namespace LinkLynx.Implementations.Collections.Zones.Contexts
             this.logger = logger;
 
             if (initialScripts == null)
-                throw new ArgumentNullException(nameof(initialScripts));
+                throw new ArgumentNullException(nameof(initialScripts), $"[ZoneScriptGroup] Error: Attempted to initialize ZoneScriptGroup with null initialScripts list.");
 
             foreach (ZoneScript script in initialScripts)
             {
@@ -79,6 +79,18 @@ namespace LinkLynx.Implementations.Collections.Zones.Contexts
         /// </summary>
         public void RemoveScript(ZoneScript script)
         {
+            if(script == null)
+            {
+                logger.Log($"[ZoneScriptGroup] Warning: Attempted to remove a null ZoneScript from the ZoneScriptGroup: {script.GetType().Name}");
+                return;
+            }
+
+            if (!scripts.Contains(script))
+            {
+                logger.Log($"[ZoneScriptGroup] Warning: Attempted to remove a ZoneScript that does not exist in the ZoneScriptGroup: {script.GetType().Name}");
+                return;
+            }
+
             scripts.Remove(script);
         }
 

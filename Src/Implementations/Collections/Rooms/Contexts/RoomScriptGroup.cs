@@ -29,14 +29,15 @@ namespace LinkLynx.Implementations.Collections.Rooms.Contexts
         /// <summary>
         /// The RoomScriptGroup Constructor.
         /// </summary>
-        public RoomScriptGroup(ILogger logger, IEnumerable<RoomScript> initialScripts)
+        /// <exception cref="ArgumentNullException"></exception>
+        public RoomScriptGroup(ILogger logger, IEnumerable<RoomScript> scripts)
         {
             this.logger = logger;
 
-            if (initialScripts == null)
-                throw new ArgumentNullException(nameof(initialScripts));
+            if(scripts == null)
+                throw new ArgumentNullException(nameof(scripts), $"[RoomScriptGroup] Error: Attempted to initialize RoomScriptGroup with null scripts list.");
 
-            foreach (var script in initialScripts)
+            foreach (RoomScript script in scripts)
             {
                 AddScript(script);
             }
@@ -47,6 +48,18 @@ namespace LinkLynx.Implementations.Collections.Rooms.Contexts
         /// </summary>
         public void AddScript(RoomScript script)
         {
+            if(script == null)
+            {
+                logger.Log($"[RoomScriptGroup] Warning: Attempted to add null RoomScript to RoomScriptGroup.");
+                return;
+            }
+
+            if (scripts.Contains(script))
+            {
+                logger.Log($"[RoomScriptGroup] Warning: Attempted to add RoomScript that already exists in RoomScriptGroup.");
+                return;
+            }
+
             scripts.Add(script);
         }
 
@@ -55,6 +68,18 @@ namespace LinkLynx.Implementations.Collections.Rooms.Contexts
         /// </summary>
         public void RemoveScript(RoomScript script)
         {
+            if(script == null)
+            {
+                logger.Log($"[RoomScriptGroup] Warning: Attempted to remove null RoomScript from RoomScriptGroup.");
+                return;
+            }
+
+            if (!scripts.Contains(script))
+            {
+                logger.Log($"[RoomScriptGroup] Warning: Attempted to remove RoomScript that does not exist in RoomScriptGroup.");
+                return;
+            }
+
             scripts.Remove(script);
         }
 

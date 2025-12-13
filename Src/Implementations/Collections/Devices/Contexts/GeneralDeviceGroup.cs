@@ -12,12 +12,34 @@ namespace LinkLynx.Core.Src.Implementations.Collections.Devices.Contexts
         /// </summary>
         private readonly List<DeviceContext> devices = new List<DeviceContext>();
 
+        /// <summary>
+        /// A logger instance for logging within the device group.
+        /// </summary>
         private readonly ILogger logger;
 
-        public GeneralDeviceGroup(List<DeviceContext> devices, ILogger logger)
+        /// <summary>
+        /// The GeneralDeviceGroup Constructor.
+        /// </summary>
+        public GeneralDeviceGroup(ILogger logger)
         {
-            this.devices = devices;
             this.logger = logger;
+        }
+
+        /// <summary>
+        /// The GeneralDeviceGroup Constructor.
+        /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
+        public GeneralDeviceGroup(ILogger logger, IEnumerable<DeviceContext> devices)
+        {
+            this.logger = logger;
+
+            if (devices == null)
+                throw new ArgumentNullException(nameof(devices), $"[GeneralDeviceGroup] Error: Attempted to initialize GeneralDeviceGroup with null devices list.");
+
+            foreach (DeviceContext device in devices)
+            {
+                AddDevice(device);
+            }
         }
 
         /// <summary>
@@ -27,7 +49,13 @@ namespace LinkLynx.Core.Src.Implementations.Collections.Devices.Contexts
         {
             if (device == null)
             {
-                logger.Log($"[GeneralDeviceGroup] Error: Can't Add a null Device {device.GetType().Name}");
+                logger.Log($"[GeneralDeviceGroup] Warning: Can't Add a null Device {device.GetType().Name}");
+                return this;
+            }
+
+            if (devices.Contains(device))
+            {
+                logger.Log($"[GeneralDeviceGroup] Warning: Attempted to add duplicate device {device.Device.GetType().Name} to GeneralDeviceGroup.");
                 return this;
             }
 
@@ -36,5 +64,26 @@ namespace LinkLynx.Core.Src.Implementations.Collections.Devices.Contexts
             return this;
         }
 
+        /// <summary>
+        /// Removes a device context from this room.
+        /// </summary>
+        public GeneralDeviceGroup RemoveDevice(DeviceContext device)
+        {
+            if (device == null)
+            {
+                logger.Log($"[GeneralDeviceGroup] Warning: Can't Remove a null Device {device.GetType().Name}");
+                return this;
+            }
+
+            if (!devices.Contains(device))
+            {
+                logger.Log($"[GeneralDeviceGroup] Warning: Attempted to remove a device {device.Device.GetType().Name} that does not exist in GeneralDeviceGroup.");
+                return this;
+            }
+
+            devices.Remove(device);
+
+            return this;
+        }
     }
 }

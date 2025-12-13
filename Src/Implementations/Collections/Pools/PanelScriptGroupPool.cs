@@ -100,8 +100,6 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// <summary>
         /// Gets the logic group for a specific panel.
         /// </summary>
-        /// <param name="device"></param>
-        /// <returns></returns>
         /// <exception cref="KeyNotFoundException"></exception>
         public PanelScriptGroup GetPanelLogicGroup(TouchPanelDevice device)
         {

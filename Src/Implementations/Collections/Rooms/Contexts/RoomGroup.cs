@@ -1,4 +1,5 @@
-﻿using LinkLynx.Implementations.Collections.Rooms;
+﻿using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
+using LinkLynx.Implementations.Collections.Rooms;
 
 namespace LinkLynx.Core.Src.Implementations.Collections.Rooms.Contexts
 {
@@ -10,19 +11,36 @@ namespace LinkLynx.Core.Src.Implementations.Collections.Rooms.Contexts
         /// <summary>
         /// The rooms contained in the RoomGroup.
         /// </summary>
-        private readonly List<RoomObject> rooms;
+        private readonly List<RoomObject> rooms = new List<RoomObject>();
 
         /// <summary>
-        /// A read-only list of all <see cref="RoomObject"/>s in the RoomGroup.
+        /// Logger instance for logging purposes. :D
         /// </summary>
-        public IReadOnlyList<RoomObject> Rooms => rooms.AsReadOnly();
+        private readonly ILogger logger;
 
         /// <summary>
         /// The constructor for a <see cref="RoomGroup"/>.
         /// </summary>
-        public RoomGroup(List<RoomObject> rooms)
+        public RoomGroup(ILogger logger)
         {
-            this.rooms = rooms;
+            this.logger = logger;
+        }
+
+        /// <summary>
+        /// The constructor for a <see cref="RoomGroup"/>.
+        /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
+        public RoomGroup(ILogger logger, IEnumerable<RoomObject> rooms)
+        {
+            this.logger = logger;
+
+            if (rooms == null)
+                throw new ArgumentNullException(nameof(rooms),$"[RoomGroup] Error: Attempted to initialize RoomGroup with null rooms list.");
+
+            foreach (RoomObject room in rooms)
+            {
+                AddRoom(room);
+            }
         }
 
         /// <summary>
@@ -30,6 +48,18 @@ namespace LinkLynx.Core.Src.Implementations.Collections.Rooms.Contexts
         /// </summary>
         public void AddRoom(RoomObject room)
         {
+            if (room == null)
+            {
+                logger.Log($"[RoomGroup] Cannot add a null RoomObject to the RoomGroup: {room.GetType().Name}");
+                return;
+            }
+
+            if (rooms.Contains(room))
+            {
+                logger.Log($"[RoomGroup] Warning: Cant add Room '{room.RoomName}' with ID '{room.RoomID}' is already in the RoomGroup.");
+                return;
+            }
+
             rooms.Add(room);
         }
 
@@ -38,6 +68,18 @@ namespace LinkLynx.Core.Src.Implementations.Collections.Rooms.Contexts
         /// </summary>
         public void RemoveRoom(RoomObject room)
         {
+            if (room == null)
+            {
+                logger.Log($"[RoomGroup] Cannot remove a null RoomObject from the RoomGroup: {room.GetType().Name}");
+                return;
+            }
+
+            if (!rooms.Contains(room))
+            {
+                logger.Log($"[RoomGroup] Warning: Cant remove Room '{room.RoomName}' with ID '{room.RoomID}' as it does not exist in the RoomGroup.");
+                return;
+            }
+
             rooms.Remove(room);
         }
 
@@ -53,6 +95,9 @@ namespace LinkLynx.Core.Src.Implementations.Collections.Rooms.Contexts
                     return room;
                 }
             }
+
+            logger.Log($"[RoomGroup] Warning: Room with name '{roomName}' not found in RoomGroup.");
+
             return null;
         }
 
@@ -68,6 +113,9 @@ namespace LinkLynx.Core.Src.Implementations.Collections.Rooms.Contexts
                     return room;
                 }
             }
+
+            logger.Log($"[RoomGroup] Warning: Room with ID '{roomID}' not found in RoomGroup.");
+
             return null;
         }
     }
