@@ -12,9 +12,9 @@ namespace LinkLynx.Core.Src.Implementations.Collections.Devices.Contexts
         /// </summary>
         private readonly List<DeviceContext> devices = new List<DeviceContext>();
 
-        ILogger logger;
+        private readonly ILogger logger;
 
-        public GeneralDeviceGroup(List<DeviceContext> devices, , ILogger logger)
+        public GeneralDeviceGroup(List<DeviceContext> devices, ILogger logger)
         {
             this.devices = devices;
             this.logger = logger;
@@ -23,11 +23,11 @@ namespace LinkLynx.Core.Src.Implementations.Collections.Devices.Contexts
         /// <summary>
         /// Adds a device context to this room.
         /// </summary>
-        public RoomObject AddDevice(DeviceContext device)
+        public GeneralDeviceGroup AddDevice(DeviceContext device)
         {
             if (device == null)
             {
-                logger.Log($"[RoomObject, Name: {RoomName}, ID: {RoomID}] Error: Can't Add a null Device");
+                logger.Log($"[GeneralDeviceGroup] Error: Can't Add a null Device {device.GetType().Name}");
                 return this;
             }
 

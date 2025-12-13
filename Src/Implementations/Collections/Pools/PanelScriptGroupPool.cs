@@ -2,6 +2,7 @@
 using LinkLynx.Core.Interfaces.Collections.Pools;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Factories;
+using LinkLynx.Core.Src.Core.Interfaces.Utility.Factories;
 using LinkLynx.Core.Src.Implementations.Utility.Factories;
 using LinkLynx.Implementations.Collections.Pages.Contexts;
 
@@ -14,14 +15,16 @@ namespace LinkLynx.Implementations.Collections.Pools
     {
         private readonly ILogger consoleLogger;
         private readonly IPageScriptFactory pageFactory;
+        private readonly IPanelScriptGroupFactory panelScriptGroupFactory;
 
         /// <summary>
         /// Class constructor
         /// </summary>
-        public PanelScriptGroupPool(ILogger consoleLogger, IPageScriptFactory pageFactory) 
+        public PanelScriptGroupPool(ILogger consoleLogger, IPageScriptFactory pageFactory, IPanelScriptGroupFactory panelScriptGroupFactory)
         {
             this.consoleLogger = consoleLogger;
             this.pageFactory = pageFactory;
+            this.panelScriptGroupFactory = panelScriptGroupFactory;
         }
 
         private readonly Dictionary<uint, PanelScriptGroup> deviceLogicPool = 
@@ -49,7 +52,7 @@ namespace LinkLynx.Implementations.Collections.Pools
 
                 try
                 {
-                    panelLogic = PanelScriptGroupFactory.CreateNewLogicGroup(device, pageFactory.BuildPagesForPanel(device));
+                    panelLogic = panelScriptGroupFactory.CreateNewLogicGroup(device, pageFactory.BuildPagesForPanel(device));
                 }
                 catch (Exception ex)
                 {

@@ -7,6 +7,8 @@ using LinkLynx.Core.Interfaces.Utility.Factories;
 using LinkLynx.Core.Interfaces.Utility.Helpers;
 using LinkLynx.Core.Interfaces.Wiring.Engine;
 using LinkLynx.Core.Options;
+using LinkLynx.Core.Src.Core.Interfaces.Utility.Factories;
+using LinkLynx.Core.Src.Implementations.Utility.Factories;
 using LinkLynx.Implementations.Collections.Dispatchers.SimpleSignals;
 using LinkLynx.Implementations.Collections.Pools;
 using LinkLynx.Implementations.Collections.Registries;
@@ -68,6 +70,7 @@ namespace LinkLynx.Wiring.Bootstraps.Implementations
 
             // Factories
             services.AddSingleton<IPageScriptFactory, PageScriptFactory>();
+            services.AddSingleton<IPanelScriptGroupFactory, PanelScriptGroupFactory>();
 
             //LinkLynx
             services.AddSingleton(options);
