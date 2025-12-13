@@ -1,4 +1,5 @@
-﻿using LinkLynx.Implementations.Collections.Rooms.Logic;
+﻿using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
+using LinkLynx.Implementations.Collections.Rooms.Logic;
 
 namespace LinkLynx.Implementations.Collections.Rooms.Contexts
 {
@@ -10,22 +11,35 @@ namespace LinkLynx.Implementations.Collections.Rooms.Contexts
         /// <summary>
         /// The scripts assigned to the room.
         /// </summary>
-        private readonly List<RoomScript> scripts;
+        private readonly List<RoomScript> scripts = new List<RoomScript>();
 
         /// <summary>
-        /// The room that is assigned to this script group.
+        /// Logger instance for logging purposes. :D
         /// </summary>
-        public RoomObject AssignedRoom { get; private set; }
+        private readonly ILogger logger;
 
         /// <summary>
         /// The RoomScriptGroup Constructor.
         /// </summary>
-        /// <param name="room">The room to be parented to.</param>
-        /// <param name="scripts">List of scripts being assigned to the room.</param>
-        public RoomScriptGroup(RoomObject room, List<RoomScript> scripts)
+        public RoomScriptGroup(ILogger logger)
         {
-            this.scripts = scripts;
-            AssignedRoom = room;
+            this.logger = logger;
+        }
+
+        /// <summary>
+        /// The RoomScriptGroup Constructor.
+        /// </summary>
+        public RoomScriptGroup(ILogger logger, IEnumerable<RoomScript> initialScripts)
+        {
+            this.logger = logger;
+
+            if (initialScripts == null)
+                throw new ArgumentNullException(nameof(initialScripts));
+
+            foreach (var script in initialScripts)
+            {
+                AddScript(script);
+            }
         }
 
         /// <summary>

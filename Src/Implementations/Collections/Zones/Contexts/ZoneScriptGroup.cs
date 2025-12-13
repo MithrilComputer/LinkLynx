@@ -1,4 +1,5 @@
-﻿using LinkLynx.Implementations.Collections.Zones.Logic;
+﻿using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
+using LinkLynx.Implementations.Collections.Zones.Logic;
 
 namespace LinkLynx.Implementations.Collections.Zones.Contexts
 {
@@ -10,20 +11,35 @@ namespace LinkLynx.Implementations.Collections.Zones.Contexts
         /// <summary>
         /// A list of all <see cref="ZoneScript"/>s in the pool.
         /// </summary>
-        private readonly List<ZoneScript> scripts;
+        private readonly List<ZoneScript> scripts = new List<ZoneScript>();
 
         /// <summary>
-        /// The <see cref="ZoneObject"/> assigned to this pool.
+        /// A logger instance for logging within the zone script group.
         /// </summary>
-        public ZoneObject AssignedZone { get; private set; }
+        private readonly ILogger logger;
 
         /// <summary>
         /// Constructor for a <see cref="ZoneScriptGroup"/>.
         /// </summary>
-        public ZoneScriptGroup(ZoneObject zone, List<ZoneScript> scripts)
+        public ZoneScriptGroup(ILogger logger)
         {
-            this.scripts = scripts;
-            AssignedZone = zone;
+            this.logger = logger;
+        }
+
+        /// <summary>
+        /// Constructor for a <see cref="ZoneScriptGroup"/>.
+        /// </summary>
+        public ZoneScriptGroup(ILogger logger, IEnumerable<ZoneScript> initialScripts)
+        {
+            this.logger = logger;
+
+            if (initialScripts == null)
+                throw new ArgumentNullException(nameof(initialScripts));
+
+            foreach (ZoneScript script in initialScripts)
+            {
+                AddScript(script);
+            }
         }
 
         /// <summary>
@@ -42,6 +58,18 @@ namespace LinkLynx.Implementations.Collections.Zones.Contexts
         /// </summary>
         public void AddScript(ZoneScript script)
         {
+            if (script == null)
+            {
+                logger.Log("[] Warning: Attempted to add a null ZoneScript to the ZoneScriptGroup.");
+                return;
+            }
+
+            if (scripts.Contains(script))
+            {
+                logger.Log("Attempted to add a ZoneScript that is already in the ZoneScriptGroup.");
+                return;
+            }
+
             scripts.Add(script);
         }
 

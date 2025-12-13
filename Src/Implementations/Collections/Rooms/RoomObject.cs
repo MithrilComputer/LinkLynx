@@ -1,7 +1,6 @@
 ﻿using LinkLynx.Core.CrestronWrappers;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Implementations.Collections.Rooms.Contexts;
-using LinkLynx.Implementations.Collections.Rooms.Logic;
 using LinkLynx.Implementations.Collections.Zones;
 using LinkLynx.Implementations.Service.Domains;
 
@@ -43,11 +42,6 @@ namespace LinkLynx.Implementations.Collections.Rooms
         public ZoneObject ParentZone { get; }
 
         /// <summary>
-        /// The top level Domain.
-        /// </summary>
-        public DomainManager DomainManager { get; }
-
-        /// <summary>
         /// A list of touch panel devices associated with this room.
         /// </summary>
         private readonly List<TouchPanelDevice> touchPanels = new List<TouchPanelDevice>();
@@ -65,11 +59,10 @@ namespace LinkLynx.Implementations.Collections.Rooms
         /// <summary>
         /// The constructor for the RoomObject class.
         /// </summary>
-        public RoomObject(ushort roomId, string roomName, DomainManager domainManager, ZoneObject parentZone, RoomScriptGroup scriptGroup, ILogger logger, RoomObject parentRoom = null)
+        public RoomObject(ushort roomId, string roomName, ZoneObject parentZone, RoomScriptGroup scriptGroup, ILogger logger, RoomObject parentRoom = null)
         {
             RoomID = roomId;
             RoomName = roomName;
-            DomainManager = domainManager;
             ParentZone = parentZone;
             ParentRoom = parentRoom;
             ScriptGroup = scriptGroup;
