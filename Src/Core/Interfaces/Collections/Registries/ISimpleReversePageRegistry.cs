@@ -7,12 +7,12 @@ namespace LinkLynx.Core.Interfaces.Collections.Registries
     /// <summary>
     /// The interface for Reverse page registry, used for finding a Page ID from a join number.
     /// </summary>
-    public interface IReversePageRegistry
+    public interface ISimpleReversePageRegistry
     {
         /// <summary>
         /// Looks up and returns the page associated with the Logic Join.
         /// </summary>
-        ushort Get(uint join, SigType type);
+        bool TryGet(uint join, SigType type, out ushort pageID);
 
         /// <summary>
         /// Registers a Logic Join to a page.

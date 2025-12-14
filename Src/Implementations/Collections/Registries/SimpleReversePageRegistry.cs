@@ -8,7 +8,7 @@ namespace LinkLynx.Implementations.Collections.Registries
     /// <summary>
     /// A special class that used to link logic joins to pages, good for reverse join searching.
     /// </summary>
-    public sealed class ReversePageRegistry : IReversePageRegistry, IDisposable
+    public sealed class SimpleReversePageRegistry : ISimpleReversePageRegistry, IDisposable
     {
         private readonly ILogger consoleLogger;
         private readonly IEnumHelper enumHelper;
@@ -16,29 +16,31 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// <summary>
         /// Class constructor.
         /// </summary>
-        public ReversePageRegistry(ILogger consoleLogger, IEnumHelper enumHelper) 
-        { 
+        public SimpleReversePageRegistry(ILogger consoleLogger, IEnumHelper enumHelper) 
+        {
             this.consoleLogger = consoleLogger;
             this.enumHelper = enumHelper;
         }
 
-        private readonly Dictionary<uint, ushort> DigitalJoinPageMap = new Dictionary<uint, ushort>();
-        private readonly Dictionary<uint, ushort> AnalogJoinPageMap = new Dictionary<uint, ushort>();
-        private readonly Dictionary<uint, ushort> SerialJoinPageMap = new Dictionary<uint, ushort>();
+        private readonly Dictionary<uint, ushort> digitalJoinPageMap = new Dictionary<uint, ushort>();
+        private readonly Dictionary<uint, ushort> analogJoinPageMap = new Dictionary<uint, ushort>();
+        private readonly Dictionary<uint, ushort> serialJoinPageMap = new Dictionary<uint, ushort>();
 
         /// <summary>
         /// Gets a page ID given an input join ID and Join Type. Gives ushort.MaxValue if the key was not found.
         /// </summary>
         /// <param name="join">The join ID to search for the page.</param>
         /// <param name="type">The type of join associated with the key.</param>
-        public ushort Get(uint join, SigType type)
+        /// <exception cref="ArgumentException"></exception>
+        public bool TryGet(uint join, SigType type, out ushort pageID)
         {
             switch (type)
             {
                 case SigType.Bool:
-                    if (DigitalJoinPageMap.TryGetValue(join, out ushort digitalPageID))
+                    if (digitalJoinPageMap.TryGetValue(join, out ushort digitalPageID))
                     {
-                        return digitalPageID;
+                        pageID = digitalPageID;
+                        return true;
                     }
 
                     consoleLogger.Log($"[ReversePageRegistry] Warning: Could not find the page associated with the signal key of '{join}' with a type of '{type}'");
@@ -46,9 +48,10 @@ namespace LinkLynx.Implementations.Collections.Registries
                     break;
 
                 case SigType.UShort:
-                    if (AnalogJoinPageMap.TryGetValue(join, out ushort analogPageID))
+                    if (analogJoinPageMap.TryGetValue(join, out ushort analogPageID))
                     {
-                        return analogPageID;
+                        pageID = analogPageID;
+                        return true;
                     }
 
                     consoleLogger.Log($"[ReversePageRegistry] Warning: Could not find the page associated with the signal key of '{join}' with a type of '{type}'");
@@ -56,20 +59,20 @@ namespace LinkLynx.Implementations.Collections.Registries
                     break;
 
                 case SigType.String:
-                    if (SerialJoinPageMap.TryGetValue(join, out ushort serialPageID))
+                    if (serialJoinPageMap.TryGetValue(join, out ushort serialPageID))
                     {
-                        return serialPageID;
+                        pageID = serialPageID;
+                        return true;
                     }
 
                     consoleLogger.Log($"[ReversePageRegistry] Warning: Could not find the page associated with the signal key of '{join}' with a type of '{type}'");
 
                     break;
-
-                default:
-                    return ushort.MaxValue;
             }
 
-            throw new Exception($"[ReversePageRegistry] Error: Could not find the page associated with the signal key of '{join}' with a type of '{type}'");
+            pageID = ushort.MaxValue;
+
+            return false;
         }
 
         /// <summary>
@@ -88,9 +91,9 @@ namespace LinkLynx.Implementations.Collections.Registries
             switch (type)
             {
                 case SigType.Bool:
-                    if (!DigitalJoinPageMap.ContainsKey(joinNumber))
+                    if (!digitalJoinPageMap.ContainsKey(joinNumber))
                     {
-                        DigitalJoinPageMap.Add(joinNumber, pageId);
+                        digitalJoinPageMap.Add(joinNumber, pageId);
                         return true;
                     } 
                     else
@@ -100,9 +103,9 @@ namespace LinkLynx.Implementations.Collections.Registries
                     }
 
                 case SigType.UShort:
-                    if (!AnalogJoinPageMap.ContainsKey(joinNumber))
+                    if (!analogJoinPageMap.ContainsKey(joinNumber))
                     {
-                        AnalogJoinPageMap.Add(joinNumber, pageId);
+                        analogJoinPageMap.Add(joinNumber, pageId);
                         return true;
                     }
                     else
@@ -112,9 +115,9 @@ namespace LinkLynx.Implementations.Collections.Registries
                     }
 
                 case SigType.String:
-                    if (!SerialJoinPageMap.ContainsKey(joinNumber))
+                    if (!serialJoinPageMap.ContainsKey(joinNumber))
                     {
-                        SerialJoinPageMap.Add(joinNumber, pageId);
+                        serialJoinPageMap.Add(joinNumber, pageId);
                         return true;
                     }
                     else
@@ -133,9 +136,9 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// </summary>
         public void Dispose()
         {
-            DigitalJoinPageMap.Clear();
-            AnalogJoinPageMap.Clear();
-            SerialJoinPageMap.Clear();
+            digitalJoinPageMap.Clear();
+            analogJoinPageMap.Clear();
+            serialJoinPageMap.Clear();
         }
     }
 }

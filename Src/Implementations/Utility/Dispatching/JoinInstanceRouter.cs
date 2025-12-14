@@ -15,13 +15,13 @@ namespace LinkLynx.Implementations.Utility.Dispatching
     {
         private readonly ILogger consoleLogger;
         private readonly IPanelScriptGroupPool logicGroupPool;
-        private readonly IReversePageRegistry reversePageRegistry;
+        private readonly ISimpleReversePageRegistry reversePageRegistry;
         private readonly IJoinDispatcher dispatcherHelper;
 
         /// <summary>
         /// The constructor for the Join Instance Router.
         /// </summary>
-        public JoinInstanceRouter(ILogger consoleLogger, IPanelScriptGroupPool logicGroupPool, IReversePageRegistry reversePageRegistry, IJoinDispatcher dispatcherHelper) 
+        public JoinInstanceRouter(ILogger consoleLogger, IPanelScriptGroupPool logicGroupPool, ISimpleReversePageRegistry reversePageRegistry, IJoinDispatcher dispatcherHelper) 
         {
             this.consoleLogger = consoleLogger;
             this.logicGroupPool = logicGroupPool;
@@ -44,7 +44,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
                     return;
                 }
 
-                PanelScriptGroup logicGroup = logicGroupPool.GetPanelLogicGroup(panel);
+                PanelScriptGroup logicGroup = panel.ScriptGroup;
 
                 if (logicGroup == null)
                 {
@@ -62,7 +62,14 @@ namespace LinkLynx.Implementations.Utility.Dispatching
 
                 PanelScriptGroup group = logicGroupPool.GetPanelLogicGroup(panel);
 
-                ushort pageId = reversePageRegistry.Get(data.SignalJoinID, data.SignalType);
+                if(data.)
+
+                if(!reversePageRegistry.TryGet(data.SignalJoinID, data.SignalType, out ushort pageId))
+                {
+                    consoleLogger.Log($"[JoinInstanceRouter] Warning: No page found for join {data.SignalJoinID} ({data.SignalType}) on device '{panel.IPID}'");
+
+                    return;
+                }
 
                 consoleLogger.Log($"[JoinInstanceRouter] Resolved PageId={pageId}");
 

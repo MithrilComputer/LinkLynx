@@ -27,7 +27,7 @@ namespace LinkLynx.Implementations.Collections.Pools
             this.panelScriptGroupFactory = panelScriptGroupFactory;
         }
 
-        private readonly Dictionary<uint, PanelScriptGroup> deviceLogicPool = 
+        private readonly Dictionary<uint, PanelScriptGroup> panelScriptPool = 
             new Dictionary<uint, PanelScriptGroup>();
 
         /// <summary>
@@ -42,11 +42,11 @@ namespace LinkLynx.Implementations.Collections.Pools
             uint id = device.IPID;
 
             if (id == 0)
-                throw new ArgumentException("[LogicGroupPool] Panel.ID is 0 (invalid/uninitialized).", nameof(device));
+                throw new ArgumentException("[PanelScriptGroupPool] Panel.ID is 0 (invalid/uninitialized).", nameof(device));
 
-            if (!deviceLogicPool.ContainsKey(device.IPID))
+            if (!panelScriptPool.ContainsKey(device.IPID))
             {
-                consoleLogger.Log($"[LogicGroupPool] Registering Panel with ID: {device.IPID}");
+                consoleLogger.Log($"[PanelScriptGroupPool] Registering Panel with ID: {device.IPID}");
 
                 PanelScriptGroup panelLogic;
 
@@ -56,26 +56,26 @@ namespace LinkLynx.Implementations.Collections.Pools
                 }
                 catch (Exception ex)
                 {
-                    consoleLogger.Log($"[LogicGroupPool] PanelLogicGroup ctor failed for ID {id}: {ex.GetType().Name}: {ex.Message}");
+                    consoleLogger.Log($"[PanelScriptGroupPool] PanelLogicGroup ctor failed for ID {id}: {ex.GetType().Name}: {ex.Message}");
                     throw; // rethrow so you see the real stack
                 }
 
                 try
                 {
                     device.SetLoadedScripts(panelLogic);
-                    deviceLogicPool.Add(id, panelLogic);
+                    panelScriptPool.Add(id, panelLogic);
                 }
                 catch (Exception ex)
                 {
-                    consoleLogger.Log($"[LogicGroupPool] Failed adding panel ID {id} to pool: {ex.GetType().Name}: {ex.Message}");
+                    consoleLogger.Log($"[PanelScriptGroupPool] Failed adding panel ID {id} to pool: {ex.GetType().Name}: {ex.Message}");
                     throw;
                 }
 
-                consoleLogger.Log($"[LogicGroupPool] Panel with ID: {device.IPID} registered successfully!");
+                consoleLogger.Log($"[PanelScriptGroupPool] Panel with ID: {device.IPID} registered successfully!");
             }
             else
             {
-                throw new ArgumentException($"[LogicGroupPool] Error: Panel with ID {device.IPID} is already registered.");
+                throw new ArgumentException($"[PanelScriptGroupPool] Error: Panel with ID {device.IPID} is already registered.");
             }
         }
 
@@ -88,13 +88,13 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// <exception cref="ArgumentException">Thrown if the specified device does not have a registry entry.</exception>
         public void UnregisterPanel(TouchPanelDevice device)
         {
-            consoleLogger.Log($"[LogicGroupPool] UnregisterPanel panel with ID: {device.IPID}");
+            consoleLogger.Log($"[PanelScriptGroupPool] UnregisterPanel panel with ID: {device.IPID}");
 
-            if(deviceLogicPool.ContainsKey(device.IPID))
+            if(panelScriptPool.ContainsKey(device.IPID))
             {
-                deviceLogicPool.Remove(device.IPID);
+                panelScriptPool.Remove(device.IPID);
             } else
-                throw new ArgumentException($"[LogicGroupPool] Error: Panel with ID: failed to Unregister due to no registry being present.");
+                throw new ArgumentException($"[PanelScriptGroupPool] Error: Panel with ID: failed to Unregister due to no registry being present.");
         }
 
         /// <summary>
@@ -103,13 +103,13 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// <exception cref="KeyNotFoundException"></exception>
         public PanelScriptGroup GetPanelLogicGroup(TouchPanelDevice device)
         {
-            if (deviceLogicPool.TryGetValue(device.IPID, out PanelScriptGroup panelLogic))
+            if (panelScriptPool.TryGetValue(device.IPID, out PanelScriptGroup panelLogic))
             {
                 return panelLogic;
             }
             else
             {
-                throw new KeyNotFoundException($"No logic group found for device {device.IPID}");
+                throw new KeyNotFoundException($"[PanelScriptGroupPool] Error: No logic group found for device {device.IPID}");
             }
         }
 
@@ -120,7 +120,7 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// <exception cref="KeyNotFoundException"></exception>
         public void InitializePanelLogic(TouchPanelDevice device)
         {
-            if (deviceLogicPool.TryGetValue(device.IPID, out PanelScriptGroup panelLogic))
+            if (panelScriptPool.TryGetValue(device.IPID, out PanelScriptGroup panelLogic))
             {
                 panelLogic.InitializePageLogic();
             }
@@ -138,7 +138,7 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// <exception cref="KeyNotFoundException"></exception>
         public void SetPanelDefaults(TouchPanelDevice device)
         {
-            if (deviceLogicPool.TryGetValue(device.IPID, out PanelScriptGroup panelLogic))
+            if (panelScriptPool.TryGetValue(device.IPID, out PanelScriptGroup panelLogic))
             {
                 panelLogic.SetPageDefaults();
             }
@@ -153,7 +153,7 @@ namespace LinkLynx.Implementations.Collections.Pools
         /// </summary>
         public void Dispose()
         {
-            deviceLogicPool.Clear();
+            panelScriptPool.Clear();
         }
     }
 }

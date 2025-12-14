@@ -1,8 +1,10 @@
 ﻿using LinkLynx.Core.Attributes;
 using LinkLynx.Core.CrestronWrappers;
+using LinkLynx.Core.Interfaces.Collections.Dispatchers;
 using LinkLynx.Core.Interfaces.Collections.Registries;
 using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Interfaces.Utility.Dispatching;
+using LinkLynx.Core.Src.Core.Interfaces.Collections.Registries;
 using LinkLynx.Implementations.Collections.Pages.Logic;
 using System.Reflection;
 
@@ -16,16 +18,20 @@ namespace LinkLynx.Implementations.Utility.Dispatching
     {
         private readonly ILogger consoleLogger;
         private readonly IJoinDispatcher dispatcherHelper;
-        private readonly IReversePageRegistry reversePageRegistry;
+        private readonly IContractActionDispatcher contractDispatcherHelper;
+        private readonly ISimpleReversePageRegistry simpleReversePageRegistry;
+        private readonly IContractReversePageRegistry contractReversePageRegistry;
+        private readonly IContractNameRegistry contractNameRegistry;
 
         /// <summary>
         /// The constructor for the AutoJoinRegistrar.
         /// </summary>
-        public AutoJoinRegistrar(ILogger consoleLogger, IJoinDispatcher dispatcherHelper, IReversePageRegistry reversePageRegistry)
+        public AutoJoinRegistrar(ILogger consoleLogger, IJoinDispatcher dispatcherHelper, ISimpleReversePageRegistry simpleReversePageRegistry, IContractReversePageRegistry contractReversePageRegistry)
         {
             this.consoleLogger = consoleLogger;
             this.dispatcherHelper = dispatcherHelper;
-            this.reversePageRegistry = reversePageRegistry;
+            this.simpleReversePageRegistry = simpleReversePageRegistry;
+            this.contractReversePageRegistry = contractReversePageRegistry;
         }
 
         /// <summary>
@@ -49,40 +55,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
 
                     foreach (JoinAttribute joinAttr in joinAttributes)
                     {
-                        switch (joinAttr.LogicJoin)
-                        {
-                            case Enum joinEnum:
-                                consoleLogger.Log($"[AutoJoinRegistrar] Registering Join '{joinEnum}' on method '{method.Name}'");
-                                if(!reversePageRegistry.TryRegister(joinEnum, pageId))
-                                {
-                                    consoleLogger.Log($"[AutoJoinRegistrar] Warning: Join '{joinEnum}' is already registered to another page. Skipping registration on method '{method.Name}'. Skipping...");
-                                    continue;
-                                }
-                                dispatcherHelper.AddToDispatcher(joinEnum, BuildLambda(method));
-                                break;
-                        }
-
-                        if (joinAttr.LogicJoin is Enum joinEnum)
-                        {
-                            consoleLogger.Log($"[AutoJoinRegistrar] Registering Join '{joinEnum}' on method '{method.Name}'");
-
-                            if(!reversePageRegistry.TryRegister(joinEnum, pageId))
-                            {
-                                consoleLogger.Log($"[AutoJoinRegistrar] Warning: Join '{joinEnum}' is already registered to another page. Skipping registration on method '{method.Name}'. Skipping...");
-
-                                continue;
-                            }
-
-                            dispatcherHelper.AddToDispatcher(joinEnum, BuildLambda(method));
-                        }
-                        else if()
-                        {
-
-                        }
-                        else
-                        {
-                            consoleLogger.Log($"[AutoJoinRegistrar] Warning: Join attribute on method '{method.Name}' does not contain a valid Enum.");
-                        }
+                        RegisterJoinBinding(joinAttr.LogicJoin, method, pageId);
                     }
                 }
             }
@@ -90,6 +63,45 @@ namespace LinkLynx.Implementations.Utility.Dispatching
             (Exception ex)
             {
                 consoleLogger.Log($"[AutoJoinRegistrar] Error while registering joins for page ID {pageId}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Registers a single join binding with the system.
+        /// </summary>
+        private void RegisterJoinBinding(object logicJoin, MethodInfo method, ushort pageId)
+        {
+            switch (logicJoin)
+            {
+                case Enum joinEnum:
+
+                    consoleLogger.Log($"[AutoJoinRegistrar] Registering Join '{joinEnum}' on method '{method.Name}'");
+
+                    if (!simpleReversePageRegistry.TryRegister(joinEnum, pageId))
+                    {
+                        consoleLogger.Log($"[AutoJoinRegistrar] Warning: Join '{joinEnum.ToString()}' is already registered to another page. Skipping registration on method '{method.Name}'. Skipping...");
+
+                        return;
+                    }
+
+                    dispatcherHelper.AddToDispatcher(joinEnum, BuildLambda(method));
+                    break;
+
+                case string contractJoin:
+
+                    consoleLogger.Log($"[AutoJoinRegistrar] Registering Join '{contractJoin}' on method '{method.Name}'");
+
+                    if (!contractReversePageRegistry.TryRegister(contractJoin, pageId))
+                    {
+                        consoleLogger.Log($"[AutoJoinRegistrar] Warning: Join '{contractJoin}' is already registered to another page. Skipping registration on method '{method.Name}'. Skipping...");
+                        return;
+                    }
+
+                    contractDispatcherHelper.TryAdd(contractJoin, BuildLambda(method));
+
+                    contractNameRegistry.TryRegister(contractJoin);
+
+                    break;
             }
         }
 

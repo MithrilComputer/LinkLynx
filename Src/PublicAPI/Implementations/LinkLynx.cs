@@ -72,7 +72,7 @@ namespace LinkLynx.PublicAPI.Implementations
         public ILinkLynx Initialize()
         {
             consoleLogger.Log("[LinkLynx] Initializing Framework...");
-            autoRegisterScanner.Run(); // your reflection scanner that registers pages + joins
+            autoRegisterScanner.Run();
 
             SendSplash();
 
@@ -184,7 +184,6 @@ namespace LinkLynx.PublicAPI.Implementations
             if (panel == null) throw new ArgumentNullException(nameof(panel) ,$"[LinkLynx] The Panel Given For The Signal Handling Is Null!");
             if (args == null) throw new ArgumentNullException(nameof(panel), $"[LinkLynx] The Signal Given For The Signal Handling Is Null!");
 
-            // TODO Wrap the Crestron types as my own, avoids issues with testing. Should prob use a factory at some point.
             SignalEventData signalData = new SignalEventData(args);
             TouchPanelDevice panelDevice = panelPool.GetPanel(panel.ID);
 

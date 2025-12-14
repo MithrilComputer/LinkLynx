@@ -71,6 +71,7 @@ namespace LinkLynx.Wiring.Engine
 
                         if (pageAttribute == null)
                         {
+                            //TODO Look this over later
                             //consoleLogger.Log($"[AutoRegisterScanner] Scanned Class has no attributes, skipping {type.FullName}");
                             continue;
                         }
@@ -152,6 +153,8 @@ namespace LinkLynx.Wiring.Engine
         /// </summary>
         private static bool CheckIfWhitelisted(Assembly assembly)
         {
+            //TODO Look this over later
+
             try
             {
                 return assembly.GetReferencedAssemblies().Any(referencedAssembly =>
