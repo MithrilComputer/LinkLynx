@@ -1,11 +1,11 @@
 ﻿using LinkLynx.Core.Signals;
 
-namespace LinkLynx.Core.Src.Core.Interfaces.Collections.Registries
+namespace LinkLynx.Core.Interfaces.Collections.Registries
 {
     /// <summary>
     /// The Contract Name Registry is responsible for keeping track of registered contract names.
     /// </summary>
-    public interface IContractIDNameRegistry
+    public interface IContractRegistry
     {
         /// <summary>
         /// Tries to register a contract name with a join number and signal direction.

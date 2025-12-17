@@ -50,8 +50,8 @@ namespace LinkLynx.Wiring.Bootstraps.Implementations
 
             // Registries
             services.AddSingleton<IEnumSignalTypeRegistry, EnumSignalTypeRegistry>();
-            services.AddSingleton<IPanelScriptRegistry, PageScriptRegistry>();
-            services.AddSingleton<ISimpleReversePanelScriptRegistry, SimpleReversePageRegistry>();
+            services.AddSingleton<IPanelScriptRegistry, PanelScriptRegistry>();
+            services.AddSingleton<ISimpleReversePanelScriptRegistry, SimpleReversePanelScriptRegistry>();
 
             // Pools
             services.AddSingleton<IPanelScriptGroupPool, PanelScriptGroupPool>();

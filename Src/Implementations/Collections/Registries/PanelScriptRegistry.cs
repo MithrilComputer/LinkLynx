@@ -8,14 +8,14 @@ namespace LinkLynx.Implementations.Collections.Registries
     /// <summary>
     /// A global page registry to keep track of all the known pages.
     /// </summary>
-    public sealed class PageScriptRegistry : IPanelScriptRegistry, IDisposable
+    public sealed class PanelScriptRegistry : IPanelScriptRegistry, IDisposable
     {
         private readonly ILogger consoleLogger;
 
         /// <summary>
         /// Class constructor.
         /// </summary>
-        public PageScriptRegistry(ILogger consoleLogger) 
+        public PanelScriptRegistry(ILogger consoleLogger) 
         {
             this.consoleLogger = consoleLogger;
         }

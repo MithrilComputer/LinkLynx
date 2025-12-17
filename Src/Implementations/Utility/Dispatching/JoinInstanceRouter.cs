@@ -19,13 +19,13 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         private readonly IPanelScriptGroupPool logicGroupPool;
         private readonly ISimpleReversePanelScriptRegistry reversePanelScriptRegistry;
         private readonly IJoinDispatcher dispatcherHelper;
-        private readonly IContractIDNameRegistry contractIDNameRegistry;
+        private readonly IContractRegistry contractIDNameRegistry;
         private readonly IContractActionDispatcher contractActionDispatcher;
 
         /// <summary>
         /// The constructor for the Join Instance Router.
         /// </summary>
-        public JoinInstanceRouter(ILogger consoleLogger, IPanelScriptGroupPool logicGroupPool, ISimpleReversePanelScriptRegistry reversePageRegistry, IJoinDispatcher dispatcherHelper, IContractIDNameRegistry contractIDNameRegistry, IContractActionDispatcher contractActionDispatcher)
+        public JoinInstanceRouter(ILogger consoleLogger, IPanelScriptGroupPool logicGroupPool, ISimpleReversePanelScriptRegistry reversePageRegistry, IJoinDispatcher dispatcherHelper, IContractRegistry contractIDNameRegistry, IContractActionDispatcher contractActionDispatcher)
         {
             this.consoleLogger = consoleLogger;
             this.logicGroupPool = logicGroupPool;

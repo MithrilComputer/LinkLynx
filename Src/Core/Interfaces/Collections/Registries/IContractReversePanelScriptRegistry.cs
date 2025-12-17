@@ -1,6 +1,6 @@
 ﻿namespace LinkLynx.Core.Interfaces.Collections.Registries
 {
-    public interface IContractReversePageRegistry
+    public interface IContractReversePanelScriptRegistry
     {
         /// <summary>
         /// Tries to register a contract join to a page ID.

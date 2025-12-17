@@ -1,13 +1,13 @@
-﻿using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
+﻿using LinkLynx.Core.Interfaces.Collections.Registries;
+using LinkLynx.Core.Interfaces.Utility.Debugging.Logging;
 using LinkLynx.Core.Signals;
-using LinkLynx.Core.Src.Core.Interfaces.Collections.Registries;
 
 namespace LinkLynx.Implementations.Collections.Registries
 {
     /// <summary>
     /// The Contract Name Registry is responsible for keeping track of registered contract names.
     /// </summary>
-    public sealed class ContractIDNameRegistry : IContractIDNameRegistry, IDisposable
+    public sealed class ContractRegistry : IContractRegistry, IDisposable
     {
         /// <summary>
         /// A dictionary to hold incoming contract names and types.
@@ -37,7 +37,7 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// <summary>
         /// The constructor for the ContractNameRegistry.
         /// </summary>
-        public ContractIDNameRegistry(ILogger logger)
+        public ContractRegistry(ILogger logger)
         {
             this.logger = logger;
         }

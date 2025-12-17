@@ -21,7 +21,7 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         private readonly IContractActionDispatcher contractDispatcherHelper;
         private readonly ISimpleReversePanelScriptRegistry simpleReversePageRegistry;
         private readonly IContractReversePanelScriptRegistry contractReversePageRegistry;
-        private readonly IContractIDNameRegistry contractNameRegistry;
+        private readonly IContractRegistry contractNameRegistry;
 
         /// <summary>
         /// The constructor for the AutoJoinRegistrar.
