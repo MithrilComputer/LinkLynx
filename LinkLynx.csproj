@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Docs\" />
+    <Folder Include="Src\Core\YamlBlueprints\" />
     <Folder Include="Src\PublicAPI\Implementations\Helpers\" />
   </ItemGroup>
 </Project>

@@ -10,12 +10,12 @@ namespace LinkLynx.Implementations.Utility.Factories
     /// </summary>
     public class PageScriptFactory : IPageScriptFactory
     {
-        private readonly IPageScriptRegistry pageRegistry;
+        private readonly IPanelScriptRegistry pageRegistry;
 
         /// <summary>
         /// The Factory for creating pages for a panel.
         /// </summary>
-        public PageScriptFactory(IPageScriptRegistry pageRegistry)
+        public PageScriptFactory(IPanelScriptRegistry pageRegistry)
         {
             this.pageRegistry = pageRegistry;
         }

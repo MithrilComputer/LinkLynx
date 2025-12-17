@@ -15,14 +15,14 @@ namespace LinkLynx.Wiring.Engine
     public sealed class AutoRegisterScanner : IAutoRegisterScanner
     {
         private readonly ILogger consoleLogger;
-        private readonly IPageScriptRegistry pageRegistry;
+        private readonly IPanelScriptRegistry pageRegistry;
         private readonly IAutoJoinRegistrar autoJoinRegistrar;
         private readonly IEnumSignalTypeRegistry enumSignalTypeRegistry;
 
         /// <summary>
         /// The constructor for the AutoRegisterScanner.
         /// </summary>
-        public AutoRegisterScanner(ILogger consoleLogger, IPageScriptRegistry pageRegistry, IAutoJoinRegistrar autoJoinRegistrar, IEnumSignalTypeRegistry enumSignalTypeRegistry)
+        public AutoRegisterScanner(ILogger consoleLogger, IPanelScriptRegistry pageRegistry, IAutoJoinRegistrar autoJoinRegistrar, IEnumSignalTypeRegistry enumSignalTypeRegistry)
         {
             this.consoleLogger = consoleLogger;
             this.pageRegistry = pageRegistry;

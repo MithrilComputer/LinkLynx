@@ -19,14 +19,14 @@ namespace LinkLynx.Implementations.Utility.Dispatching
         private readonly ILogger consoleLogger;
         private readonly IJoinDispatcher dispatcherHelper;
         private readonly IContractActionDispatcher contractDispatcherHelper;
-        private readonly ISimpleReversePageRegistry simpleReversePageRegistry;
-        private readonly IContractReversePageRegistry contractReversePageRegistry;
-        private readonly IContractNameRegistry contractNameRegistry;
+        private readonly ISimpleReversePanelScriptRegistry simpleReversePageRegistry;
+        private readonly IContractReversePanelScriptRegistry contractReversePageRegistry;
+        private readonly IContractIDNameRegistry contractNameRegistry;
 
         /// <summary>
         /// The constructor for the AutoJoinRegistrar.
         /// </summary>
-        public AutoJoinRegistrar(ILogger consoleLogger, IJoinDispatcher dispatcherHelper, ISimpleReversePageRegistry simpleReversePageRegistry, IContractReversePageRegistry contractReversePageRegistry)
+        public AutoJoinRegistrar(ILogger consoleLogger, IJoinDispatcher dispatcherHelper, ISimpleReversePanelScriptRegistry simpleReversePageRegistry, IContractReversePanelScriptRegistry contractReversePageRegistry)
         {
             this.consoleLogger = consoleLogger;
             this.dispatcherHelper = dispatcherHelper;

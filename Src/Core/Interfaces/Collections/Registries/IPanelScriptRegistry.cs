@@ -11,7 +11,7 @@ namespace LinkLynx.Core.Interfaces.Collections.Registries
     /// logic factories by their unique identifiers, and access all registered factories as a read-only collection. It
     /// is designed to facilitate dynamic creation and resolution of page logic at runtime based on the provided <see
     /// cref="TouchPanelDevice"/> context.</remarks>
-    public interface IPageScriptRegistry
+    public interface IPanelScriptRegistry
     {
         /// <summary>
         /// Registers a page with the specified identifier and logic factory function.

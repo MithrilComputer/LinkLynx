@@ -1,8 +1,5 @@
 ﻿namespace LinkLynx.Core.Interfaces.Collections.Registries
 {
-    /// <summary>
-    /// The Contract Reverse Page Registry is responsible for mapping contract joins to their respective page IDs.
-    /// </summary>
     public interface IContractReversePageRegistry
     {
         /// <summary>

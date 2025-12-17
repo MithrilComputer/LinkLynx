@@ -39,8 +39,8 @@ namespace LinkLynx.Tests.SystemTests.Fixtures
 
             // Registries
             services.AddSingleton<IEnumSignalTypeRegistry, EnumSignalTypeRegistry>();
-            services.AddSingleton<IPageScriptRegistry, PageScriptRegistry>();
-            services.AddSingleton<ISimpleReversePageRegistry, SimpleReversePageRegistry>();
+            services.AddSingleton<IPanelScriptRegistry, PageScriptRegistry>();
+            services.AddSingleton<ISimpleReversePanelScriptRegistry, SimpleReversePageRegistry>();
 
             // Pools
             services.AddSingleton<IPanelScriptGroupPool, PanelScriptGroupPool>();

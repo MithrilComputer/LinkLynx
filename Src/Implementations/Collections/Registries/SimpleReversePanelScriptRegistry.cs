@@ -6,9 +6,9 @@ using LinkLynx.Core.Signals;
 namespace LinkLynx.Implementations.Collections.Registries
 {
     /// <summary>
-    /// A special class that used to link logic joins to pages, good for reverse join searching.
+    /// A special class that used to link logic logic joins to pages, good for reverse join searching.
     /// </summary>
-    public sealed class SimpleReversePageRegistry : ISimpleReversePageRegistry, IDisposable
+    public sealed class SimpleReversePanelScriptRegistry : ISimpleReversePanelScriptRegistry, IDisposable
     {
         private readonly ILogger consoleLogger;
         private readonly IEnumHelper enumHelper;
@@ -16,7 +16,7 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// <summary>
         /// Class constructor.
         /// </summary>
-        public SimpleReversePageRegistry(ILogger consoleLogger, IEnumHelper enumHelper) 
+        public SimpleReversePanelScriptRegistry(ILogger consoleLogger, IEnumHelper enumHelper) 
         {
             this.consoleLogger = consoleLogger;
             this.enumHelper = enumHelper;

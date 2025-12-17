@@ -6,11 +6,11 @@ namespace LinkLynx.Implementations.Collections.Registries
     /// <summary>
     /// The Contract Reverse Page Registry is responsible for mapping contract joins to their respective page IDs.
     /// </summary>
-    public sealed class ContractReversePageRegistry : IContractReversePageRegistry, IDisposable
+    public sealed class ContractReversePageRegistry : IContractReversePanelScriptRegistry, IDisposable
     {
         private readonly ILogger logger;
 
-        private readonly Dictionary<string, ushort> contractJoinPageMap = new Dictionary<string, ushort>();
+        private readonly Dictionary<string, ushort> contractJoinScriptMap = new Dictionary<string, ushort>();
 
         /// <summary>
         /// The constructor for the ContractReversePageRegistry.
@@ -25,12 +25,12 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// </summary>
         public bool TryRegister(string contractJoin, ushort pageId)
         {
-            if (contractJoinPageMap.ContainsKey(contractJoin))
+            if (contractJoinScriptMap.ContainsKey(contractJoin))
             {
                 logger.Log($"[ContractReversePageRegistry] Warning: Contract Join '{contractJoin}' is already registered to another page. Skipping registration...");
                 return false;
             }
-            contractJoinPageMap[contractJoin] = pageId;
+            contractJoinScriptMap[contractJoin] = pageId;
             return true;
         }
 
@@ -39,7 +39,7 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// </summary>
         public bool TryGetPageId(string contractJoin, out ushort pageId)
         {
-            if (contractJoinPageMap.TryGetValue(contractJoin, out ushort registeredPageId))
+            if (contractJoinScriptMap.TryGetValue(contractJoin, out ushort registeredPageId))
             {
                 pageId = registeredPageId;
                 return true;
@@ -57,7 +57,7 @@ namespace LinkLynx.Implementations.Collections.Registries
         /// </summary>
         public void Dispose()
         {
-            contractJoinPageMap.Clear();
+            contractJoinScriptMap.Clear();
         }
     }
 }
