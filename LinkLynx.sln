@@ -1,9 +1,52 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.37216.2 d17.14
+VisualStudioVersion = 17.14.37216.2
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Build", "LinkLynx.Build\LinkLynx.Build.csproj", "{393F3CCC-AA4D-48B8-8C5A-9D00C009BF3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Crestron", "LinkLynx.Crestron\LinkLynx.Crestron.csproj", "{055BF479-C7A7-449D-B17B-A3E3A70A93FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Desktop", "LinkLynx.Desktop\LinkLynx.Desktop.csproj", "{2CBE98EC-432B-40ED-940D-9241A12DCD12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Processor", "LinkLynx.Processor\LinkLynx.Processor.csproj", "{2DD115AC-976A-4A40-8F3A-09F8A0D96F2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Engine", "LinkLynx.Engine\LinkLynx.Engine.csproj", "{6A9CDF46-A45B-4214-AABF-A9F813119D92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Core", "LinkLynx.Core\LinkLynx.Core.csproj", "{CBA2CADA-ECA2-42CB-A16F-0B0AED9E8E68}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{393F3CCC-AA4D-48B8-8C5A-9D00C009BF3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{393F3CCC-AA4D-48B8-8C5A-9D00C009BF3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{393F3CCC-AA4D-48B8-8C5A-9D00C009BF3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{393F3CCC-AA4D-48B8-8C5A-9D00C009BF3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{055BF479-C7A7-449D-B17B-A3E3A70A93FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{055BF479-C7A7-449D-B17B-A3E3A70A93FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{055BF479-C7A7-449D-B17B-A3E3A70A93FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{055BF479-C7A7-449D-B17B-A3E3A70A93FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CBE98EC-432B-40ED-940D-9241A12DCD12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CBE98EC-432B-40ED-940D-9241A12DCD12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CBE98EC-432B-40ED-940D-9241A12DCD12}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{2CBE98EC-432B-40ED-940D-9241A12DCD12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CBE98EC-432B-40ED-940D-9241A12DCD12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DD115AC-976A-4A40-8F3A-09F8A0D96F2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DD115AC-976A-4A40-8F3A-09F8A0D96F2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DD115AC-976A-4A40-8F3A-09F8A0D96F2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DD115AC-976A-4A40-8F3A-09F8A0D96F2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A9CDF46-A45B-4214-AABF-A9F813119D92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A9CDF46-A45B-4214-AABF-A9F813119D92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A9CDF46-A45B-4214-AABF-A9F813119D92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A9CDF46-A45B-4214-AABF-A9F813119D92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBA2CADA-ECA2-42CB-A16F-0B0AED9E8E68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBA2CADA-ECA2-42CB-A16F-0B0AED9E8E68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBA2CADA-ECA2-42CB-A16F-0B0AED9E8E68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBA2CADA-ECA2-42CB-A16F-0B0AED9E8E68}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
