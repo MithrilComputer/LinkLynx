@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Serialization", "L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Platform", "LinkLynx.Platform\LinkLynx.Platform.csproj", "{5EE6B30E-5F1F-4DE3-9315-57251BDCE365}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Platform.Crestron", "LinkLynx.Platform.Crestron\LinkLynx.Platform.Crestron.csproj", "{5DD257E5-C597-4B4B-9A59-E482F65478F7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Runtime.Processor", "LinkLynx.Runtime.Processor\LinkLynx.Runtime.Processor.csproj", "{343E354F-893E-42FB-9853-846C5DE03560}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Nodes", "LinkLynx.Nodes\LinkLynx.Nodes.csproj", "{47069D8B-BCBD-4DA2-A6A2-362A19E0430B}"
@@ -24,6 +22,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Nodes.Default", "LinkLynx.Nodes.Default\LinkLynx.Nodes.Default.csproj", "{910D7645-0D91-450B-A529-B7F5F5E06EFC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Nodes.Crestron", "LinkLynx.Nodes.Crestron\LinkLynx.Nodes.Crestron.csproj", "{1848930A-484E-4C31-A79B-9361A61F95C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Platform.Desktop", "LinkLynx.Platform.Desktop\LinkLynx.Platform.Desktop.csproj", "{5101F5AD-2AC8-4B39-AFB1-988B1DC30860}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Platform.Crestron", "LinkLynx.Platform.Crestron\LinkLynx.Platform.Crestron.csproj", "{E59E842A-E558-4087-AC06-9E3CFFCB8614}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,10 +58,6 @@ Global
 		{5EE6B30E-5F1F-4DE3-9315-57251BDCE365}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EE6B30E-5F1F-4DE3-9315-57251BDCE365}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EE6B30E-5F1F-4DE3-9315-57251BDCE365}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5DD257E5-C597-4B4B-9A59-E482F65478F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5DD257E5-C597-4B4B-9A59-E482F65478F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5DD257E5-C597-4B4B-9A59-E482F65478F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5DD257E5-C597-4B4B-9A59-E482F65478F7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{343E354F-893E-42FB-9853-846C5DE03560}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{343E354F-893E-42FB-9853-846C5DE03560}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{343E354F-893E-42FB-9853-846C5DE03560}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -76,6 +74,14 @@ Global
 		{1848930A-484E-4C31-A79B-9361A61F95C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1848930A-484E-4C31-A79B-9361A61F95C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1848930A-484E-4C31-A79B-9361A61F95C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5101F5AD-2AC8-4B39-AFB1-988B1DC30860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5101F5AD-2AC8-4B39-AFB1-988B1DC30860}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5101F5AD-2AC8-4B39-AFB1-988B1DC30860}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5101F5AD-2AC8-4B39-AFB1-988B1DC30860}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E59E842A-E558-4087-AC06-9E3CFFCB8614}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E59E842A-E558-4087-AC06-9E3CFFCB8614}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E59E842A-E558-4087-AC06-9E3CFFCB8614}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E59E842A-E558-4087-AC06-9E3CFFCB8614}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

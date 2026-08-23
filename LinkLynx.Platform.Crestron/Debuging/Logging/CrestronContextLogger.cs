@@ -1,14 +1,12 @@
 ﻿using Crestron.SimplSharp;
 using LinkLynx.Core.Abstractions.Debugging.Logging;
 using LinkLynx.Core.Debugging.Logging;
-using System;
-using System.Diagnostics;
 
 namespace LinkLynx.Platform.Crestron.Logging
 {
     internal class CrestronContextLogger<T> : IContextLogger<T>
     {
-        public void Log(LogLevel level, string message, bool debugOnly = false, Exception exception = null)
+        public void Log(LogLevel level, string message, bool debugOnly = false, Exception? exception = null)
         {
             #if !DEBUG
                 if (debugOnly)
