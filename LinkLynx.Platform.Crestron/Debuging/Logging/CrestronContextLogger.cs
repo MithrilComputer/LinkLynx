@@ -4,7 +4,7 @@ using LinkLynx.Core.Debugging.Logging;
 
 namespace LinkLynx.Platform.Crestron.Logging
 {
-    internal class CrestronContextLogger<T> : IContextLogger<T>
+    public class CrestronContextLogger<T> : IContextLogger<T>
     {
         public void Log(LogLevel level, string message, bool debugOnly = false, Exception? exception = null)
         {

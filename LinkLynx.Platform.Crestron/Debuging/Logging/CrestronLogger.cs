@@ -1,12 +1,10 @@
 ﻿using Crestron.SimplSharp;
 using LinkLynx.Core.Abstractions.Debugging.Logging;
 using LinkLynx.Core.Debugging.Logging;
-using System;
-using System.Diagnostics;
 
 namespace LinkLynx.Platform.Crestron.Logging
 {
-    internal class CrestronLogger : ILogger
+    public class CrestronLogger : ILogger
     {
         public void Log(LogLevel level, string message, bool debugOnly = false, Exception? exception = null)
         {

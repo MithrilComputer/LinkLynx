@@ -16,10 +16,10 @@ namespace LinkLynx.Desktop
 
             builder.Services.AddMauiBlazorWebView();
 
-#if DEBUG
+            #if DEBUG
     		builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
-#endif
+            #endif
 
             return builder.Build();
         }

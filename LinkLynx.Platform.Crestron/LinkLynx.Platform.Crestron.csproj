@@ -10,6 +10,7 @@
     <PackageReference Include="Crestron.SimplSharp.SDK.Library" Version="2.21.274" />
     <PackageReference Include="Crestron.SimplSharp.SDK.Program" Version="2.21.274" />
     <PackageReference Include="Crestron.SimplSharp.SDK.ProgramLibrary" Version="2.21.274" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.2" />
   </ItemGroup>
 
   <ItemGroup>
