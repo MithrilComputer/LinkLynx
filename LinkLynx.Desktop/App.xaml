@@ -1,17 +1,9 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
-<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+﻿<Application x:Class="LinkLynx.Desktop.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:LinkLynx.Desktop"
-             x:Class="LinkLynx.Desktop.App">
+             StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <ResourceDictionary>
-
-        <!--
-            For information about styling .NET MAUI pages
-            please refer to the documentation:
-            https://go.microsoft.com/fwlink/?linkid=2282329
-        -->
-
-        </ResourceDictionary>
+         
     </Application.Resources>
 </Application>

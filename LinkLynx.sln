@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.37216.2
+# Visual Studio Version 18
+VisualStudioVersion = 18.9.12120.119 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Build", "LinkLynx.Build\LinkLynx.Build.csproj", "{393F3CCC-AA4D-48B8-8C5A-9D00C009BF3A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Desktop", "LinkLynx.Desktop\LinkLynx.Desktop.csproj", "{2CBE98EC-432B-40ED-940D-9241A12DCD12}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Engine", "LinkLynx.Engine\LinkLynx.Engine.csproj", "{6A9CDF46-A45B-4214-AABF-A9F813119D92}"
 EndProject
@@ -32,6 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkLynx.Desktop", "LinkLynx.Desktop\LinkLynx.Desktop.csproj", "{FDB4C20A-45FD-4F0B-9B6B-23370FAB0683}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,11 +42,6 @@ Global
 		{393F3CCC-AA4D-48B8-8C5A-9D00C009BF3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{393F3CCC-AA4D-48B8-8C5A-9D00C009BF3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{393F3CCC-AA4D-48B8-8C5A-9D00C009BF3A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2CBE98EC-432B-40ED-940D-9241A12DCD12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2CBE98EC-432B-40ED-940D-9241A12DCD12}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2CBE98EC-432B-40ED-940D-9241A12DCD12}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{2CBE98EC-432B-40ED-940D-9241A12DCD12}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2CBE98EC-432B-40ED-940D-9241A12DCD12}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6A9CDF46-A45B-4214-AABF-A9F813119D92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A9CDF46-A45B-4214-AABF-A9F813119D92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A9CDF46-A45B-4214-AABF-A9F813119D92}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -87,6 +82,10 @@ Global
 		{E59E842A-E558-4087-AC06-9E3CFFCB8614}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E59E842A-E558-4087-AC06-9E3CFFCB8614}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E59E842A-E558-4087-AC06-9E3CFFCB8614}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDB4C20A-45FD-4F0B-9B6B-23370FAB0683}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDB4C20A-45FD-4F0B-9B6B-23370FAB0683}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDB4C20A-45FD-4F0B-9B6B-23370FAB0683}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDB4C20A-45FD-4F0B-9B6B-23370FAB0683}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
