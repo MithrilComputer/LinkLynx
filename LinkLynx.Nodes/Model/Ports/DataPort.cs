@@ -4,7 +4,7 @@
     {
         public T Value { get; internal set; }
 
-        public DataPort(string id, PortDirection portDirection) : base(id, portDirection)
+        public DataPort(string id, PortDirection direction) : base(id, direction)
         {
 
         }

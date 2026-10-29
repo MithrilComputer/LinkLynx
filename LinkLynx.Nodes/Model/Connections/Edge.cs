@@ -1,12 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LinkLynx.Nodes.Model.Connections
+﻿namespace LinkLynx.Nodes.Model.Connections
 {
-    internal class Edge
+    public class Edge
     {
+        public int SourceNodeId { get; init; }
+        public int TargetNodeId { get; init; }
+
+        public string SourcePortId { get; init; }
+        public string TargetPortId { get; init; }
+
+        public Edge(int sourceNodeId, int targetNodeId, string sourcePortId, string targetPortid)
+        {
+            SourceNodeId = sourceNodeId;
+            TargetNodeId = targetNodeId;
+
+            SourcePortId = sourcePortId;
+            TargetPortId = targetPortid;
+        }
     }
 }

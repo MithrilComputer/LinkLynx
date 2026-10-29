@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LinkLynx.Nodes.Model;
+using LinkLynx.Nodes.Model.Connections;
 
 namespace LinkLynx.Nodes.Collections
 {
     internal class Graph
     {
+        public List<Node> Nodes { get; } = new List<Node>();
+        public List<Edge> Edges { get; } = new List<Edge>();
+
+        Dictionary<(int NodeId, string PortId), List<Edge>> outgoingEdges = new Dictionary<(int NodeId, string PortId), List<Edge>>();
+
+
+
     }
 }
